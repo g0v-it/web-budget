@@ -1,0 +1,33 @@
+{
+    "meta": {
+        "year": 2018,
+        "um": "keur",
+        "update":"2018-07-11",
+        "source": "https://bdap-opendata.mef.gov.it/opendata/spd_lbf_spe_elb_cap_01_2017",
+        "tag-labels": {
+            "MINISTERO_DELLA_SALUTE": "MINISTERO DELLA SALUTE",
+            "m020": "Tutela della salute",
+            "m017": "Ricerca e innovazione"
+        }
+    },
+    "accounts": [
+        {
+            "code": "0200120001",
+            "amount": 288149000,
+            "last_amount": 301358000,
+            "tags": [
+                "MINISTERO_DELLA_SALUTE",
+                "m020"
+            ]
+        },
+        {
+            "code": "0170200001",
+            "amount": 288149000,
+            "last_amount": 301358000,
+            "tags": [
+                "MINISTERO_DELLA_SALUTE",
+                "m017"
+            ]
+        }
+    ]
+}
