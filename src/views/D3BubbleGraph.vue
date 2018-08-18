@@ -9,7 +9,7 @@
 import BudgetBubbles from "@/components/BudgetBubbles.vue"
 
 export default {
-  //name: 'd3-bubble-graph'
+  name: 'd3-bubble-graph',
   components:{
     BudgetBubbles
   }

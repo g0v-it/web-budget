@@ -8,7 +8,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      //name: 'home',
+      name: 'd3-bubble-graph',
       component: D3BubbleGraph
     },
     {
