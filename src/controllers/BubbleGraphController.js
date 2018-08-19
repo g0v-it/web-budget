@@ -90,7 +90,7 @@ class BubbleGraphController {
         //  enter selection to apply our transtition to below.
         let bubblesE = this.bubbles.enter().append('circle')
             .classed('bubble', true)
-            .attr('r', 2)
+            .attr('r', 0)
             .attr('fill', (d) => { return this.fillColor(d.value); })
             .attr('stroke', (d) => { return d3.rgb(this.fillColor(d.value)).darker(); })
             .attr('stroke-width', 2)

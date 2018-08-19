@@ -1,20 +1,31 @@
 <template>
-  <div>
-    <div class="btn-group">
-      <button class="btn">default</button>
-      <button class="btn">group1</button>
-      <button class="btn">group2</button>
-    </div>
-    <div class="graph-container">
-      <BudgetBubbles v-bind:height="height" v-bind:width="width" />
-    </div>  
-  </div>
+  <v-container align-center="true" fluid="true">
+
+        <v-layout row >
+            <v-flex lg12 sm12 align-center="true" class="py-2">
+                <v-btn-toggle v-model="viewId">
+                    <v-btn flat color="primary" value="default">
+                        globale
+                    </v-btn>
+                    <v-btn flat color="primary" value="group1">
+                        per ministero
+                    </v-btn>
+                    <v-btn flat color="primary" value="group2">
+                        per missione
+                    </v-btn>
+                </v-btn-toggle>
+            </v-flex>
+         </v-layout >
+
+        <v-layout row >
+            <BudgetBubbles v-bind:height="height" v-bind:width="width" />
+        </v-layout >
+  </v-container>
 </template>
 
 <script>
 // @ is an alias to /src
 import BudgetBubbles from "@/components/BudgetBubbles.vue";
-
 
 export default {
   name: "d3-bubble-graph",
@@ -24,6 +35,7 @@ export default {
 
   data: () => {
     return {
+      viewId: "",
       height: 0,
       width: 0
     };
