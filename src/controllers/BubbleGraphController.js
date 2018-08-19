@@ -48,18 +48,19 @@ class BubbleGraphController {
             .range([5, 80])
             .domain([minAmount, maxAmount]);
 
-        this.fillColor = this.calcFillColor([minAmount, maxAmount], ["#c6dbef", "#08500c"]);
+        this.fillColor = this.calcFillColor([minAmount, maxAmount], ["#2962ff", "#00c853"]);
 
-            // Use map() to convert raw data into node data.
-            // Checkout http://learnjsdata.com/ for more on
-            // working with data.
-            ;
+        // Use map() to convert raw data into node data.
+        // Checkout http://learnjsdata.com/ for more on
+        // working with data.
+        ;
         let myNodes = rawData.map((d) => {
 
             return {
                 id: d.code,
                 radius: radiusScale(+d.amount),
                 value: +d.amount,
+                diff: d.amount - d.last_amount,
                 nome: d.group2,
                 x: Math.random() * this.width,
                 y: Math.random() * this.height

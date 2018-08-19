@@ -18,7 +18,9 @@
          </v-layout >
 
         <v-layout row >
-            <BudgetBubbles v-bind:height="height" v-bind:width="width" />
+            <v-flex lg12 align-center="true" class="py-2">
+                <BudgetBubbles v-bind:height="height" v-bind:width="width" />
+            </v-flex>
         </v-layout >
   </v-container>
 </template>
