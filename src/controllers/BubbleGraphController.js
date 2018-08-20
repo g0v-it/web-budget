@@ -57,11 +57,12 @@ function createNodes(rawData) {
     // Checkout http://learnjsdata.com/ for more on
     // working with data.
     let myNodes = rawData.map(function (d) {
+      
         return {
             id: d.code,
             radius: radiusScale(+d.amount),
             value: d.amount - d.last_amount,
-            partitions: d.partitions,
+            partitions: d.partition,
             tags: d.tags,
             x: Math.random() * 900,
             y: Math.random() * 800
@@ -124,10 +125,11 @@ export function groupBubbles() {
 export function splitBubbles(group_cat_id) {    
     //assign center to bubble
     for(let i=0;i<nodes.length;++i){
+      console.log(nodes[i]);
         let center=group_cat_id.labels.find(function(el){
-            el.value==nodes[i].partitions[group_cat_id.partition]
+            return el.value==nodes[i].partitions[group_cat_id.partition]
         })
-        nodes[i][group_center]={x:center.x,y:center.y}
+        nodes[i].group_center={x:center.x,y:center.y}
     }
     // @v4 Reset the 'x' force to draw the bubbles to their year centers
     simulation.force('x', d3.forceX().strength(forceStrength).x(function (d) {
@@ -184,7 +186,8 @@ export function chart(selector, rawData, width_p, height_p) {
         .attr('r', 0)
         .attr('fill', function (d) { return fillColor(d.value); })
         .attr('stroke', function (d) { return d3.rgb(fillColor(d.value)).darker(); })
-        .attr('stroke-width', 2);
+        .attr('stroke-width', 2)
+        .on('click',function(d){console.log(d)});
 
     // @v4 Merge the original empty selection and the enter selection
     bubbles = bubbles.merge(bubblesE);
