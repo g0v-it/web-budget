@@ -5,13 +5,13 @@
                 {{totAmount}}
             </div>             
         </div>
-        <div id="vis" v-bind:style="{ height: 100 + '%', width: 100 + '%' }">ciao</div>
+        <div id="vis" v-bind:style="{ height: 100 + '%', width: 100 + '%' }"></div>
     </div>
 </template>
 
 
 <script>
-import BubbleGraphController from "@/controllers/BubbleGraphController.js";
+import * as BubbleGraphController from "@/controllers/BubbleGraphController.js";
 import rawData from "@/assets/example.json.js";
 
 export default {
@@ -22,17 +22,24 @@ export default {
   data: () => {
     return {
       partitionBlocks: {
-        "Debito pubblico": 167,
+        /* "Debito pubblico": 167,
         "Politiche economico-finanziarie e di bilancio e tutela della finanza pubblica": 1287,
         asfudbabf0: 35468,
         argrdgrgbatsh: 5554,
         jdfyhnfyj: 13874,
         ncfjnync: 3184,
-        oijoijoirj: 341548
+        oijoijoirj: 341548 */
       }
     };
   },
   mounted() {
+    //(selector, rawData, width_p, height_p)
+    BubbleGraphController.chart(
+      "#vis",
+      rawData.accounts,
+      this.width,
+      this.height
+    );
     let centers = this.calcCenterOfBlocks(this.$refs.grid.childNodes);
     console.log(centers);
   },
@@ -45,7 +52,7 @@ export default {
             x: childNodes[key].offsetLeft + childNodes[key].offsetWidth / 2,
             y: childNodes[key].offsetTop + childNodes[key].offsetHeight / 2
           };
-         centers.push(c);
+          centers.push(c);
         }
       }
       return centers;
