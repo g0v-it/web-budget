@@ -3,9 +3,9 @@
   
         <v-layout row >
             <v-flex lg12 class="py-2">
-                <v-btn-toggle v-model="viewID">
+                <v-btn-toggle v-model="viewID" mandatory>
                     <v-btn flat color="primary" value="default">
-                        globale
+                        dafault
                     </v-btn>
                     <v-btn flat color="primary" value="missione">
                         per missione

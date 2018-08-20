@@ -8,9 +8,9 @@
 
         <div ref="vis" id="vis" >
             <div ref="grid" class="grid">
-                <div v-for="(label, totAmount) in partitionBlocks" :key="label" class="grid-block">
-                    {{totAmount}}
-                </div>             
+                <v-card v-for="(totAmount,label) in partitionBlocks" :key="label" class="grid-block">
+                    <h3 class="subheading">{{label}}</h3>
+                </v-card>             
             </div>
         </div>
 
@@ -36,7 +36,12 @@ export default {
 
   watch: {
     partitionID: function() {
-      this.partitionBlocks = labels.partitions[this.partitionID];
+      if (this.partitionID !== "default") {
+        this.partitionBlocks = labels.partitions[this.partitionID];
+        console.log(this.partitionBlocks);
+      } else {
+        this.partitionBlocks = {};
+      }
     }
   },
   mounted() {
@@ -48,14 +53,13 @@ export default {
     );
   },
   updated() {
-    if (this.partitionID == "default") {
+    if (this.partitionID === "default") {
       BubbleGraphController.groupBubbles(
         this.$refs.vis.offsetWidth,
         this.$refs.vis.offsetHeight
       );
     } else {
       let centers = this.calcCenterOfBlocks(this.$refs.grid.childNodes);
-      console.log(centers, this.partitionID);
       //aggiornare il grafico
       let labels = centers;
 
@@ -102,24 +106,23 @@ export default {
 
 <style>
 .grid {
+  text-align: center;
   display: grid;
   grid-gap: 1rem;
   grid-template-columns: repeat(4, 1fr);
   grid-auto-rows: 25rem;
 }
-
-/* .grid > .grid-block {
-  background: #eeeeee;
+.grid > .subheading {
+  text-align: center;
 }
-.grid > .grid-block:nth-child(odd) {
-  background: #dddddd;
-} */
-
+.grid > .grid-block {
+  padding: 1rem;
+}
 #vis {
   position: relative;
   height: 100%;
   width: 100%;
- /*  background: #d4d4d4; */
+  /*  background: #d4d4d4; */
 }
 
 #vis > svg {

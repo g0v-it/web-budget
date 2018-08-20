@@ -92,12 +92,13 @@ function charge(d) {
     return -Math.pow(d.radius, 2.0) * forceStrength;
 }
 
+
 /* Nice looking colors - no reason to buck the trend
    @v4 scales now have a flattened naming scheme*/
 let fillColor = d3.scalePow()
     .exponent(0.5)
     .domain([-2566300000, 6501500000])
-    .range(['#FFA500', '#3bc62b']);
+    .range(['#ffffff', '#0d47a1']);
 
 //VISIBILI DALL ESTERNO
 /*
