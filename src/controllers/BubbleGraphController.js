@@ -69,7 +69,7 @@ function createNodes(rawData) {
     });
     // sort them to prevent occlusion of smaller nodes.
     myNodes.sort(function (a, b) { return b.radius - a.radius; });
-    console.log(myNodes)
+    //console.log(myNodes)
     return myNodes;
 }
 
@@ -121,14 +121,20 @@ export function groupBubbles() {
    * tick function is set to move nodes to the
    * yearCenter of their data's year.
    */
-export function splitBubbles(group_cat_id) {
+export function splitBubbles(group_cat_id) {    
     //assign center to bubble
+    for(let i=0;i<nodes.length;++i){
+        let center=group_cat_id.labels.find(function(el){
+            el.value==nodes[i].partitions[group_cat_id.partition]
+        })
+        nodes[i][group_center]={x:center.x,y:center.y}
+    }
     // @v4 Reset the 'x' force to draw the bubbles to their year centers
     simulation.force('x', d3.forceX().strength(forceStrength).x(function (d) {
-        //return d.group[group_cat_id].x;
+        return d.group_center.x;
     }));
     simulation.force('y', d3.forceY().strength(forceStrength).y(function (d) {
-        //return d.group[group_cat_id].y;
+        return d.group_center.y;
     }));
 
     // @v4 We can reset the alpha value and restart the simulation

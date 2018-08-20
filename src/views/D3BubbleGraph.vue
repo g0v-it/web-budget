@@ -3,14 +3,11 @@
 
         <v-layout row >
             <v-flex lg12 sm12 align-center="true" class="py-2">
-                <v-btn-toggle v-model="viewId">
+                <v-btn-toggle v-model="viewID">
                     <v-btn flat color="primary" value="default">
                         globale
                     </v-btn>
-                    <v-btn flat color="primary" value="group1">
-                        per ministero
-                    </v-btn>
-                    <v-btn flat color="primary" value="group2">
+                    <v-btn flat color="primary" value="missione">
                         per missione
                     </v-btn>
                 </v-btn-toggle>
@@ -19,7 +16,7 @@
 
         <v-layout row >
             <v-flex lg12 align-center="true" class="py-2">
-                <BudgetBubbles v-bind:height="height" v-bind:width="width" />
+                <BudgetBubbles v-bind:height="height" v-bind:width="width" :partitionID="viewID" />
             </v-flex>
         </v-layout >
   </v-container>
@@ -37,7 +34,7 @@ export default {
 
   data: () => {
     return {
-      viewId: "",
+      viewID: "",
       height: 0,
       width: 0
     };

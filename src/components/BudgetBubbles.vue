@@ -13,25 +13,30 @@
 <script>
 import * as BubbleGraphController from "@/controllers/BubbleGraphController.js";
 import rawData from "@/assets/example.json.js";
+import labels from "@/assets/labels.json.js";
 
 export default {
   props: {
+    partitionID: String,
     height: Number,
     width: Number
   },
   data: () => {
     return {
-      partitionBlocks: {
-        /* "Debito pubblico": 167,
-        "Politiche economico-finanziarie e di bilancio e tutela della finanza pubblica": 1287,
-        asfudbabf0: 35468,
-        argrdgrgbatsh: 5554,
-        jdfyhnfyj: 13874,
-        ncfjnync: 3184,
-        oijoijoirj: 341548 */
-      }
+      partitionBlocks: {}
     };
   },
+
+  watch: {
+    partitionID: function() {
+      //setto partition block con le possibili label:tot.
+      this.partitionBlocks = labels.partitions[this.partitionID];
+      console.log(this.partitionBlocks);
+      //calcolo i cen
+      //chiamo funzione di partizionamento
+    }
+  },
+
   mounted() {
     //(selector, rawData, width_p, height_p)
     BubbleGraphController.chart(
@@ -40,9 +45,31 @@ export default {
       this.width,
       this.height
     );
-    let centers = this.calcCenterOfBlocks(this.$refs.grid.childNodes);
-    console.log(centers);
   },
+  updated() {
+    let centers = this.calcCenterOfBlocks(this.$refs.grid.childNodes);
+    console.log(centers, this.partitionID);
+    //aggiornare il grafico
+    let labels = centers;
+
+    for (let i = 0; i < Object.keys(this.partitionBlocks).length; i++) {
+      centers[i].value = Object.keys(this.partitionBlocks)[i];
+    }
+
+    for (const key in this.partitionBlocks) {
+      if (this.partitionBlocks.hasOwnProperty(key)) {
+        labels;
+      }
+    }
+
+    let groupCatId = {
+      partition: this.partitionID,
+      labels: centers
+    };
+    
+    BubbleGraphController.splitBubbles(groupCatId);
+  },
+
   methods: {
     calcCenterOfBlocks(childNodes) {
       let centers = [];
