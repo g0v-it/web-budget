@@ -5,6 +5,7 @@
                 {{totAmount}}
             </div>             
         </div>
+
         <div id="vis" v-bind:style="{ height: 100 + '%', width: 100 + '%' }"></div>
     </div>
 </template>
@@ -31,7 +32,6 @@ export default {
     partitionID: function() {
       //setto partition block con le possibili label:tot.
       this.partitionBlocks = labels.partitions[this.partitionID];
-      console.log(this.partitionBlocks);
       //calcolo i cen
       //chiamo funzione di partizionamento
     }
@@ -39,6 +39,8 @@ export default {
 
   mounted() {
     //(selector, rawData, width_p, height_p)
+    this.height = window.innerHeight;
+    this.width = window.innerWidth;
     BubbleGraphController.chart(
       "#vis",
       rawData.accounts,
@@ -47,6 +49,8 @@ export default {
     );
   },
   updated() {
+    this.height=this.$refs.grid.offsetHeight;
+    this.width=this.$refs.grid.offsetWidth;
     let centers = this.calcCenterOfBlocks(this.$refs.grid.childNodes);
     console.log(centers, this.partitionID);
     //aggiornare il grafico
@@ -61,12 +65,12 @@ export default {
         labels;
       }
     }
-
+    
     let groupCatId = {
       partition: this.partitionID,
       labels: centers
     };
-    
+
     BubbleGraphController.splitBubbles(groupCatId);
   },
 
