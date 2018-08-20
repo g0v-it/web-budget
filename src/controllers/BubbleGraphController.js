@@ -193,6 +193,7 @@ export function chart(selector, rawData, width_p, height_p) {
         .attr('fill', function (d) { return fillColor(d.value); })
         .attr('stroke', function (d) { return d3.rgb(fillColor(d.value)).darker(); })
         .attr('stroke-width', 2)
+        .attr('pointer-events','all')
         .on('click', function (d) { console.log(d) });
 
     // @v4 Merge the original empty selection and the enter selection

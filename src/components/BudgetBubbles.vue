@@ -1,19 +1,12 @@
 <template>
-
-        <!-- <div ref="grid" class="grid">
-            <div v-for="(label, totAmount) in partitionBlocks" :key="label" class="grid-block">
-                {{totAmount}}
-            </div>             
-        </div> -->
-
         <div ref="vis" id="vis" >
             <div ref="grid" class="grid">
-                <v-card v-for="(totAmount,label) in partitionBlocks" :key="label" class="grid-block">
-                    <h3 class="subheading">{{label}}</h3>
-                </v-card>             
+                <div v-for="(totAmount,label) in partitionBlocks" :key="label" class="grid-block">
+                    <h3 class="subheading" >{{label}}</h3> 
+                    <h3 class="title" >€ {{totAmount}}</h3> 
+                </div>             
             </div>
         </div>
-
 </template>
 
 
@@ -117,6 +110,19 @@ export default {
 }
 .grid > .grid-block {
   padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 2px;
+  min-width: 0;
+  position: relative;
+  text-decoration: none;
+  -webkit-box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
+    0 1px 3px 0 rgba(0, 0, 0, 0.12);
+  background-color: #fff;
+  color: rgba(0, 0, 0, 0.87);
 }
 #vis {
   position: relative;
@@ -129,6 +135,7 @@ export default {
   z-index: 1;
   position: absolute;
   top: 0;
+  pointer-events: none;
 }
 
 @media screen and (max-width: 900px) {
