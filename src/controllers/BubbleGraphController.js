@@ -57,7 +57,7 @@ function createNodes(rawData) {
     // Checkout http://learnjsdata.com/ for more on
     // working with data.
     let myNodes = rawData.map(function (d) {
-      
+
         return {
             id: d.code,
             radius: radiusScale(+d.amount),
@@ -106,8 +106,10 @@ let fillColor = d3.scalePow()
    * tick function is set to move all nodes to the
    * center of the visualization.
    */
-export function groupBubbles() {
+export function groupBubbles(width_p, height_p) {
     // @v4 Reset the 'x' force to draw the bubbles to the center.
+    svg.attr('width', width_p)
+        .attr('height', height_p);
 
     simulation.force('x', d3.forceX().strength(forceStrength).x(center.x));
     simulation.force('y', d3.forceY().strength(forceStrength).y(center.y));
@@ -122,14 +124,16 @@ export function groupBubbles() {
    * tick function is set to move nodes to the
    * yearCenter of their data's year.
    */
-export function splitBubbles(group_cat_id) {    
+export function splitBubbles(group_cat_id, width_p, height_p) {
     //assign center to bubble
-    for(let i=0;i<nodes.length;++i){
-      console.log(nodes[i]);
-        let center=group_cat_id.labels.find(function(el){
-            return el.value==nodes[i].partitions[group_cat_id.partition]
+    svg.attr('width', width_p)
+        .attr('height', height_p);
+
+    for (let i = 0; i < nodes.length; ++i) {
+        let center = group_cat_id.labels.find(function (el) {
+            return el.value == nodes[i].partitions[group_cat_id.partition]
         })
-        nodes[i].group_center={x:center.x,y:center.y}
+        nodes[i].group_center = { x: center.x, y: center.y }
     }
     // @v4 Reset the 'x' force to draw the bubbles to their year centers
     simulation.force('x', d3.forceX().strength(forceStrength).x(function (d) {
@@ -167,11 +171,12 @@ export function chart(selector, rawData, width_p, height_p) {
         x: width / 2,
         y: height / 2
     }
-  
+
     svg = d3.select(selector)
         .append('svg')
         .attr('width', width)
         .attr('height', height);
+
     // Bind nodes data to what will become DOM elements to represent them.
     bubbles = svg.selectAll('.bubble')
         .data(nodes, function (d) { return d.id; });
@@ -187,7 +192,7 @@ export function chart(selector, rawData, width_p, height_p) {
         .attr('fill', function (d) { return fillColor(d.value); })
         .attr('stroke', function (d) { return d3.rgb(fillColor(d.value)).darker(); })
         .attr('stroke-width', 2)
-        .on('click',function(d){console.log(d)});
+        .on('click', function (d) { console.log(d) });
 
     // @v4 Merge the original empty selection and the enter selection
     bubbles = bubbles.merge(bubblesE);
@@ -208,7 +213,7 @@ export function chart(selector, rawData, width_p, height_p) {
     // @v4 Once we set the nodes, the simulation will start running automatically!
 
     // Set initial layout to single group.
-    groupBubbles();
+    groupBubbles(width, height);
 };
 
 

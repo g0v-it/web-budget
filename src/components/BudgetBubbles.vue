@@ -1,13 +1,19 @@
 <template>
-    <div>
-        <div ref="grid" class="grid">
+
+        <!-- <div ref="grid" class="grid">
             <div v-for="(label, totAmount) in partitionBlocks" :key="label" class="grid-block">
                 {{totAmount}}
             </div>             
+        </div> -->
+
+        <div ref="vis" id="vis" >
+            <div ref="grid" class="grid">
+                <div v-for="(label, totAmount) in partitionBlocks" :key="label" class="grid-block">
+                    {{totAmount}}
+                </div>             
+            </div>
         </div>
 
-        <div id="vis" v-bind:style="{ height: 100 + '%', width: 100 + '%' }"></div>
-    </div>
 </template>
 
 
@@ -18,9 +24,9 @@ import labels from "@/assets/labels.json.js";
 
 export default {
   props: {
-    partitionID: String,
-    height: Number,
-    width: Number
+    /*     height: Number,
+    width: Number, */
+    partitionID: String
   },
   data: () => {
     return {
@@ -30,48 +36,50 @@ export default {
 
   watch: {
     partitionID: function() {
-      //setto partition block con le possibili label:tot.
       this.partitionBlocks = labels.partitions[this.partitionID];
-      //calcolo i cen
-      //chiamo funzione di partizionamento
     }
   },
-
   mounted() {
-    //(selector, rawData, width_p, height_p)
-    this.height = window.innerHeight;
-    this.width = window.innerWidth;
     BubbleGraphController.chart(
       "#vis",
       rawData.accounts,
-      this.width,
-      this.height
+      this.$refs.vis.offsetWidth,
+      this.$refs.vis.offsetHeight
     );
   },
   updated() {
-    this.height=this.$refs.grid.offsetHeight;
-    this.width=this.$refs.grid.offsetWidth;
-    let centers = this.calcCenterOfBlocks(this.$refs.grid.childNodes);
-    console.log(centers, this.partitionID);
-    //aggiornare il grafico
-    let labels = centers;
+    if (this.partitionID == "default") {
+      BubbleGraphController.groupBubbles(
+        this.$refs.vis.offsetWidth,
+        this.$refs.vis.offsetHeight
+      );
+    } else {
+      let centers = this.calcCenterOfBlocks(this.$refs.grid.childNodes);
+      console.log(centers, this.partitionID);
+      //aggiornare il grafico
+      let labels = centers;
 
-    for (let i = 0; i < Object.keys(this.partitionBlocks).length; i++) {
-      centers[i].value = Object.keys(this.partitionBlocks)[i];
-    }
-
-    for (const key in this.partitionBlocks) {
-      if (this.partitionBlocks.hasOwnProperty(key)) {
-        labels;
+      for (let i = 0; i < Object.keys(this.partitionBlocks).length; i++) {
+        centers[i].value = Object.keys(this.partitionBlocks)[i];
       }
-    }
-    
-    let groupCatId = {
-      partition: this.partitionID,
-      labels: centers
-    };
 
-    BubbleGraphController.splitBubbles(groupCatId);
+      for (const key in this.partitionBlocks) {
+        if (this.partitionBlocks.hasOwnProperty(key)) {
+          labels;
+        }
+      }
+
+      let groupCatId = {
+        partition: this.partitionID,
+        labels: centers
+      };
+
+      BubbleGraphController.splitBubbles(
+        groupCatId,
+        this.$refs.grid.offsetWidth,
+        this.$refs.grid.offsetHeight
+      );
+    }
   },
 
   methods: {
@@ -100,16 +108,24 @@ export default {
   grid-auto-rows: 25rem;
 }
 
-.grid > .grid-block {
+/* .grid > .grid-block {
   background: #eeeeee;
 }
 .grid > .grid-block:nth-child(odd) {
   background: #dddddd;
-}
+} */
 
 #vis {
-  z-index: 10;
-  background: #d4d4d4;
+  position: relative;
+  height: 100%;
+  width: 100%;
+ /*  background: #d4d4d4; */
+}
+
+#vis > svg {
+  z-index: 1;
+  position: absolute;
+  top: 0;
 }
 
 @media screen and (max-width: 900px) {
