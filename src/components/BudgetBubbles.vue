@@ -7,18 +7,22 @@
             </div>             
         </div>
         <svg :height="svgSize.height" :width="svgSize.width">
-            <circle @click="bubbleMouseOverHandler(node)" class="bubble" v-for="node in nodes" :key="node.code" ></circle>
+            <circle @mouseover="bubbleMouseOverHandler" @mouseout="bubbleMouseOutHandler" :code="JSON.stringify(node)" class="bubble" v-for="node in nodes" :key="node.code" ></circle>
         </svg>
+        <TooltipBubble v-if="tooltipVisible"  topLevel="ministero-1" title="titolo-1" :amount="111111" v-bind:diff="30" color="#BECCAE" ></TooltipBubble>
     </div>
 </template>
-
 
 <script>
 import * as BubbleGraphController from "@/controllers/BubbleGraphController.js";
 import rawData from "@/assets/example.json.js";
 import labels from "@/assets/labels.json.js";
+import TooltipBubble from "@/components/TooltipBubble.vue"
 
 export default {
+   components: {
+    TooltipBubble
+  },
   props: {
     partitionID: String
   },
@@ -26,6 +30,8 @@ export default {
     return {
       partitionBlocks: {},
       nodes: rawData.accounts,
+      currentNode:{},
+      tooltipVisible:false,
       svgSize: {
         height: 0,
         width: 0
@@ -85,8 +91,12 @@ export default {
   },
 
   methods: {
-    bubbleMouseOverHandler(node) {
-        
+    bubbleMouseOverHandler(ev) {
+      console.log(ev.target.attributes[0].value)
+      this.tooltipVisible=true;   
+    },
+    bubbleMouseOutHandler(ev) {
+      this.tooltipVisible=false;        
     },
     calcCenterOfBlocks(childNodes) {
       let centers = [];

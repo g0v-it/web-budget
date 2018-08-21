@@ -73,7 +73,7 @@ function createNodes(rawData) {
         };
     });
     // sort them to prevent occlusion of smaller nodes.
-    myNodes.sort(function (a, b) { return b.radius - a.radius; });
+    //myNodes.sort(function (a, b) { return b.radius - a.radius; });
     //console.log(myNodes)
     return myNodes;
 }
