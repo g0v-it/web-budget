@@ -6,11 +6,12 @@ let simulation;
 const velocityDecay = 0.2;
 const forceStrength = 0.03;
 let center;
-let group_centers;
 let bubbles;
 let nodes;
 let svg;
 let chart;
+
+
 /*
    * Callback function that is called after every tick of the
    * force simulation.
@@ -50,8 +51,10 @@ function createNodes(rawData) {
     // Sizes bubbles based on .
     let radiusScale = d3.scalePow()
         .exponent(0.5)
-        .range([5, 80])
+        .range([4, 90])
         .domain([minAmount, maxAmount]);
+
+
 
     // Use map() to convert raw data into node data.
     // Checkout http://learnjsdata.com/ for more on
@@ -62,10 +65,11 @@ function createNodes(rawData) {
             id: d.code,
             radius: radiusScale(+d.amount),
             value: d.amount - d.last_amount,
+            diff: ((d.amount - d.last_amount) / d.amount) * 100,
             partitions: d.partition,
             tags: d.tags,
             x: Math.random() * 900,
-            y: Math.random() * 800
+            y: Math.random() * 900
         };
     });
     // sort them to prevent occlusion of smaller nodes.
@@ -95,10 +99,27 @@ function charge(d) {
 
 /* Nice looking colors - no reason to buck the trend
    @v4 scales now have a flattened naming scheme*/
-let fillColor = d3.scalePow()
-    .exponent(0.5)
-    .domain([-2566300000, 6501500000])
-    .range(['#ffffff', '#0d47a1']);
+let fillColor = (val) => {
+    let color = '#D84B2A';
+    let bubbleHeight = 5;
+    if (val > -25) {
+        color = '#EE9586';
+    }
+    if (val > -5) {
+        color = '#E4B7B2';
+    }
+    if (val > 0) {
+        color = '#BECCAE';
+    }
+    if (val > 5) {
+        color = '#9CAF84';
+    }
+    if (val > 25) {
+        color = '#7AA25C';
+    }
+    return color;
+
+}
 
 //VISIBILI DALL ESTERNO
 /*
@@ -162,12 +183,13 @@ export function splitBubbles(group_cat_id, width_p, height_p) {
    * a d3 loading function like d3.csv.
    */
 export function chart(selector, rawData, width_p, height_p) {
+    width = width_p;
+    height = height_p;
     // convert raw data into nodes data
     nodes = createNodes(rawData);
 
     // Create a SVG element inside the provided selector with desired size.
-    width = width_p;
-    height = height_p;
+
     center = {
         x: width / 2,
         y: height / 2
@@ -190,10 +212,10 @@ export function chart(selector, rawData, width_p, height_p) {
     var bubblesE = bubbles.enter().append('circle')
         .classed('bubble', true)
         .attr('r', 0)
-        .attr('fill', function (d) { return fillColor(d.value); })
-        .attr('stroke', function (d) { return d3.rgb(fillColor(d.value)).darker(); })
-        .attr('stroke-width', 2)
-        .attr('pointer-events','all')
+        .attr('fill', function (d) { return fillColor(d.diff); })
+        .attr('stroke', function (d) { return d3.rgb(fillColor(d.diff)).darker(); })
+        .attr('stroke-width', 1)
+        .attr('pointer-events', 'all')
         .on('click', function (d) { console.log(d) });
 
     // @v4 Merge the original empty selection and the enter selection

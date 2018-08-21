@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer disable-resize-watcher v-model="drawer" app>
+    <v-navigation-drawer  temporary v-model="drawer" app >
       <v-list>
 
         <v-list-tile

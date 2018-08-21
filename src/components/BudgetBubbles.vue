@@ -30,7 +30,9 @@ export default {
   watch: {
     partitionID: function() {
       if (this.partitionID !== "default") {
-        this.partitionBlocks = labels.partitions[this.partitionID];
+        this.partitionBlocks = this.sortBlocks(
+          labels.partitions[this.partitionID]
+        );
         console.log(this.partitionBlocks);
       } else {
         this.partitionBlocks = {};
@@ -53,7 +55,6 @@ export default {
       );
     } else {
       let centers = this.calcCenterOfBlocks(this.$refs.grid.childNodes);
-      //aggiornare il grafico
       let labels = centers;
 
       for (let i = 0; i < Object.keys(this.partitionBlocks).length; i++) {
@@ -92,6 +93,22 @@ export default {
         }
       }
       return centers;
+    },
+    //temp function
+    sortBlocks(blocks) {
+      let sortable = [];
+      for (let key in blocks) {
+        sortable.push([key, blocks[key]]);
+      }
+      sortable.sort(function(a, b) {
+        return b[1] - a[1];
+      });
+      let newBlocks = {};
+      sortable.map(b => {
+        newBlocks[b[0]] = b[1];
+      });
+      console.log(newBlocks);
+      return newBlocks;
     }
   }
 };
