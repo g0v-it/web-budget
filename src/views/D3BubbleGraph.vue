@@ -15,9 +15,11 @@
          </v-layout >
  
         <v-layout class="graph-layout" wrap>
-            <v-flex lg12  class="py-2">
-                <BudgetBubbles :partitionID="viewID" />
+           
+            <v-flex  class="py-2">
+                <BudgetBubbles @myevent="handle" :partitionID="viewID" />
             </v-flex>
+           
         </v-layout >
 
   </v-container>
@@ -35,8 +37,14 @@ export default {
 
   data: () => {
     return {
-      viewID: "",
+      viewID: "default",
     };
+  },
+  methods:{
+      handle(d){
+          console.log(d);
+          
+      }
   }
 };
 </script>
