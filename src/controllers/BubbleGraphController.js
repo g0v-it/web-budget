@@ -51,7 +51,7 @@ function createNodes(rawData) {
     // Sizes bubbles based on .
     let radiusScale = d3.scalePow()
         .exponent(0.5)
-        .range([4, 90])
+        .range([3, 90])
         .domain([minAmount, maxAmount]);
 
 
@@ -128,10 +128,8 @@ let fillColor = (val) => {
    * tick function is set to move all nodes to the
    * center of the visualization.
    */
-export function groupBubbles(width_p, height_p) {
+export function groupBubbles() {
     // @v4 Reset the 'x' force to draw the bubbles to the center.
-    svg.attr('width', width_p)
-        .attr('height', height_p);
 
     simulation.force('x', d3.forceX().strength(forceStrength).x(center.x));
     simulation.force('y', d3.forceY().strength(forceStrength).y(center.y));
@@ -146,10 +144,8 @@ export function groupBubbles(width_p, height_p) {
    * tick function is set to move nodes to the
    * yearCenter of their data's year.
    */
-export function splitBubbles(group_cat_id, width_p, height_p) {
+export function splitBubbles(group_cat_id) {
     //assign center to bubble
-    svg.attr('width', width_p)
-        .attr('height', height_p);
 
     for (let i = 0; i < nodes.length; ++i) {
         let center = group_cat_id.labels.find(function (el) {
@@ -157,7 +153,7 @@ export function splitBubbles(group_cat_id, width_p, height_p) {
         })
         nodes[i].group_center = { x: center.x, y: center.y }
     }
-    // @v4 Reset the 'x' force to draw the bubbles to their year centers
+
     simulation.force('x', d3.forceX().strength(forceStrength).x(function (d) {
         return d.group_center.x;
     }));
@@ -169,75 +165,47 @@ export function splitBubbles(group_cat_id, width_p, height_p) {
     simulation.alpha(1).restart();
 }
 
-/*
-   * Main entry point to the bubble chart. This function is returned
-   * by the parent closure. It prepares the rawData for visualization
-   * and adds an svg element to the provided selector and starts the
-   * visualization creation process.
-   *
-   * selector is expected to be a DOM element or CSS selector that
-   * points to the parent element of the bubble chart. Inside this
-   * element, the code will add the SVG continer for the visualization.
-   *
-   * rawData is expected to be an array of data objects as provided by
-   * a d3 loading function like d3.csv.
-   */
-export function chart(selector, rawData, width_p, height_p) {
+
+export function chart( rawData, width_p, height_p) {
     width = width_p;
     height = height_p;
     // convert raw data into nodes data
     nodes = createNodes(rawData);
 
-    // Create a SVG element inside the provided selector with desired size.
+
 
     center = {
         x: width / 2,
         y: height / 2
     }
+    
+    svg = d3.select('svg');
+    console.log(svg.attr('width'))
+    /* center = {
+        x: svg.attr('width') / 2,
+        y: svg.attr('height') / 2
+    } */
 
-    svg = d3.select(selector)
-        .append('svg')
-        .attr('width', width)
-        .attr('height', height);
-
-    // Bind nodes data to what will become DOM elements to represent them.
-    bubbles = svg.selectAll('.bubble')
-        .data(nodes, function (d) { return d.id; });
-
-    // Create new circle elements each with class `bubble`.
-    // There will be one circle.bubble for each object in the nodes array.
-    // Initially, their radius (r attribute) will be 0.
-    // @v4 Selections are immutable, so lets capture the
-    //  enter selection to apply our transtition to below.
-    var bubblesE = bubbles.enter().append('circle')
-        .classed('bubble', true)
+    bubbles = svg.selectAll('circle')
+        .data(nodes)
         .attr('r', 0)
         .attr('fill', function (d) { return fillColor(d.diff); })
         .attr('stroke', function (d) { return d3.rgb(fillColor(d.diff)).darker(); })
         .attr('stroke-width', 1)
-        .attr('pointer-events', 'all')
-        .on('click', function (d) { console.log(d) });
-
-    // @v4 Merge the original empty selection and the enter selection
-    bubbles = bubbles.merge(bubblesE);
-
-    // Fancy transition to make bubbles appear, ending with the
-    // correct radius
+        .attr('pointer-events', 'all');
+   /*      .on('click', function (d) { console.log(d) }); */
+   
     bubbles.transition()
         .duration(2000)
         .attr('r', function (d) { return d.radius; });
 
-    //create simulation
     simulation = d3.forceSimulation()
         .velocityDecay(velocityDecay)
         .nodes(nodes)
         .force('charge', d3.forceManyBody().strength(charge))
-        .on('tick', ticked);
-    // Set the simulation's nodes to our newly created nodes array.
-    // @v4 Once we set the nodes, the simulation will start running automatically!
+        .on('tick', ticked).stop();
 
-    // Set initial layout to single group.
-    groupBubbles(width, height);
+    groupBubbles();
 };
 
 

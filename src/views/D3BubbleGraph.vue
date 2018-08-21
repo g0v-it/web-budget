@@ -14,10 +14,8 @@
             </v-flex>
          </v-layout >
  
- 
         <v-layout class="graph-layout" wrap>
             <v-flex lg12  class="py-2">
-                <!-- <BudgetBubbles v-bind:height="height" v-bind:width="width" :partitionID="viewID" /> -->
                 <BudgetBubbles :partitionID="viewID" />
             </v-flex>
         </v-layout >
@@ -31,7 +29,6 @@
 import BudgetBubbles from "@/components/BudgetBubbles.vue";
 
 export default {
-  name: "d3-bubble-graph",
   components: {
     BudgetBubbles
   },
@@ -39,16 +36,7 @@ export default {
   data: () => {
     return {
       viewID: "",
-      height: 0,
-      width: 0
     };
-  },
-
-  methods: {},
-
-  created: function() {
-    this.height = window.innerHeight;
-    this.width = window.innerWidth;
   }
 };
 </script>
@@ -56,9 +44,6 @@ export default {
 <style>
 .container{
     height: 100%;
-}
-.btn-group {
-  padding: 1rem 2rem;
 }
 .container > .graph-layout {
   width: 100%;

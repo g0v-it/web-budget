@@ -1,12 +1,15 @@
 <template>
-        <div ref="vis" id="vis" >
-            <div ref="grid" class="grid">
-                <div v-for="(totAmount,label) in partitionBlocks" :key="label" class="grid-block">
-                    <h3 class="subheading" >{{label}}</h3> 
-                    <h3 class="title" >€ {{totAmount}}</h3> 
-                </div>             
-            </div>
+    <div ref="vis" id="vis" >
+        <div ref="grid" class="grid">
+            <div v-for="(totAmount,label) in partitionBlocks" :key="label" class="grid-block">
+                <h3 class="subheading" >{{label}}</h3> 
+                <h3 class="title" >€ {{totAmount}}</h3> 
+            </div>             
         </div>
+        <svg :height="svgSize.height" :width="svgSize.width">
+            <circle @click="bubbleMouseOverHandler(node)" class="bubble" v-for="node in nodes" :key="node.code" ></circle>
+        </svg>
+    </div>
 </template>
 
 
@@ -17,13 +20,16 @@ import labels from "@/assets/labels.json.js";
 
 export default {
   props: {
-    /*     height: Number,
-    width: Number, */
     partitionID: String
   },
   data: () => {
     return {
-      partitionBlocks: {}
+      partitionBlocks: {},
+      nodes: rawData.accounts,
+      svgSize: {
+        height: 0,
+        width: 0
+      }
     };
   },
 
@@ -40,19 +46,21 @@ export default {
     }
   },
   mounted() {
+    this.svgSize.height = this.$refs.vis.offsetHeight;
+    this.svgSize.width = this.$refs.vis.offsetWidth;
+
     BubbleGraphController.chart(
-      "#vis",
       rawData.accounts,
-      this.$refs.vis.offsetWidth,
-      this.$refs.vis.offsetHeight
+      this.svgSize.width,
+      this.svgSize.height
     );
   },
   updated() {
+    this.svgSize.height = this.$refs.vis.offsetHeight;
+    this.svgSize.width = this.$refs.vis.offsetWidth;
+
     if (this.partitionID === "default") {
-      BubbleGraphController.groupBubbles(
-        this.$refs.vis.offsetWidth,
-        this.$refs.vis.offsetHeight
-      );
+      BubbleGraphController.groupBubbles();
     } else {
       let centers = this.calcCenterOfBlocks(this.$refs.grid.childNodes);
       let labels = centers;
@@ -72,15 +80,14 @@ export default {
         labels: centers
       };
 
-      BubbleGraphController.splitBubbles(
-        groupCatId,
-        this.$refs.grid.offsetWidth,
-        this.$refs.grid.offsetHeight
-      );
+      BubbleGraphController.splitBubbles(groupCatId);
     }
   },
 
   methods: {
+    bubbleMouseOverHandler(node) {
+        
+    },
     calcCenterOfBlocks(childNodes) {
       let centers = [];
       for (const key in childNodes) {
