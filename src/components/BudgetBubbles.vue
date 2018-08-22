@@ -22,8 +22,8 @@ import labels from "@/assets/labels.json.js";
 import * as d3 from "d3";
 
 let simulation;
-const velocityDecay = 0.2;
-const forceStrength = 0.03;
+let velocityDecay = 0.2;
+let forceStrength = 0.03;
 let nodes;
 
 function createNodes(rawData) {
@@ -181,7 +181,7 @@ export default {
       function charge(d) {
         return -Math.pow(d.radius, 2.0) * forceStrength;
       }
-
+      
       let bubbles = d3
         .select("#vis svg")
         .selectAll("circle")
@@ -196,8 +196,17 @@ export default {
         .attr("stroke-width", 1)
         .attr("pointer-events", "all")
         .on("click", d => {
-            
-          this.$emit("myevent", d);
+          this.$emit("click", d);
+        })
+        .on("mouseover", d => {
+          this.$emit("over", {d, 
+                              colorBg:fillColor(d.diff), 
+                              darkerColor:d3.rgb(fillColor(d.diff)).darker().hex(),
+                              x:d.x+24,
+                              y:d.y+60});
+        })
+        .on("mouseout", d => {
+          this.$emit("out", d);
         });
 
       bubbles
