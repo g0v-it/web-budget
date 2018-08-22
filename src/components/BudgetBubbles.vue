@@ -7,22 +7,94 @@
             </div>             
         </div>
         <svg :height="svgSize.height" :width="svgSize.width">
-            <circle @mouseover="bubbleMouseOverHandler" @mouseout="bubbleMouseOutHandler" :code="JSON.stringify(node)" class="bubble" v-for="node in nodes" :key="node.code" ></circle>
+            <circle class="bubble" v-for="node in nodes" :key="node.code" ></circle>
         </svg>
-        <TooltipBubble v-if="tooltipVisible"  topLevel="ministero-1" title="titolo-1" :amount="111111" v-bind:diff="30" color="#BECCAE" ></TooltipBubble>
     </div>
 </template>
 
 <script>
-import * as BubbleGraphController from "@/controllers/BubbleGraphController.js";
+/* VA SISTEMATO LA STRUTTURA GENERALE DELLO SCRIPT */
 import rawData from "@/assets/example.json.js";
 import labels from "@/assets/labels.json.js";
-import TooltipBubble from "@/components/TooltipBubble.vue"
 
+import * as d3 from "d3";
+
+let simulation;
+const velocityDecay = 0.2;
+const forceStrength = 0.03;
+let nodes;
+
+function createNodes(rawData) {
+  let maxAmount = d3.max(rawData, function(d) {
+    return +d.amount;
+  });
+  let minAmount = d3.min(rawData, function(d) {
+    return +d.amount;
+  });
+  // Sizes bubbles based on .
+  let radiusScale = d3
+    .scalePow()
+    .exponent(0.5)
+    .range([3, 90])
+    .domain([minAmount, maxAmount]);
+
+  let myNodes = rawData.map(function(d) {
+    return {
+      id: d.code,
+      radius: radiusScale(+d.amount),
+      value: d.amount - d.last_amount,
+      diff: (d.amount - d.last_amount) / d.amount * 100,
+      partitions: d.partition,
+      tags: d.tags,
+      x: Math.random() * 900,
+      y: Math.random() * 900
+    };
+  });
+  return myNodes;
+}
+
+let fillColor = val => {
+  let color = "#D84B2A";
+  let bubbleHeight = 5;
+  if (val > -25) {
+    color = "#EE9586";
+    bubbleHeight = 4;
+  }
+  if (val > -5) {
+    color = "#E4B7B2";
+    bubbleHeight = 3;
+  }
+  if (val > 0) {
+    color = "#BECCAE";
+    bubbleHeight = 2;
+  }
+  if (val > 5) {
+    color = "#9CAF84";
+    bubbleHeight = 1;
+  }
+  if (val > 25) {
+    color = "#7AA25C";
+    bubbleHeight = 0;
+  }
+  return color;
+};
+
+function calcCenterOfBlocks(childNodes) {
+  let centers = [];
+  for (const key in childNodes) {
+    if (childNodes.hasOwnProperty(key)) {
+      const c = {
+        x: childNodes[key].offsetLeft + childNodes[key].offsetWidth / 2,
+        y: childNodes[key].offsetTop + childNodes[key].offsetHeight / 2
+      };
+      centers.push(c);
+    }
+  }
+  return centers;
+}
+
+/* Vue component */
 export default {
-   components: {
-    TooltipBubble
-  },
   props: {
     partitionID: String
   },
@@ -30,8 +102,6 @@ export default {
     return {
       partitionBlocks: {},
       nodes: rawData.accounts,
-      currentNode:{},
-      tooltipVisible:false,
       svgSize: {
         height: 0,
         width: 0
@@ -42,10 +112,7 @@ export default {
   watch: {
     partitionID: function() {
       if (this.partitionID !== "default") {
-        this.partitionBlocks = this.sortBlocks(
-          labels.partitions[this.partitionID]
-        );
-        console.log(this.partitionBlocks);
+        this.partitionBlocks = labels.partitions[this.partitionID];
       } else {
         this.partitionBlocks = {};
       }
@@ -55,20 +122,17 @@ export default {
     this.svgSize.height = this.$refs.vis.offsetHeight;
     this.svgSize.width = this.$refs.vis.offsetWidth;
 
-    BubbleGraphController.chart(
-      rawData.accounts,
-      this.svgSize.width,
-      this.svgSize.height
-    );
+    /* Create chart */
+    this.chart(rawData.accounts);
   },
   updated() {
     this.svgSize.height = this.$refs.vis.offsetHeight;
     this.svgSize.width = this.$refs.vis.offsetWidth;
 
     if (this.partitionID === "default") {
-      BubbleGraphController.groupBubbles();
+      this.groupBubbles();
     } else {
-      let centers = this.calcCenterOfBlocks(this.$refs.grid.childNodes);
+      let centers = calcCenterOfBlocks(this.$refs.grid.childNodes);
       let labels = centers;
 
       for (let i = 0; i < Object.keys(this.partitionBlocks).length; i++) {
@@ -86,46 +150,112 @@ export default {
         labels: centers
       };
 
-      BubbleGraphController.splitBubbles(groupCatId);
+      this.splitBubbles(groupCatId);
     }
   },
 
   methods: {
-    bubbleMouseOverHandler(ev) {
-      console.log(ev.target.attributes[0].value)
-      this.tooltipVisible=true;   
-    },
-    bubbleMouseOutHandler(ev) {
-      this.tooltipVisible=false;        
-    },
-    calcCenterOfBlocks(childNodes) {
-      let centers = [];
-      for (const key in childNodes) {
-        if (childNodes.hasOwnProperty(key)) {
-          const c = {
-            x: childNodes[key].offsetLeft + childNodes[key].offsetWidth / 2,
-            y: childNodes[key].offsetTop + childNodes[key].offsetHeight / 2
-          };
-          centers.push(c);
-        }
+    chart(rawData) {
+      // convert raw data into nodes data
+      nodes = createNodes(rawData);
+
+      function ticked() {
+        bubbles
+          .attr("cx", function(d) {
+            return d.x;
+          })
+          .attr("cy", function(d) {
+            return d.y;
+          });
       }
-      return centers;
-    },
-    //temp function
-    sortBlocks(blocks) {
-      let sortable = [];
-      for (let key in blocks) {
-        sortable.push([key, blocks[key]]);
+
+      function charge(d) {
+        return -Math.pow(d.radius, 2.0) * forceStrength;
       }
-      sortable.sort(function(a, b) {
-        return b[1] - a[1];
-      });
-      let newBlocks = {};
-      sortable.map(b => {
-        newBlocks[b[0]] = b[1];
-      });
-      console.log(newBlocks);
-      return newBlocks;
+
+      let bubbles = d3
+        .select("svg")
+        .selectAll("circle")
+        .data(nodes)
+        .attr("r", 0)
+        .attr("fill", function(d) {
+          return fillColor(d.diff);
+        })
+        .attr("stroke", function(d) {
+          return d3.rgb(fillColor(d.diff)).darker();
+        })
+        .attr("stroke-width", 1)
+        .attr("pointer-events", "all")
+        .on("click", d => {
+          this.$emit("myevent", d);
+        });
+
+      bubbles
+        .transition()
+        .duration(2000)
+        .attr("r", function(d) {
+          return d.radius;
+        });
+
+      simulation = d3
+        .forceSimulation()
+        .velocityDecay(velocityDecay)
+        .nodes(nodes)
+        .force("charge", d3.forceManyBody().strength(charge))
+        .on("tick", ticked)
+        .stop();
+
+      this.groupBubbles();
+    },
+    groupBubbles() {
+      simulation.force(
+        "x",
+        d3
+          .forceX()
+          .strength(forceStrength)
+          .x(this.svgSize.width / 2)
+      );
+      simulation.force(
+        "y",
+        d3
+          .forceY()
+          .strength(forceStrength)
+          .y(this.svgSize.height / 2)
+      );
+
+      simulation.alpha(1).restart();
+    },
+    splitBubbles(group_cat_id) {
+      //assign center to bubble
+
+      for (let i = 0; i < nodes.length; ++i) {
+        let center = group_cat_id.labels.find(function(el) {
+          return el.value == nodes[i].partitions[group_cat_id.partition];
+        });
+        nodes[i].group_center = { x: center.x, y: center.y };
+      }
+
+      simulation.force(
+        "x",
+        d3
+          .forceX()
+          .strength(forceStrength)
+          .x(function(d) {
+            return d.group_center.x;
+          })
+      );
+      simulation.force(
+        "y",
+        d3
+          .forceY()
+          .strength(forceStrength)
+          .y(function(d) {
+            return d.group_center.y;
+          })
+      );
+
+      // @v4 We can reset the alpha value and restart the simulation
+      simulation.alpha(1).restart();
     }
   }
 };
