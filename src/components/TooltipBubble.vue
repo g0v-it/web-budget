@@ -20,15 +20,15 @@ export default {
     diff: String,
     bgColor: String,
     dkColor: String,
-    xPos:Number,
-    yPos:Number
+    xPos: Number,
+    yPos: Number
   }
 };
 </script>
 <style>
 #bubble-tooltip {
-width: 17rem;
-height: 10rem;
+  width: 25rem;
+  height: 15rem;
   position: absolute;
   z-index: 20;
   display: flex;
@@ -44,46 +44,44 @@ height: 10rem;
   background-color: #fff;
   color: rgba(0, 0, 0, 0.87);
 }
-#tooltipTitle{
-    padding: 0.1rem;
-    text-align: center;
+#tooltipTitle {
+  padding: 0rem;
+  text-align: center;
 }
 
-#tooltipTitle p{
-    width:100%;
-    font-size: 13px;
-    margin: 0px;
+#tooltipTitle p {
+  width: 100%;
+  font-size: 13px;
+  margin: 0px;
 }
-
 
 #tooltipText {
-    padding:0rem;
+  padding: 0rem;
 }
 #tooltipText p {
-    padding-left:1rem;
-    padding-right:1rem;
-    padding-top:0.5rem;
-    padding-bottom:0.1rem;
-    font-size: 13px;
-    margin:0rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.1rem;
+  font-size: 13px;
+  margin: 0rem;
 }
-#numberContainer{
-    display: flex;
+#numberContainer {
+  display: flex;
   flex-direction: row;
   justify-content: space-between;
   vertical-align: middle;
-  padding-left:1rem;
-    padding-right:1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
-#numberContainer h3{
-    display: table-cell;
-    vertical-align: middle;
+#numberContainer h3 {
+  display: table-cell;
+  vertical-align: middle;
 }
-#numberContainer #amount{
-    background-color: #fff;
-    padding:0px;
+#numberContainer #amount {
+  background-color: #fff;
+  padding: 0px;
 }
-
 </style>
 

@@ -15,7 +15,6 @@
 
 <script>
 /* VA SISTEMATO LA STRUTTURA GENERALE DELLO SCRIPT */
-import BubbleGraphLegend from "@/components/BubbleGraphLegend.vue";
 import rawData from "@/assets/example.json.js";
 import labels from "@/assets/labels.json.js";
 
@@ -101,9 +100,6 @@ function calcCenterOfBlocks(childNodes) {
 
 /* Vue component */
 export default {
-  components: {
-    BubbleGraphLegend
-  },
   props: {
     partitionID: String
   },
@@ -181,7 +177,7 @@ export default {
       function charge(d) {
         return -Math.pow(d.radius, 2.0) * forceStrength;
       }
-      
+      let temp = this;
       let bubbles = d3
         .select("#vis svg")
         .selectAll("circle")
@@ -198,15 +194,17 @@ export default {
         .on("click", d => {
           this.$emit("click", d);
         })
-        .on("mouseover", d => {
-          this.$emit("over", {d, 
+        .on("mouseover", function(d) {
+            this.style['stroke-width']=2;
+          temp.$emit("over", {d, 
                               colorBg:fillColor(d.diff), 
                               darkerColor:d3.rgb(fillColor(d.diff)).darker().hex(),
                               x:d.x+24,
                               y:d.y+60});
         })
-        .on("mouseout", d => {
-          this.$emit("out", d);
+        .on("mouseout", function(d) {
+            this.style['stroke-width']=1;
+          temp.$emit("out", d);
         });
 
       bubbles

@@ -1,9 +1,9 @@
 <template>
     <div class="legend">
         <div class="legend-description">
-             <h2 class="title">Come vengono gestite le spese</h2>
+             <h2 class="title">Legge dello stato 2018</h2>
             <p class="description">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Est, corporis cumque aut saepe voluptates quasi veniam.
+                Previsioni di spesa suddivise per capitolo.
             </p>
         </div>
         <svg class="legend-radius">
