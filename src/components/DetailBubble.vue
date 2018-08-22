@@ -1,5 +1,5 @@
 <template>
-  <v-card class="detail">
+<v-card class="detail">
           <v-card-title
             class="headline grey lighten-2"
             primary-title
@@ -15,18 +15,27 @@
   
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn
-              color="primary"
-              flat
-              @click="dialog = false"
+            <v-btn color="primary" flat @click="handle"
             >
               I accept
             </v-btn>
           </v-card-actions>
-        </v-card>  
+  </v-card> 
 </template>
 <script>
-export default {};
+export default {
+    props:{
+    },
+    data(){
+      return{
+      }
+    },
+    methods:{
+      handle: function(ev){
+        this.$emit("close",ev)
+      }
+    }
+};
 </script>
 <style scoped>
 .detail{
@@ -34,5 +43,7 @@ export default {};
   right:0;
   top:0;
   width:33%;
+  height: 100%;
+  z-index: 1;
 }
 </style>

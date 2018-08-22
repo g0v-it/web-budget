@@ -12,36 +12,64 @@
         </v-btn-toggle>
     </div>
 
-    <BudgetBubbles class="graph-layout" @myevent="handle" :partitionID="viewID" />
-     
+    <BudgetBubbles class="graph-layout" @click="onClick" @over="onMouseOver" @out="onMouseOut" :partitionID="viewID" />
+    <TooltipBubble :style="{ top: currentNode.y + 'px' , left: currentNode.x + 'px' }"
+        :topLevel="currentNode.topLevel"
+        :title="currentNode.name"
+        :amount="currentNode.amount"
+        :diff="currentNode.diff"
+        :bgColor="currentNode.colorBg"
+        :dkColor="currentNode.darkerColor"
+        v-if=showTooltip
+        ></TooltipBubble>
+    <DetailBubble v-if=showDetail @close="closeDialog"></DetailBubble>
+
 </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import BudgetBubbles from "@/components/BudgetBubbles.vue";
-import TooltipBubble from "@/components/BudgetBubbles.vue";
-import DetailBubble from "@/components/DetailBubbles.vue";
+import TooltipBubble from "@/components/TooltipBubble.vue";
+import DetailBubble from "@/components/DetailBubble.vue";
 export default {
   components: {
-    BudgetBubbles
-    
+    BudgetBubbles,
+    TooltipBubble,
+    DetailBubble
   },
 
   data: () => {
     return {
-      viewID: "default"
+      viewID: "default",
+      currentNode:{},
+      showTooltip:false,
+      showDetail:false
     };
   },
   methods:{
       onClick(node){
-          console.log(node);   
+        this.showDetail=true;   
       },
-      onMouseOver(node){
-          console.log(node);  
+      onMouseOver(node){ 
+          let n={};       
+        n.topLevel="ECONOMIA E FINANZE" 
+        n.name="Realizzazione del sistema integrato delle banche dati in materia tributaria e fiscale" 
+        n.amount="€ 3894 bilion"
+        n.diff=""+Math.round(node.d.diff * 100) / 100+" %"
+        n.colorBg=node.colorBg
+        n.darkerColor=node.darkerColor
+        n.x=node.x-70;
+        n.y=node.y-node.d.radius-119
+        this.currentNode=n;
+        this.showTooltip=true;  
       },
       onMouseOut(node){
           console.log(node);  
+      },
+      closeDialog(el){
+          console.log(el);
+          this.showDetail=false;
       }
   }
 };

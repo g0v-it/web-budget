@@ -97,7 +97,7 @@ function calcCenterOfBlocks(childNodes) {
 
 /* Vue component */
 export default {
-    components: {
+  components: {
     BubbleGraphLegend
   },
   props: {
@@ -177,7 +177,7 @@ export default {
       function charge(d) {
         return -Math.pow(d.radius, 2.0) * forceStrength;
       }
-
+      
       let bubbles = d3
         .select("svg")
         .selectAll("circle")
@@ -194,12 +194,16 @@ export default {
         .on("click", d => {
           this.$emit("click", d);
         })
-        .on("mouseover", d=>{
-          this.$emit("over", d);
+        .on("mouseover", d => {
+          this.$emit("over", {d, 
+                              colorBg:fillColor(d.diff), 
+                              darkerColor:d3.rgb(fillColor(d.diff)).darker().hex(),
+                              x:d.x+24,
+                              y:d.y+60});
         })
-        .on("mouseout", d=>{
+        .on("mouseout", d => {
           this.$emit("out", d);
-        })
+        });
 
       bubbles
         .transition()
