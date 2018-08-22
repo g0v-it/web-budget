@@ -11,7 +11,7 @@
             </v-btn>
         </v-btn-toggle>
     </div>
-    <BubbleGraphLegend v-if="viewID=='default'" class="legend-layout" />
+
     <BudgetBubbles class="graph-layout" @myevent="handle" :partitionID="viewID" />
      
 </div>
@@ -43,22 +43,23 @@ export default {
 
 <style>
 .container {
-  display: grid;
+  /* display: grid;
   grid-template-areas:
     "head head head head head"
-    "legend graph graph graph graph" ;
-  grid-template-rows: 3rem auto;
+    "graph graph graph graph graph" ;
+  grid-template-rows: 3rem auto; */
   height: 100%;
 }
 .partition-buttons {
-  grid-area: head;
-  height: 36px;
+/*   grid-area: head;
+  height: 36px; */
 }
 .graph-layout {
-  grid-area: graph;
+/*   grid-area: graph; */
+padding: 1rem 0;
 }
-.filters-layout {
-  grid-area: filters;
+.legend-layout {
+/*   grid-area: legend; */
 }
 
 .container > .graph-layout {

@@ -1,11 +1,12 @@
 <template>
     <div ref="vis" id="vis" >
-        <div ref="grid" class="grid">
+        <div ref="grid" v-if="partitionID!='default'" class="grid">
             <div v-for="(totAmount,label) in partitionBlocks" :key="label" class="grid-block">
                 <h3 class="subheading" >{{label}}</h3> 
                 <h3 class="title" >€ {{totAmount}}</h3> 
             </div>             
         </div>
+        <BubbleGraphLegend v-if="partitionID=='default'" class="legend-layout" />
         <svg :height="svgSize.height" :width="svgSize.width">
             <circle class="bubble" v-for="node in nodes" :key="node.code" ></circle>
         </svg>
@@ -14,6 +15,7 @@
 
 <script>
 /* VA SISTEMATO LA STRUTTURA GENERALE DELLO SCRIPT */
+import BubbleGraphLegend from "@/components/BubbleGraphLegend.vue";
 import rawData from "@/assets/example.json.js";
 import labels from "@/assets/labels.json.js";
 
@@ -95,6 +97,9 @@ function calcCenterOfBlocks(childNodes) {
 
 /* Vue component */
 export default {
+    components: {
+    BubbleGraphLegend
+  },
   props: {
     partitionID: String
   },
