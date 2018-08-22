@@ -6,7 +6,7 @@
                 <h3 class="title" >€ {{totAmount}}</h3> 
             </div>             
         </div>
-        <BubbleGraphLegend v-if="partitionID=='default'" class="legend-layout" />
+        
         <svg :height="svgSize.height" :width="svgSize.width">
             <circle class="bubble" v-for="node in nodes" :key="node.code" ></circle>
         </svg>
@@ -40,11 +40,15 @@ function createNodes(rawData) {
     .range([3, 90])
     .domain([minAmount, maxAmount]);
 
-  let myNodes = rawData.map(function(d) {
+console.log(`1000000: ${radiusScale(1000000)}`);
+console.log(`10000000: ${radiusScale(10000000)}`);
+console.log(`230704370200: ${radiusScale(230704370200)}`);
+
+  let myNodes = rawData.map(function(d) {      
     return {
       id: d.code,
       radius: radiusScale(+d.amount),
-      value: d.amount - d.last_amount,
+      amount: d.amount,
       diff: (d.amount - d.last_amount) / d.amount * 100,
       partitions: d.partition,
       tags: d.tags,
@@ -97,7 +101,7 @@ function calcCenterOfBlocks(childNodes) {
 
 /* Vue component */
 export default {
-    components: {
+  components: {
     BubbleGraphLegend
   },
   props: {
@@ -179,7 +183,7 @@ export default {
       }
 
       let bubbles = d3
-        .select("svg")
+        .select("#vis svg")
         .selectAll("circle")
         .data(nodes)
         .attr("r", 0)
@@ -192,6 +196,7 @@ export default {
         .attr("stroke-width", 1)
         .attr("pointer-events", "all")
         .on("click", d => {
+            
           this.$emit("myevent", d);
         });
 
@@ -267,6 +272,19 @@ export default {
 </script>
 
 <style>
+#vis {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  padding: 1rem 0;
+}
+
+#vis > svg {
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  pointer-events: none;
+}
 .grid {
   text-align: center;
   display: grid;
@@ -292,19 +310,6 @@ export default {
     0 1px 3px 0 rgba(0, 0, 0, 0.12);
   background-color: #fff;
   color: rgba(0, 0, 0, 0.87);
-}
-#vis {
-  position: relative;
-  height: 100%;
-  width: 100%;
-  /*  background: #d4d4d4; */
-}
-
-#vis > svg {
-  z-index: 1;
-  position: absolute;
-  top: 0;
-  pointer-events: none;
 }
 
 @media screen and (max-width: 900px) {

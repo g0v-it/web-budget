@@ -1,20 +1,18 @@
 <template>
-<div class="container fluid">
-  
-    <div class="partition-buttons">
-        <v-btn-toggle v-model="viewID" mandatory>
-            <v-btn flat color="primary" value="default">
-                dafault
-            </v-btn>
-            <v-btn flat color="primary" value="missione">
-                per missione
-            </v-btn>
-        </v-btn-toggle>
+    <div class="container fluid">
+        <div class="partition-buttons">
+            <v-btn-toggle v-model="partitionID" mandatory>
+                <v-btn flat color="primary" value="default">
+                    dafault
+                </v-btn>
+                <v-btn flat color="primary" value="missione">
+                    per missione
+                </v-btn>
+            </v-btn-toggle>
+        </div>
+        <BubbleGraphLegend v-if="partitionID=='default'"/>
+        <BudgetBubbles class="graph-layout" @myevent="handle" :partitionID="partitionID"/>
     </div>
-
-    <BudgetBubbles class="graph-layout" @myevent="handle" :partitionID="viewID" />
-     
-</div>
 </template>
 
 <script>
@@ -30,7 +28,7 @@ export default {
 
   data: () => {
     return {
-      viewID: "default"
+      partitionID: "default"
     };
   },
   methods: {
@@ -43,24 +41,9 @@ export default {
 
 <style>
 .container {
-  /* display: grid;
-  grid-template-areas:
-    "head head head head head"
-    "graph graph graph graph graph" ;
-  grid-template-rows: 3rem auto; */
   height: 100%;
 }
-.partition-buttons {
-/*   grid-area: head;
-  height: 36px; */
-}
-.graph-layout {
-/*   grid-area: graph; */
-padding: 1rem 0;
-}
-.legend-layout {
-/*   grid-area: legend; */
-}
+
 
 .container > .graph-layout {
   width: 100%;
