@@ -17,7 +17,7 @@
         <v-layout class="graph-layout" wrap>
            
             <v-flex  class="py-2">
-                <BudgetBubbles @myevent="handle" :partitionID="viewID" />
+                <BudgetBubbles @click="onClick" @over="onMouseOver" @out="onMouseOut" :partitionID="viewID" />
             </v-flex>
            
         </v-layout >
@@ -29,10 +29,12 @@
 <script>
 // @ is an alias to /src
 import BudgetBubbles from "@/components/BudgetBubbles.vue";
-
+import TooltipBubble from "@/components/BudgetBubbles.vue";
+import DetailBubble from "@/components/DetailBubbles.vue";
 export default {
   components: {
     BudgetBubbles
+    
   },
 
   data: () => {
@@ -41,9 +43,14 @@ export default {
     };
   },
   methods:{
-      handle(d){
-          console.log(d);
-          
+      onClick(node){
+          console.log(node);   
+      },
+      onMouseOver(node){
+          console.log(node);  
+      },
+      onMouseOut(node){
+          console.log(node);  
       }
   }
 };
