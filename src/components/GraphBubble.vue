@@ -1,50 +1,170 @@
 <template>
-    <div id="bubble-tooltip"  >
-            <v-card-title id="tooltipTitle" class="headline grey lighten-2" primary-title><p>{{topLevel}}</p></v-card-title>
-             <v-card-text id="tooltipText">
-              <p>{{title}}</p>
-            <!--<h3 class="tooltip">{{mission}}</h3>-->
-            </v-card-text>
-            <div id="numberContainer">
-              
-                <div id="amount"><h3>{{amount}}</h3></div>
-                <div id="diff" :style="{backgroundColor:bgColor}" ><h3>{{diff}}</h3></div>
-               
-            </div>                
-    </div>
+    <div  class="cardGraph"  >
+        <div class='graphContainer'>
+          <svg id="svgPlaceholder" class="graphSvg"></svg>
+        </div>
+      </div>
 </template>
 <script>
+import * as d3 from "d3";
+//---------------------------------------------------------
+//BOUNDARIES
+    let margin = 80;
+    let width = 980-2*margin;
+    let height = 420 - 2 * margin;
+    let barSeparation=0.4;
+    let animationDuration=1000;
+    let min=0;
+    let max=100;
+    let t;
+    let svg;
+    let chart;
+    let data=[{year: 2010,value: 10},
+      {year: 2011,value: 20},
+      {year: 2012,value: 30},
+      {year: 2013,value: 40},
+      {year: 2014,value: 50},
+      {year: 2015,value: 60},
+      {year: 2016,value: 70},
+      {year: 2017,value: 80},
+      {year: 2018,value: 90},
+      {year: 2019,value: 100}];
+  //---------------------------------------------------------
+  //SCALE FUNCTIONS
+    const xScale = d3.scaleBand()
+      .range([0, width])
+      .domain(data.map((s) => s.year))
+      .padding(barSeparation)
+    const yScale = d3.scaleLinear()
+      .range([height, 0])
+      .domain([min, max]);
+  
+  //----------------------------------------------------------
 export default {
   props: {
-    topLevel: String,
-    title: String,
-    amount: String,
-    diff: String,
-    bgColor: String,
-    dkColor: String,
-    xPos: Number,
-    yPos: Number
+
+  },
+  mounted(){
+    //----------------------------------------------------------
+    //DROW GRAPHIC BOUNDLE
+    console.log("ekkle");
+    
+    t = d3.transition().duration(animationDuration);
+    svg = d3.select('#svgPlaceholder');
+    chart = svg.append('g').attr('transform', `translate(${margin}, ${margin})`);
+    //ASSE X
+    chart.append('g').attr('transform', `translate(0, ${height})`).call(d3.axisBottom(xScale));
+    //ASSE Y
+    chart.append('g').call(d3.axisLeft(yScale));
+    //Y LINES
+    chart.append('g').attr('class', 'grid').call(d3.axisLeft().scale(yScale).tickSize(-width, 0, 0).tickFormat(''));
+    //LABEL X AXIS
+    svg.append('text')
+      .attr('class', 'label')
+      .attr('x', -(height / 2) - margin)
+      .attr('y', margin / 2.4)
+      .attr('transform', 'rotate(-90)')
+      .attr('text-anchor', 'middle')
+      .text('Bilions');
+    //LABEL Y AXIS
+    svg.append('text')
+      .attr('class', 'label')
+      .attr('x', width / 2 + margin)
+      .attr('y', height + margin * 1.7)
+      .attr('text-anchor', 'middle')
+      .text('year');
+    const barGroups = chart.selectAll()
+      .data(data)
+      .enter()
+      .append('g')
+
+    barGroups
+      .append('rect')
+      .attr('class', 'bar')
+      .attr('x', (g) => xScale(g.year))
+      .attr('y', (g) => yScale(0))
+      .attr("height", 0)
+      .attr('width', xScale.bandwidth())
+      .on('mouseenter', function (actual, i) {
+        d3.selectAll('.valueText')
+          .attr('opacity', 0)
+
+        d3.select(this)
+          .transition()
+          .duration(300)
+          .attr('opacity', 0.6)
+          .attr('x', (a) => xScale(a.year) - 5)
+          .attr('width', xScale.bandwidth() + 10)
+
+        const y = yScale(actual.value)
+
+        let line = chart.append('line')
+          .attr('id', 'limit')
+          .attr('x1', 0)
+          .attr('y1', y)
+          .attr('x2', width)
+          .attr('y2', y)
+
+        barGroups.append('text')
+          .attr('class', 'divergence')
+          .attr('x', (a) => xScale(a.year) + xScale.bandwidth() / 2)
+          .attr('y', (a) => yScale(a.value) -30)
+          .attr('fill', 'white')
+          .attr('text-anchor', 'middle')
+          .text((a, idx) => {
+            const divergence = (a.value - actual.value).toFixed(1)
+            
+            let text = ''
+            if (divergence > 0) text += '+'
+            text += `${divergence}%`
+
+            return idx !== i ? text : '';
+          })
+
+      })
+      .on('mouseleave', function () {
+        d3.selectAll('.valueText')
+          .attr('opacity', 1)
+        d3.select(this)
+          .transition()
+          .duration(300)
+          .attr('opacity', 1)
+          .attr('x', (a) => xScale(a.year))
+          .attr('width', xScale.bandwidth())
+
+        chart.selectAll('#limit').remove()
+        chart.selectAll('.divergence').remove()
+      })
+      .transition(t)
+      .attr("height", (g) => (height - yScale(g.value)))
+      .attr('y',(g)=>yScale(g.value));
+    //LABEL ON BAR
+    barGroups 
+      .append('text').attr('class', 'valueText')
+      .attr('x', (a) => xScale(a.year) + xScale.bandwidth() / 2)
+      .attr('y', (a) => yScale(0) - 10)
+      .attr('text-anchor', 'middle')
+      .text((a) => `${a.value}%`)
+      .transition(t).tween("text", function(d) {
+        const v0 =0;//start
+        const v1 = d.value;//target
+        const i = d3.interpolateRound(v0, v1);
+        
+        return t => {this.textContent = i(t)};
+      });
+    
+
+
+
   }
 };
 </script>
 <style>
-#bubble-tooltip {
-  width: 25rem;
-  height: 15rem;
+.cardGraph {
+  width: 70rem;
+  height: 30rem;
   position: absolute;
   z-index: 20;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  border-radius: 2px;
-  min-width: 0;
-  text-decoration: none;
-  -webkit-box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2),
-    0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
-  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
-    0 1px 3px 0 rgba(0, 0, 0, 0.12);
-  background-color: #fff;
-  color: rgba(0, 0, 0, 0.87);
 }
 #tooltipTitle {
   padding: 0rem;
@@ -57,50 +177,69 @@ export default {
   margin: 0px;
 }
 
-#tooltipText {
-  padding: 0rem;
-}
-#tooltipText p {
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-top: 0.5rem;
-  padding-bottom: 0.1rem;
-  font-size: 13px;
-  margin: 0rem;
-}
-#numberContainer {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  vertical-align: middle;
-  padding-left: 1rem;
-  padding-right: 1rem;
+
+div.graphContainer {
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  background-color: #ffffff;
 }
 
-#numberContainer h3 {
-  display: table-cell;
-  vertical-align: middle;
-}
-#numberContainer #amount {
-  background-color: #fff;
-  padding: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-#numberContainer #diff {
-  width: 8rem;
-  color: #fff;
-  padding: 0.5rem;
-  margin-bottom: 0.5rem;
-  text-align: center;
-  border-radius: 28px;
-   -webkit-box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2),
-    0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
-  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
-    0 1px 3px 0 rgba(0, 0, 0, 0.12);
-}
-#numberContainer #diff h3{
-  width: 8rem;
+div .graphSvg {
+  width: 100%;
+  height: 100%;
 }
 
+.bar {
+  fill: #4682B4;
+}
+
+text.valueText {
+  font-size: 14px;
+  fill: #ffffff;
+}
+
+path {
+  stroke: gray;
+}
+
+line {
+  stroke: gray;
+}
+
+line#limit {
+  stroke: #FED966;
+  stroke-width: 3;
+  stroke-dasharray: 3 6;
+}
+
+.grid path {
+  stroke-width: 0;
+}
+
+.grid .tick line {
+  stroke: #9FAAAE;
+  stroke-opacity: 0.3;
+}
+
+text.divergence {
+  font-size: 12px;
+  fill: #000000;
+}
+
+text.value {
+  font-size: 14px;
+}
+
+
+text.label {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+text.source {
+  font-size: 10px;
+}
 </style>
+
 

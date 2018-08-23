@@ -1,12 +1,15 @@
 <template>
     <div>
-        Lorem ipsum dolor sit ame
-        t consectetur adipisicing elit. In numquam totam delectus illum expedita commodi nulla tempore 
-        sit animi est ab, dignissimos consectetur laudantium eius dolores! Consectetur officiis recusandae adipisci?
+      <GraphBubble style="top: 5rem ; left: 2rem;"></GraphBubble>
     </div>
 </template>
 <script>
+import GraphBubble from "@/components/GraphBubble.vue";
+ 
 export default {
+   components: {
+    GraphBubble
+  },
   props: {},
   data() {
     return {};
