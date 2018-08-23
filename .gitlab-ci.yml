@@ -2,6 +2,7 @@ image: node:alpine
 
 pages:
   script:
+  - npm install
   - npm run build
   artifacts:
     paths:
