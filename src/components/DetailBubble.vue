@@ -6,10 +6,17 @@
         <div class="comments">
             commenti    
         </div>
+    <div>
+      <GraphBubble style="top: 5rem ; left: 2rem;"></GraphBubble>
     </div>
 </template>
 <script>
+import GraphBubble from "@/components/GraphBubble.vue";
+ 
 export default {
+   components: {
+    GraphBubble
+  },
   props: {},
   data() {
     return {};
