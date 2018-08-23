@@ -1,49 +1,46 @@
 <template>
-<v-card class="detail">
-          <v-card-title
-            class="headline grey lighten-2"
-            primary-title
-          >
-            Privacy Policy
-          </v-card-title>
-  
-          <v-card-text>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-          </v-card-text>
-  
-          <v-divider></v-divider>
-  
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="primary" flat @click="handle"
-            >
-              I accept
-            </v-btn>
-          </v-card-actions>
-  </v-card> 
+    <div>
+        Lorem ipsum dolor sit ame
+        t consectetur adipisicing elit. In numquam totam delectus illum expedita commodi nulla tempore 
+        sit animi est ab, dignissimos consectetur laudantium eius dolores! Consectetur officiis recusandae adipisci?
+    </div>
 </template>
 <script>
 export default {
-    props:{
-    },
-    data(){
-      return{
-      }
-    },
-    methods:{
-      handle: function(ev){
-        this.$emit("close",ev)
-      }
+  props: {},
+  data() {
+    return {};
+  },
+  methods: {
+    handle: function(ev) {
+      this.$emit("close", ev);
     }
+  }
 };
 </script>
 <style scoped>
-.detail{
-  position: absolute;
-  right:0;
-  top:0;
-  width:33%;
-  height: 100%;
+.details-layout {
   z-index: 1;
+  height: 80%;
+  margin: 30px;
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  width: 80%;
+}
+/* .details-layout {
+  position: absolute;
+  top:0;
+  left:0;
+  margin: 5rem;
+  z-index: 1;
+  width: 78rem;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+} */
+.details {
+  height: 100%;
 }
 </style>

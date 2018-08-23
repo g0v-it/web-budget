@@ -45,12 +45,12 @@ export default {
           icon: "bubble_chart",
           title: "Bubble Graph",
           path: "/"
-        },
+        }/* ,
         {
           icon: "pie_chart",
           title: "Another Graph",
           path: "/treemap"
-        }
+        } */
       ],
       title: "Budget.g0v.it"
     };

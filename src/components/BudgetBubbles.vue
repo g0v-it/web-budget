@@ -1,7 +1,7 @@
 <template>
     <div ref="vis" id="vis" >
         <div ref="grid" v-if="partitionID!='default'" class="grid">
-            <div v-for="(totAmount,label) in partitionBlocks" :key="label" class="grid-block">
+            <div v-for="(totAmount,label) in partitionBlocks" :key="label" class="card grid-block">
                 <h3 class="subheading" >{{label}}</h3> 
                 <h3 class="title" >€ {{totAmount}}</h3> 
             </div>             
@@ -39,9 +39,6 @@ function createNodes(rawData) {
     .range([3, 90])
     .domain([minAmount, maxAmount]);
 
-console.log(`1000000: ${radiusScale(1000000)}`);
-console.log(`10000000: ${radiusScale(10000000)}`);
-console.log(`230704370200: ${radiusScale(230704370200)}`);
 
   let myNodes = rawData.map(function(d) {      
     return {
@@ -304,19 +301,11 @@ export default {
 }
 .grid > .grid-block {
   padding: 1rem;
+   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border-radius: 2px;
-  min-width: 0;
-  position: relative;
-  text-decoration: none;
-  -webkit-box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2),
-    0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
-  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
-    0 1px 3px 0 rgba(0, 0, 0, 0.12);
-  background-color: #fff;
-  color: rgba(0, 0, 0, 0.87);
+  
 }
 
 @media screen and (max-width: 900px) {
