@@ -1,14 +1,13 @@
 <template>
-    <div id="bubble-tooltip"  >
-            <v-card-title id="tooltipTitle" class="headline grey lighten-2" primary-title><p>{{topLevel}}</p></v-card-title>
+    <div id="bubble-tooltip" class="card"  >
+            <v-card-title id="tooltipTitle" class="headline grey lighten-2" primary-title><p>{{currentNode.topLevel}}</p></v-card-title>
              <v-card-text id="tooltipText">
               <p>{{title}}</p>
-            <!--<h3 class="tooltip">{{mission}}</h3>-->
             </v-card-text>
             <div id="numberContainer">
               
                 <div id="amount"><h3>{{amount}}</h3></div>
-                <div id="diff" :style="{backgroundColor:bgColor}" ><h3>{{diff}}</h3></div>
+                <div id="diff" :style="{backgroundColor:bgColor}" ><h3>{{currentNode.diff}}</h3></div>
                
             </div>                
     </div>
@@ -16,6 +15,7 @@
 <script>
 export default {
   props: {
+    currentNode: Object,
     topLevel: String,
     title: String,
     amount: String,
@@ -36,15 +36,6 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border-radius: 2px;
-  min-width: 0;
-  text-decoration: none;
-  -webkit-box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2),
-    0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
-  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
-    0 1px 3px 0 rgba(0, 0, 0, 0.12);
-  background-color: #fff;
-  color: rgba(0, 0, 0, 0.87);
 }
 #tooltipTitle {
   padding: 0rem;
@@ -93,14 +84,13 @@ export default {
   margin-bottom: 0.5rem;
   text-align: center;
   border-radius: 28px;
-   -webkit-box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2),
+  -webkit-box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2),
     0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
   box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
     0 1px 3px 0 rgba(0, 0, 0, 0.12);
 }
-#numberContainer #diff h3{
+#numberContainer #diff h3 {
   width: 8rem;
 }
-
 </style>
 
