@@ -6,8 +6,10 @@
             <!--<h3 class="tooltip">{{mission}}</h3>-->
             </v-card-text>
             <div id="numberContainer">
-                <v-chip id="amount" text-color="black"><h3>{{amount}}</h3></v-chip>
-                <v-chip :style="{backgroundColor:bgColor}" text-color="white"><h3>{{diff}}</h3></v-chip>  
+              
+                <div id="amount"><h3>{{amount}}</h3></div>
+                <div id="diff" :style="{backgroundColor:bgColor}" ><h3>{{diff}}</h3></div>
+               
             </div>                
     </div>
 </template>
@@ -81,7 +83,24 @@ export default {
 }
 #numberContainer #amount {
   background-color: #fff;
-  padding: 0px;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
 }
+#numberContainer #diff {
+  width: 8rem;
+  color: #fff;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  border-radius: 28px;
+   -webkit-box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
+    0 1px 3px 0 rgba(0, 0, 0, 0.12);
+}
+#numberContainer #diff h3{
+  width: 8rem;
+}
+
 </style>
 
