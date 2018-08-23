@@ -280,7 +280,7 @@ export default {
   position: relative;
   height: 100%;
   width: 100%;
-  padding: 1rem 0;
+  padding: 1rem 0 0 0;
 }
 
 #vis > svg {

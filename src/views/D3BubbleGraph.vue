@@ -76,17 +76,22 @@ export default {
       dialog: false
     };
   },
-  mounted() {
-    if (this.code) {
+  created(){
+      if (this.code) {
       this.dialog = true;
     } else {
       this.dialog = false;
     }
   },
+  mounted(){
+    
+  },
   watch: {
     $route(to, from) {
       if (to.name === "d3-bubble-graph") {
         this.dialog = false;
+      } else {
+        this.dialog = true;
       }
     }
   },
@@ -122,6 +127,9 @@ export default {
 </script>
 
 <style>
+body{
+    background: #fafafa;
+}
 .container {
   height: 100%;
 }
@@ -142,19 +150,29 @@ export default {
   height: 100%;
 }
 
-.footer{
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    display: flex;
-    justify-content: space-between;
-}
-.footer img{
-    border-width:0;
+footer {
+  width: 100;
+  padding: 1rem;
 }
 
-.footer a{
-    text-decoration: none;
+.footer {
+  background: #fafafa;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+   text-decoration: none;
+}
+.footer img {
+  border-width: 0;
+}
 
+.footer a {
+    color:  rgba(0, 0, 0, 0.87);
+    font-size: 1rem;
+    font-weight: 500;
+    text-transform: uppercase;
+  text-decoration: none;
 }
 </style>

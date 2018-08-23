@@ -1,8 +1,11 @@
 <template>
-    <div>
-        Lorem ipsum dolor sit ame
-        t consectetur adipisicing elit. In numquam totam delectus illum expedita commodi nulla tempore 
-        sit animi est ab, dignissimos consectetur laudantium eius dolores! Consectetur officiis recusandae adipisci?
+    <div class="modal-layout">
+        <div class="details">
+            
+        </div>
+        <div class="comments">
+            commenti    
+        </div>
     </div>
 </template>
 <script>
@@ -18,29 +21,24 @@ export default {
   }
 };
 </script>
-<style scoped>
-.details-layout {
-  z-index: 1;
-  height: 80%;
-  margin: 30px;
-  position: absolute;
-  top: 0;
-  left: 10%;
-  right: 10%;
-  width: 80%;
-}
-/* .details-layout {
-  position: absolute;
-  top:0;
-  left:0;
-  margin: 5rem;
-  z-index: 1;
-  width: 78rem;
+<style>
+.modal-layout {
+  margin: 0;
+  padding: 1rem 1rem;
   height: 100%;
+  width: 100%;
   display: flex;
-  justify-content: space-between;
-} */
-.details {
-  height: 100%;
+}
+.details{
+    padding: 1rem;
+    flex:1;
+    height: 100%;
+}
+
+.comments{
+    padding: 1rem;
+    flex:1;
+    background: #00ffee;
+    height: 100%;
 }
 </style>
