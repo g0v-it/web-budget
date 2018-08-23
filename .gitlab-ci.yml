@@ -1,0 +1,11 @@
+image: node:alpine
+
+pages:
+  script:
+  - npm run build
+  artifacts:
+    paths:
+    - dist
+    expire_in: 1 day
+  only:
+  - master

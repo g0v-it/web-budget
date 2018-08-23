@@ -10,7 +10,7 @@ import * as d3 from "d3";
 //---------------------------------------------------------
 //BOUNDARIES
     let margin = 80;
-    let width = 980-2*margin;
+    let width = 500-2*margin;
     let height = 420 - 2 * margin;
     let barSeparation=0.4;
     let animationDuration=1000;
@@ -24,11 +24,7 @@ import * as d3 from "d3";
       {year: 2012,value: 30},
       {year: 2013,value: 40},
       {year: 2014,value: 50},
-      {year: 2015,value: 60},
-      {year: 2016,value: 70},
-      {year: 2017,value: 80},
-      {year: 2018,value: 90},
-      {year: 2019,value: 100}];
+      {year: 2015,value: 60}];
   //---------------------------------------------------------
   //SCALE FUNCTIONS
     const xScale = d3.scaleBand()
@@ -161,10 +157,10 @@ export default {
 </script>
 <style>
 .cardGraph {
-  width: 70rem;
+  width: 100%;
   height: 30rem;
-  position: absolute;
-  z-index: 20;
+  /* position: absolute; */
+/*   z-index: 20; */
 }
 #tooltipTitle {
   padding: 0rem;

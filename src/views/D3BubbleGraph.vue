@@ -41,7 +41,7 @@
         </v-dialog>
         <footer>
             <ul class="footer">
-                <li><a href="https://git.copernicani.it/g0v/web-budget"> Visita sorgenti dell'App</a></li>
+                <li><a target="_blank" rel="noopener noreferrer" href="https://git.copernicani.it/g0v/web-budget"> Visita il sorgente dell'App</a></li>
                 <li><a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
                 <img alt="Creative Commons License" src="https://i.creativecommons.org/l/by/4.0/80x15.png" />
                 </a></li>
