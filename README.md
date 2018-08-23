@@ -38,7 +38,7 @@ For answers you may not find in here or in the Wiki, avoid posting issues. Feel 
 
 ## Credits
 
-- [All Contributors](../../contributors)
+- [All Contributors](https://gitlab.com/g0v-it/web-budget/graphs/master)
 - The Smart data platform is based on the [SDaaS Platform](https://bitbucket.org/linkeddatacenter/sdaas/wiki/Home) by LinkedData.Center . 
 - The [Vue community](https://vuejs.org) for the great framework
 
