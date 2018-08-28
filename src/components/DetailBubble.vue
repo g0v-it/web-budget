@@ -1,29 +1,29 @@
 <template>
     <div class="modal-layout">
         <div class="details">
-            <GraphBubble style=""></GraphBubble>
+            lore {{JSON.stringify(currentNode)}}
+            <!-- <GraphBubble style=""></GraphBubble> -->
         </div>
         <div class="comments">
-            commenti    
+            commenti
         </div>
     </div>
 </template>
 <script>
 import GraphBubble from "@/components/GraphBubble.vue";
- 
+
 export default {
-   components: {
+  name: "detail-bubble",
+  components: {
     GraphBubble
   },
-  props: {},
+  props: {
+    currentNode: Object
+  },
   data() {
     return {};
   },
-  methods: {
-    handle: function(ev) {
-      this.$emit("close", ev);
-    }
-  }
+  methods: {}
 };
 </script>
 <style>
@@ -35,17 +35,22 @@ export default {
   display: flex;
   flex-direction: row;
 }
-
-.details{
-    padding: 1rem;
-    flex:1;
-    min-height: 100%;
+@media screen and (max-width: 700px) {
+  .modal-layout {
+    flex-direction: column;
+  }
+}
+.details {
+  padding: 1rem;
+  flex: 1;
+  min-height: 100%;
 }
 
-.comments{
-    padding: 1rem;
-    flex:1;
-    background: #00ffee;
-    min-height: 100%;
+.comments {
+  padding: 1rem;
+  flex: 1;
+  min-width: 20rem;
+  background: #00ffee;
+  min-height: 100%;
 }
 </style>

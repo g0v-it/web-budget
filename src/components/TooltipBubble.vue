@@ -1,29 +1,28 @@
 <template>
-    <div id="bubble-tooltip" class="card"  >
-            <v-card-title id="tooltipTitle" class="headline grey lighten-2" primary-title><p>{{currentNode.topLevel}}</p></v-card-title>
-             <v-card-text id="tooltipText">
-              <p>{{title}}</p>
-            </v-card-text>
-            <div id="numberContainer">
-              
-                <div id="amount"><h3>{{amount}}</h3></div>
-                <div id="diff" :style="{backgroundColor:bgColor}" ><h3>{{currentNode.diff}}</h3></div>
-               
-            </div>                
+    <div id="bubble-tooltip" class="card">
+        <v-card-title id="tooltipTitle" class="headline grey lighten-2" primary-title>
+            <p>{{currentNode.topLevel}}</p>
+        </v-card-title>
+        <v-card-text id="tooltipText">
+            <p>{{currentNode.name}}</p>
+        </v-card-text>
+        <div id="numberContainer">
+
+            <div id="amount">
+                <h3>{{currentNode.amount}}</h3>
+            </div>
+            <div id="diff" :style="{backgroundColor:bgColor}">
+                <h3>{{currentNode.diff}}</h3>
+            </div>
+
+        </div>
     </div>
 </template>
 <script>
 export default {
   props: {
     currentNode: Object,
-    topLevel: String,
-    title: String,
-    amount: String,
-    diff: String,
-    bgColor: String,
-    dkColor: String,
-    xPos: Number,
-    yPos: Number
+    bgColor: String
   }
 };
 </script>

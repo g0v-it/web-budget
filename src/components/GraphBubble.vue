@@ -43,7 +43,6 @@ export default {
   mounted(){
     //----------------------------------------------------------
     //DROW GRAPHIC BOUNDLE
-    console.log("ekkle");
     
     t = d3.transition().duration(animationDuration);
     svg = d3.select('#svgPlaceholder');

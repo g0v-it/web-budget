@@ -1,14 +1,14 @@
 <template>
-    <div ref="vis" id="vis" >
+    <div ref="vis" id="vis">
         <div ref="grid" v-if="partitionID!='default'" class="grid">
-            <div v-for="(totAmount,label) in partitionBlocks" :key="label" class="card grid-block">
-                <h3 class="subheading" >{{label}}</h3> 
-                <h3 class="title" >€ {{totAmount}}</h3> 
-            </div>             
+            <div v-for="block in partitionBlocks" :key="block[partitionID]" class="card grid-block">
+                <h3 class="subheading">{{block[partitionID]}}</h3>
+                <h3 class="title">€ {{block.amount}}</h3>
+            </div>
         </div>
-        
+
         <svg :height="svgSize.height" :width="svgSize.width">
-            <circle class="bubble" v-for="node in nodes" :key="node.code" ></circle>
+            <circle class="bubble" v-for="node in nodes" :key="node.code"></circle>
         </svg>
     </div>
 </template>
@@ -18,6 +18,7 @@
 import rawData from "@/assets/example.json.js";
 import labels from "@/assets/labels.json.js";
 
+import { fillColor, calcCenterOfBlocks } from "@/utils/functions.js";
 import * as d3 from "d3";
 
 let simulation;
@@ -39,60 +40,21 @@ function createNodes(rawData) {
     .range([3, 90])
     .domain([minAmount, maxAmount]);
 
-
-  let myNodes = rawData.map(function(d) {      
+  let myNodes = rawData.map(function(d) {
     return {
       id: d.code,
+      name: d.name,
+      top_level: d.top_level,
       radius: radiusScale(+d.amount),
       amount: d.amount,
-      diff: (d.amount - d.last_amount) / d.amount * 100,
-      partitions: d.partition,
+      diff: (d.amount - d.last_amount) / d.last_amount * 100,
+      partitions: d.partitions,
       tags: d.tags,
       x: Math.random() * 900,
       y: Math.random() * 900
     };
   });
   return myNodes;
-}
-
-let fillColor = val => {
-  let color = "#D84B2A";
-  let bubbleHeight = 5;
-  if (val > -25) {
-    color = "#EE9586";
-    bubbleHeight = 4;
-  }
-  if (val > -5) {
-    color = "#E4B7B2";
-    bubbleHeight = 3;
-  }
-  if (val > 0) {
-    color = "#BECCAE";
-    bubbleHeight = 2;
-  }
-  if (val > 5) {
-    color = "#9CAF84";
-    bubbleHeight = 1;
-  }
-  if (val > 25) {
-    color = "#7AA25C";
-    bubbleHeight = 0;
-  }
-  return color;
-};
-
-function calcCenterOfBlocks(childNodes) {
-  let centers = [];
-  for (const key in childNodes) {
-    if (childNodes.hasOwnProperty(key)) {
-      const c = {
-        x: childNodes[key].offsetLeft + childNodes[key].offsetWidth / 2,
-        y: childNodes[key].offsetTop + childNodes[key].offsetHeight / 2
-      };
-      centers.push(c);
-    }
-  }
-  return centers;
 }
 
 /* Vue component */
@@ -102,7 +64,7 @@ export default {
   },
   data: () => {
     return {
-      partitionBlocks: {},
+      partitionBlocks: [],
       nodes: rawData.accounts,
       svgSize: {
         height: 0,
@@ -114,9 +76,9 @@ export default {
   watch: {
     partitionID: function() {
       if (this.partitionID !== "default") {
-        this.partitionBlocks = labels.partitions[this.partitionID];
+        this.partitionBlocks = labels[this.partitionID];
       } else {
-        this.partitionBlocks = {};
+        this.partitionBlocks = [];
       }
     }
   },
@@ -127,6 +89,7 @@ export default {
     /* Create chart */
     this.chart(rawData.accounts);
   },
+
   updated() {
     this.svgSize.height = this.$refs.vis.offsetHeight;
     this.svgSize.width = this.$refs.vis.offsetWidth;
@@ -137,14 +100,8 @@ export default {
       let centers = calcCenterOfBlocks(this.$refs.grid.childNodes);
       let labels = centers;
 
-      for (let i = 0; i < Object.keys(this.partitionBlocks).length; i++) {
-        centers[i].value = Object.keys(this.partitionBlocks)[i];
-      }
-
-      for (const key in this.partitionBlocks) {
-        if (this.partitionBlocks.hasOwnProperty(key)) {
-          labels;
-        }
+      for (let i = 0; i < this.partitionBlocks.length; i++) {
+        centers[i].value = this.partitionBlocks[i][this.partitionID];
       }
 
       let groupCatId = {
@@ -192,15 +149,20 @@ export default {
           this.$emit("click", d);
         })
         .on("mouseover", function(d) {
-            this.style['stroke-width']=2;
-          temp.$emit("over", {d, 
-                              colorBg:fillColor(d.diff), 
-                              darkerColor:d3.rgb(fillColor(d.diff)).darker().hex(),
-                              x:d.x+24,
-                              y:d.y+60});
+          this.style["stroke-width"] = 2;
+          temp.$emit("over", {
+            d,
+            colorBg: fillColor(d.diff),
+            darkerColor: d3
+              .rgb(fillColor(d.diff))
+              .darker()
+              .hex(),
+            x: d.x + 24,
+            y: d.y + 60
+          });
         })
         .on("mouseout", function(d) {
-            this.style['stroke-width']=1;
+          this.style["stroke-width"] = 1;
           temp.$emit("out", d);
         });
 
@@ -245,6 +207,7 @@ export default {
       for (let i = 0; i < nodes.length; ++i) {
         let center = group_cat_id.labels.find(function(el) {
           return el.value == nodes[i].partitions[group_cat_id.partition];
+          console.log("nodes", nodes);
         });
         nodes[i].group_center = { x: center.x, y: center.y };
       }
@@ -294,18 +257,18 @@ export default {
   display: grid;
   grid-gap: 1rem;
   grid-template-columns: repeat(4, 1fr);
-  grid-auto-rows: 25rem;
+  grid-auto-rows: 30rem;
 }
 .grid > .subheading {
+  z-index: 5;
   text-align: center;
 }
 .grid > .grid-block {
   padding: 1rem;
-   position: relative;
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  
 }
 
 @media screen and (max-width: 900px) {
