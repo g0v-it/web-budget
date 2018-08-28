@@ -27,7 +27,7 @@ npm run build
 
 ## Data
 
-All visualized data are extracted from [bdap portal](https://bdap-opendata.mef.gov.it/tema/bilancio-finanziario-dello-stato-0) and processed by a dedicated *smart data management platform* (DMP) compliant with the W3C Semantic Web standards. The platform and the datalake is available in the [data-budget repository](https://git.copernicani.it/g0v-it/data-budget)
+All visualized data are extracted from [bdap portal](https://bdap-opendata.mef.gov.it/tema/bilancio-finanziario-dello-stato-0) and processed by a dedicated *smart data management platform* (DMP) compliant with the W3C Semantic Web standards. The platform and the datalake is available in the [data-budget repository](https://git.copernicani.it/g0v/data-budget)
 
 The web application connects to data management platform through an api server endpoint available at the address http://v1.api.data.budget.g0v.it:8080/. You can also run your private instance of the platform (see data-budget repo for more info )
 
