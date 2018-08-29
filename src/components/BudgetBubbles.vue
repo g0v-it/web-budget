@@ -16,9 +16,9 @@
 <script>
 /* VA SISTEMATO LA STRUTTURA GENERALE DELLO SCRIPT */
 import rawData from "@/assets/example.json.js";
-import labels from "@/assets/labels.json.js";
 
 import { fillColor, calcCenterOfBlocks } from "@/utils/functions.js";
+import { getAccounts } from '@/utils/api.service.js'
 import * as d3 from "d3";
 
 let simulation;
@@ -60,7 +60,8 @@ function createNodes(rawData) {
 /* Vue component */
 export default {
   props: {
-    partitionID: String
+    partitionID: String,
+    partitionLabels: Object
   },
   data: () => {
     return {
@@ -76,7 +77,7 @@ export default {
   watch: {
     partitionID: function() {
       if (this.partitionID !== "default") {
-        this.partitionBlocks = labels[this.partitionID];
+        this.partitionBlocks = this.partitionLabels[this.partitionID];
       } else {
         this.partitionBlocks = [];
       }
@@ -86,6 +87,7 @@ export default {
     this.svgSize.height = this.$refs.vis.offsetHeight;
     this.svgSize.width = this.$refs.vis.offsetWidth;
 
+   
     /* Create chart */
     this.chart(rawData.accounts);
   },
@@ -98,7 +100,6 @@ export default {
       this.groupBubbles();
     } else {
       let centers = calcCenterOfBlocks(this.$refs.grid.childNodes);
-      let labels = centers;
 
       for (let i = 0; i < this.partitionBlocks.length; i++) {
         centers[i].value = this.partitionBlocks[i][this.partitionID];
@@ -246,7 +247,7 @@ export default {
   padding: 1rem 0 0 0;
 }
 
-#vis > svg {
+#vis  svg {
   z-index: 1;
   position: absolute;
   top: 0;
@@ -259,11 +260,11 @@ export default {
   grid-template-columns: repeat(4, 1fr);
   grid-auto-rows: 30rem;
 }
-.grid > .subheading {
-  z-index: 5;
+.grid  .subheading {
+  z-index: 1;
   text-align: center;
 }
-.grid > .grid-block {
+.grid  .grid-block {
   padding: 1rem;
   position: relative;
   display: flex;

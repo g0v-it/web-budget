@@ -10,4 +10,6 @@ export const getNodeDetails = (id) => {
     return get(`${apiEndpoint}/account/${id}`);
 }
 
-export const s = 'cioa'
+export const getPartitionLabels = () => {
+    return get(`${apiEndpoint}/partition_labels`);
+}

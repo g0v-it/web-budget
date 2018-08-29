@@ -14,8 +14,8 @@
             </v-btn-toggle>
         </div>
         <BubbleGraphLegend v-if="partitionID=='default'" :datasetMeta="datasetMeta" />
-        <BudgetBubbles class="graph-layout" @click="onClick" @over="onMouseOver" @out="onMouseOut" :partitionID="partitionID" />
-        <TooltipBubble style="top: 7rem ; right: 2rem; position:fixed;" :currentNode="currentNode" :diff="currentNode.diff" :bgColor="currentNode.colorBg" v-if="showTooltip && !dialog"></TooltipBubble>
+        <BudgetBubbles class="graph-layout" @click="onClick" @over="onMouseOver" @out="onMouseOut" :partitionID="partitionID" :partitionLabels="partitionLabels" />
+        <TooltipBubble style="top: 7rem ; right: 2rem; position:fixed;" :currentNode="hoveredNode" :diff="hoveredNode.diff" :bgColor="hoveredNode.colorBg" v-if="showTooltip && !dialog"></TooltipBubble>
 
         <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
             <v-card>
@@ -32,7 +32,7 @@
                     </v-toolbar-items>
                 </v-toolbar>
 
-                <DetailBubble :currentNode="currentNode"></DetailBubble>
+                <DetailBubble :selectedNode="selectedNode"></DetailBubble>
             </v-card>
         </v-dialog>
         <footer>
@@ -57,7 +57,11 @@ import TooltipBubble from "@/components/TooltipBubble.vue";
 import DetailBubble from "@/components/DetailBubble.vue";
 import BubbleGraphLegend from "@/components/BubbleGraphLegend.vue";
 
-import { getAccounts, getNodeDetails } from "@/utils/api.service.js";
+import {
+  getAccounts,
+  getNodeDetails,
+  getPartitionLabels
+} from "@/utils/api.service.js";
 
 export default {
   props: {
@@ -72,10 +76,12 @@ export default {
 
   data: () => {
     return {
-      currentNode: {},
+      hoveredNode: {},
       datasetMeta: {},
 
+      selectedNode: {},
       partitionID: "default",
+      partitionLabels: {},
       showTooltip: false,
       dialog: false
     };
@@ -84,8 +90,7 @@ export default {
     if (this.code) {
       this.dialog = true;
       getNodeDetails(this.code).then(res => {
-        this.currentNode = res.data;
-        console.log("currentNode", this.currentNode);
+        this.selectedNode = res.data;
       });
     } else {
       this.dialog = false;
@@ -95,6 +100,9 @@ export default {
     getAccounts().then(res => {
       this.datasetMeta = res.data.meta;
     });
+    getPartitionLabels().then(res => {
+      this.partitionLabels = res.data;
+    });
   },
   watch: {
     $route(to, from) {
@@ -102,8 +110,7 @@ export default {
         this.dialog = false;
       } else {
         getNodeDetails(this.$route.params.code).then(res => {
-          this.currentNode = res.data;
-          console.log("node", res.data);
+          this.selectedNode = res.data;
         });
         this.dialog = true;
       }
@@ -113,10 +120,6 @@ export default {
     onClick(node) {
       this.dialog = true;
       this.showTooltip = false;
-      getNodeDetails(node.id).then(res => {
-        this.currentNode = res.data;
-        console.log("node", res.data);
-      });
       this.$router.push({ name: "account-details", params: { code: node.id } });
     },
     onMouseOver(node) {
@@ -129,7 +132,7 @@ export default {
       n.darkerColor = node.darkerColor;
       n.x = node.x;
       n.y = node.y;
-      this.currentNode = n;
+      this.hoveredNode = n;
       this.showTooltip = true;
     },
     onMouseOut(node) {

@@ -1,7 +1,11 @@
 <template>
     <div class="modal-layout">
         <div class="details">
-            lore {{JSON.stringify(currentNode)}}
+            <h2 class="azione">{{selectedNode.name}}</h2>
+            <h3 class="ministero">Ministero: {{selectedNode.top_level}}</h3>
+        <!--     <h3 class="missione">Missione: {{selectedNode.partitions.second_partition}}</h3> -->
+            <p>Spesa: € {{selectedNode.amount}}</p>
+            <p>Ultima spesa: € {{selectedNode.last_amount}}</p>
             <!-- <GraphBubble style=""></GraphBubble> -->
         </div>
         <div class="comments">
@@ -18,7 +22,7 @@ export default {
     GraphBubble
   },
   props: {
-    currentNode: Object
+    selectedNode: Object
   },
   data() {
     return {};
@@ -46,11 +50,24 @@ export default {
   min-height: 100%;
 }
 
+.azione{
+    font-size: 2rem;
+    font-weight: 500;
+    margin: 1rem 0;
+}
+.ministero, .missione{
+    font-size: 1.5rem;
+    font-weight: 400;
+     margin: 1rem 0;
+}
+
+
+
 .comments {
   padding: 1rem;
   flex: 1;
   min-width: 20rem;
-  background: #00ffee;
+  background: #c9c9c9;
   min-height: 100%;
 }
 </style>
