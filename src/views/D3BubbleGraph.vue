@@ -1,5 +1,6 @@
 <template>
     <div class="container fluid">
+
         <div class="partition-buttons">
             <v-btn-toggle v-model="partitionID" mandatory>
                 <v-btn flat color="primary" value="default">
@@ -13,9 +14,10 @@
                 </v-btn>
             </v-btn-toggle>
         </div>
+
         <BubbleGraphLegend v-if="partitionID=='default'" :datasetMeta="datasetMeta" />
         <BudgetBubbles class="graph-layout" @click="onClick" @over="onMouseOver" @out="onMouseOut" :partitionID="partitionID" :partitionLabels="partitionLabels" />
-        <TooltipBubble style="top: 7rem ; right: 2rem; position:fixed;" :currentNode="hoveredNode" :diff="hoveredNode.diff" :bgColor="hoveredNode.colorBg" v-if="showTooltip && !dialog"></TooltipBubble>
+        <TooltipBubble style="top: 7rem ; right: 2rem; position:fixed;" :currentNode="hoveredNode" :diff="hoveredNode.diff" :bgColor="hoveredNode.colorBg" v-if="showTooltip && !dialog" />
 
         <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
             <v-card>
@@ -27,6 +29,12 @@
                     <v-spacer></v-spacer>
                     <v-toolbar-items>
                         <v-btn dark flat>
+                            <v-icon>fab fa-facebook</v-icon>
+                        </v-btn>
+                        <v-btn dark flat>
+                            <v-icon>fab fa-twitter</v-icon>
+                        </v-btn>
+                        <v-btn dark flat @click="copyLink">
                             <v-icon>file_copy</v-icon>
                         </v-btn>
                     </v-toolbar-items>
@@ -35,6 +43,7 @@
                 <DetailBubble :selectedNode="selectedNode"></DetailBubble>
             </v-card>
         </v-dialog>
+
         <footer>
             <ul class="footer">
                 <li>
@@ -140,6 +149,12 @@ export default {
     },
     closeDialog(el) {
       this.dialog = false;
+    },
+    copyLink(){
+        /* this.$refs.urlText.value=window.location.href;
+        this.$refs.urlText.select();
+        document.execCommand("copy");
+        console.log('window', this.$refs.urlText.value); */
     }
   }
 };
@@ -164,7 +179,7 @@ body {
   color: rgba(0, 0, 0, 0.87);
 }
 
-.container > .graph-layout {
+.container .graph-layout {
   width: 100%;
   height: 100%;
 }

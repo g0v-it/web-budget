@@ -9,7 +9,7 @@
             <!-- <GraphBubble style=""></GraphBubble> -->
         </div>
         <div class="comments">
-            commenti
+
         </div>
     </div>
 </template>
@@ -67,7 +67,7 @@ export default {
   padding: 1rem;
   flex: 1;
   min-width: 20rem;
-  background: #c9c9c9;
+  background: #ececec;
   min-height: 100%;
 }
 </style>

@@ -7,8 +7,8 @@
             </div>
         </div>
 
-        <svg :height="svgSize.height" :width="svgSize.width">
-            <circle class="bubble" v-for="node in nodes" :key="node.code"></circle>
+        <svg id="bubbles" :height="svgSize.height" :width="svgSize.width">
+
         </svg>
     </div>
 </template>
@@ -18,7 +18,7 @@
 import rawData from "@/assets/example.json.js";
 
 import { fillColor, calcCenterOfBlocks } from "@/utils/functions.js";
-import { getAccounts } from '@/utils/api.service.js'
+import { getAccounts } from "@/utils/api.service.js";
 import * as d3 from "d3";
 
 let simulation;
@@ -54,6 +54,11 @@ function createNodes(rawData) {
       y: Math.random() * 900
     };
   });
+
+  /*   myNodes = myNodes.sort((a,b)=>{
+        return b.amount - a.amount;
+    })
+ */
   return myNodes;
 }
 
@@ -66,7 +71,6 @@ export default {
   data: () => {
     return {
       partitionBlocks: [],
-      nodes: rawData.accounts,
       svgSize: {
         height: 0,
         width: 0
@@ -87,13 +91,16 @@ export default {
     this.svgSize.height = this.$refs.vis.offsetHeight;
     this.svgSize.width = this.$refs.vis.offsetWidth;
 
-   
-    /* Create chart */
+    /* getAccounts().then(res => {
+      this.chart(res.data.accounts);
+    }); */
     this.chart(rawData.accounts);
+    /* Create chart */
   },
 
   updated() {
-    this.svgSize.height = this.$refs.vis.offsetHeight;
+    console.log("update called");
+        this.svgSize.height = this.$refs.vis.offsetHeight;
     this.svgSize.width = this.$refs.vis.offsetWidth;
 
     if (this.partitionID === "default") {
@@ -133,10 +140,14 @@ export default {
         return -Math.pow(d.radius, 2.0) * forceStrength;
       }
       let temp = this;
+
       let bubbles = d3
-        .select("#vis svg")
+        .select("#bubbles")
         .selectAll("circle")
         .data(nodes)
+        .enter()
+        .append("circle")
+        .classed("bubble", true)
         .attr("r", 0)
         .attr("fill", function(d) {
           return fillColor(d.diff);
@@ -182,7 +193,7 @@ export default {
         .on("tick", ticked)
         .stop();
 
-      this.groupBubbles();
+   /*    this.groupBubbles(); */
     },
     groupBubbles() {
       simulation.force(
@@ -247,7 +258,7 @@ export default {
   padding: 1rem 0 0 0;
 }
 
-#vis  svg {
+#vis svg {
   z-index: 1;
   position: absolute;
   top: 0;
@@ -260,11 +271,11 @@ export default {
   grid-template-columns: repeat(4, 1fr);
   grid-auto-rows: 30rem;
 }
-.grid  .subheading {
+.grid .subheading {
   z-index: 1;
   text-align: center;
 }
-.grid  .grid-block {
+.grid .grid-block {
   padding: 1rem;
   position: relative;
   display: flex;
