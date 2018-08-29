@@ -1,6 +1,6 @@
 <template>
     <div ref="vis" id="vis">
-        <div ref="grid" v-if="partitionID!='default'" class="grid">
+        <div ref="grid" v-if="partitionID != 'default'" class="grid">
             <div v-for="block in partitionBlocks" :key="block[partitionID]" class="card grid-block">
                 <h3 class="subheading">{{block[partitionID]}}</h3>
                 <h3 class="title">€ {{block.amount}}</h3>
@@ -15,11 +15,12 @@
 
 <script>
 /* VA SISTEMATO LA STRUTTURA GENERALE DELLO SCRIPT */
-import rawData from "@/assets/example.json.js";
+/* import rawData from "@/assets/example.json.js"; */
 
 import { fillColor, calcCenterOfBlocks } from "@/utils/functions.js";
 import { getAccounts } from "@/utils/api.service.js";
 import * as d3 from "d3";
+
 
 let simulation;
 let velocityDecay = 0.2;
@@ -88,19 +89,16 @@ export default {
     }
   },
   mounted() {
-    this.svgSize.height = this.$refs.vis.offsetHeight;
-    this.svgSize.width = this.$refs.vis.offsetWidth;
-
-    /* getAccounts().then(res => {
+    getAccounts().then(res => {
       this.chart(res.data.accounts);
-    }); */
-    this.chart(rawData.accounts);
-    /* Create chart */
+      this.svgSize.height = this.$refs.vis.offsetHeight;
+      this.svgSize.width = this.$refs.vis.offsetWidth;
+    });
   },
 
   updated() {
     console.log("update called");
-        this.svgSize.height = this.$refs.vis.offsetHeight;
+    this.svgSize.height = this.$refs.vis.offsetHeight;
     this.svgSize.width = this.$refs.vis.offsetWidth;
 
     if (this.partitionID === "default") {
@@ -193,7 +191,7 @@ export default {
         .on("tick", ticked)
         .stop();
 
-   /*    this.groupBubbles(); */
+      /*    this.groupBubbles(); */
     },
     groupBubbles() {
       simulation.force(

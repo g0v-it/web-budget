@@ -149,12 +149,6 @@ export default {
     },
     closeDialog(el) {
       this.dialog = false;
-    },
-    copyLink(){
-        /* this.$refs.urlText.value=window.location.href;
-        this.$refs.urlText.select();
-        document.execCommand("copy");
-        console.log('window', this.$refs.urlText.value); */
     }
   }
 };
