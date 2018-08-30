@@ -4,7 +4,7 @@
         <div class="partition-buttons">
             <v-btn-toggle v-model="partitionID" mandatory>
                 <v-btn flat color="primary" value="default">
-                    dafault
+                    default
                 </v-btn>
                 <v-btn flat color="primary" value="top_partition">
                     ministero
