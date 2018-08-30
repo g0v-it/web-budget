@@ -7,9 +7,7 @@
             </div>
         </div>
 
-        <svg id="bubbles" :height="svgSize.height" :width="svgSize.width">
-
-        </svg>
+        <svg id="bubbles" :height="svgSize.height" :width="svgSize.width"></svg>
     </div>
 </template>
 

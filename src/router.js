@@ -17,13 +17,13 @@ export default new Router({
             name: 'd3-bubble-graph',
             component: D3BubbleGraph
         },
-        /* {
+        {
           path: '/treemap',
           name: 'treemap',
           // route level code-splitting
           // this generates a separate chunk (treemap.[hash].js) for this route
           // which is lazy-loaded when the route is visited.
           component: () => import('./views/Treemap.vue')
-        } */
+        }
     ]
 })

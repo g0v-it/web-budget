@@ -1,7 +1,7 @@
 <template>
-    <div class="container fluid">
+    <div class="g0v-container">
 
-        <div class="partition-buttons">
+        <div class="g0v-partitions-header">
             <v-btn-toggle v-model="partitionID" mandatory>
                 <v-btn flat color="primary" value="default">
                     dafault
@@ -15,37 +15,28 @@
             </v-btn-toggle>
         </div>
 
-        <BubbleGraphLegend v-if="partitionID=='default'" :datasetMeta="datasetMeta" />
-        <BudgetBubbles class="graph-layout" @click="onClick" @over="onMouseOver" @out="onMouseOut" :partitionID="partitionID" :partitionLabels="partitionLabels" />
-        <TooltipBubble style="top: 7rem ; right: 2rem; position:fixed;" :currentNode="hoveredNode" :diff="hoveredNode.diff" :bgColor="hoveredNode.colorBg" v-if="showTooltip && !dialog" />
+        <div class="g0v-content">
 
-        <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
-            <v-card>
-                <v-toolbar dark color="primary">
-                    <v-btn icon dark @click.native="dialog = false; $router.push({ name: 'd3-bubble-graph'})">
-                        <v-icon>close</v-icon>
-                    </v-btn>
-                    <v-toolbar-title>Dettagli azione</v-toolbar-title>
-                    <v-spacer></v-spacer>
-                    <v-toolbar-items>
-                        <v-btn dark flat>
-                            <v-icon>fab fa-facebook</v-icon>
-                        </v-btn>
-                        <v-btn dark flat>
-                            <v-icon>fab fa-twitter</v-icon>
-                        </v-btn>
-                        <v-btn dark flat @click="copyLink">
-                            <v-icon>file_copy</v-icon>
-                        </v-btn>
-                    </v-toolbar-items>
-                </v-toolbar>
+            <div class="g0v-content-grid">
 
-                <DetailBubble :selectedNode="selectedNode"></DetailBubble>
-            </v-card>
-        </v-dialog>
+                <div class="left-column">
+                    <BubbleGraphLegend v-if="partitionID=='default'" :datasetMeta="datasetMeta" />
+                </div>
+
+                <div class="right-column">
+                    <TooltipBubble :currentNode="hoveredNode" :diff="hoveredNode.diff" :bgColor="hoveredNode.colorBg" v-if="showTooltip && !dialog" />
+                </div>
+
+            </div>
+
+            <div class="g0v-bubble-chart">
+                <BudgetBubbles class="graph-layout" @click="onClick" @over="onMouseOver" @out="onMouseOut" :partitionID="partitionID" :partitionLabels="partitionLabels" />
+            </div>
+
+        </div>
 
         <footer>
-            <ul class="footer">
+            <ul class="g0v-footer">
                 <li>
                     <a target="_blank" rel="noopener noreferrer" href="https://git.copernicani.it/g0v/web-budget">Seguici su Gitlab</a>
                 </li>
@@ -56,6 +47,7 @@
                 </li>
             </ul>
         </footer>
+
     </div>
 </template>
 
@@ -155,12 +147,82 @@ export default {
 </script>
 
 <style>
-body {
-  background: #fafafa;
+.g0v-container {
+  padding: 24px 24px 0 24px;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
 }
-.container {
+
+/* .g0v-partitions-header{
+    height: 3rem;
+} */
+
+.g0v-content {
+  margin: 1rem 0 0 0;
+  position: relative;
   height: 100%;
 }
+
+.g0v-bubble-chart {
+  /*   background: rgba(0, 0, 0, 0.342); */
+  height: 100%;
+  width: 100%;
+}
+
+.g0v-content-grid {
+  padding: 0;
+  margin: 0;
+  pointer-events: none;
+  height: 100%;
+  position: absolute;
+  z-index: 0;
+  display: grid;
+  grid-template-areas: "left . . . right";
+  grid-auto-columns: 1fr;
+}
+
+.left-column {
+  /*   background: rgba(220, 255, 221, 0.247); */
+  position: relative;
+  grid-area: left;
+}
+
+.right-column {
+  /*   background: rgba(220, 244, 255, 0.39); */
+  position: relative;
+  grid-area: right;
+}
+
+footer {
+  height: 3rem;
+  width: 100;
+  padding: 0.5rem 0;
+}
+
+.g0v-footer {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  text-decoration: none;
+}
+
+.g0v-footer img {
+  border-width: 0;
+}
+
+.g0v-footer a {
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 1rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+/* Global style */
 .card {
   border-radius: 2px;
   min-width: 0;
@@ -171,36 +233,5 @@ body {
     0 1px 3px 0 rgba(0, 0, 0, 0.12);
   background-color: #fff;
   color: rgba(0, 0, 0, 0.87);
-}
-
-.container .graph-layout {
-  width: 100%;
-  height: 100%;
-}
-
-footer {
-  width: 100;
-  padding: 1rem;
-}
-
-.footer {
-  background: #fafafa;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  justify-content: space-between;
-  text-decoration: none;
-}
-.footer img {
-  border-width: 0;
-}
-
-.footer a {
-  color: rgba(0, 0, 0, 0.87);
-  font-size: 1rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  text-decoration: none;
 }
 </style>

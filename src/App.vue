@@ -21,7 +21,7 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-toolbar app :clipped-left="clipped">
+    <v-toolbar  app :clipped-left="clipped">
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title v-text="title"></v-toolbar-title>
     </v-toolbar>
@@ -45,12 +45,12 @@ export default {
           icon: "bubble_chart",
           title: "Bubble Graph",
           path: "/"
-        }/* ,
+        },
         {
           icon: "pie_chart",
           title: "Another Graph",
           path: "/treemap"
-        } */
+        }
       ],
       title: "Budget.g0v.it"
     };
