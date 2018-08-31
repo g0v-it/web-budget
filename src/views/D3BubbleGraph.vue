@@ -3,14 +3,14 @@
 
         <div class="g0v-partitions-header">
             <v-btn-toggle v-model="partitionID" mandatory>
-                <v-btn flat color="primary" value="default">
-                    <router-link :to="{ name: 'd3-bubble-graph'}">default</router-link>
+                <v-btn flat color="primary" value="default" @click="$router.push({ name: 'd3-bubble-graph'})">
+                    default
                 </v-btn>
-                <v-btn flat color="primary" value="top_partition">
-                    <router-link :to="{ name: 'accounts-partition', params: { urlPartitionID: 'top_partition' }}">ministero</router-link>
+                <v-btn flat color="primary" value="top_partition" @click="$router.push({ name: 'accounts-partition', params: { urlPartitionID: 'top_partition' }})">
+                    ministero
                 </v-btn>
-                <v-btn flat color="primary" value="second_partition">
-                    <router-link :to="{ name: 'accounts-partition', params: { urlPartitionID: 'second_partition' }}">missione</router-link>
+                <v-btn flat color="primary" value="second_partition" @click="$router.push({ name: 'accounts-partition', params: { urlPartitionID: 'second_partition' }})">
+                    missione
                 </v-btn>
             </v-btn-toggle>
         </div>
