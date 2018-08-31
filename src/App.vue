@@ -50,6 +50,11 @@ export default {
           icon: "pie_chart",
           title: "Another Graph",
           path: "/treemap"
+        },
+        {
+          icon: "",
+          title: "Crediti",
+          path: "/credits"
         }
       ],
       title: "Budget.g0v.it"

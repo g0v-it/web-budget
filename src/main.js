@@ -3,10 +3,10 @@ import Vue from 'vue'
 import './plugins/vuetify'
 import App from './App.vue'
 import router from './router'
-import axios from 'axios'
+import * as api from './api.service.js'
 
 Vue.config.productionTip = false
-Vue.prototype.$http = axios;
+Vue.prototype.$http = api;
 
 new Vue({
   router,

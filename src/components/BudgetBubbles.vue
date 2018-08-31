@@ -7,16 +7,12 @@
             </div>
         </div>
 
-        <svg id="bubbles" :height="svgSize.height" :width="svgSize.width"></svg>
+        <svg id="bubbles"></svg>
     </div>
 </template>
 
 <script>
-/* VA SISTEMATO LA STRUTTURA GENERALE DELLO SCRIPT */
-/* import rawData from "@/assets/example.json.js"; */
-
 import { fillColor, calcCenterOfBlocks } from "@/utils/functions.js";
-import { getAccounts } from "@/utils/api.service.js";
 import * as d3 from "d3";
 
 let simulation;
@@ -85,16 +81,30 @@ export default {
       }
     }
   },
+  /* created() {
+    if (this.partitionID !== "default") {
+      this.partitionBlocks = this.partitionLabels[this.partitionID];
+    } else {
+      this.partitionBlocks = [];
+    }
+  }, */
   mounted() {
-    getAccounts().then(res => {
-      this.chart(res.data.accounts);
+    this.$http.getAccounts().then(res => {
+      this.chart(res.accounts);
       this.svgSize.height = this.$refs.vis.offsetHeight;
       this.svgSize.width = this.$refs.vis.offsetWidth;
+      this.groupBubbles();
+      console.log("mounted", this.partitionID);
+      /* if (this.partitionID) {
+        this.partitionBlocks = this.partitionLabels[this.partitionID];
+        console.log("this.partitionID da  budget", this.partitionID);
+      } */
     });
+    /* console.log('this.$refs.vis',this.$refs.vis.offsetHeight ); */
   },
 
   updated() {
-    console.log("update called");
+    console.log("this.partitionID da  budget update", this.partitionID);
     this.svgSize.height = this.$refs.vis.offsetHeight;
     this.svgSize.width = this.$refs.vis.offsetWidth;
 
@@ -164,8 +174,8 @@ export default {
               .rgb(fillColor(d.diff))
               .darker()
               .hex(),
-            x: d.x + 24,
-            y: d.y + 60
+            x: d.x,
+            y: d.y
           });
         })
         .on("mouseout", function(d) {
@@ -179,7 +189,6 @@ export default {
         .attr("r", function(d) {
           return d.radius;
         });
-
 
       simulation = d3
         .forceSimulation()
@@ -256,6 +265,7 @@ export default {
 #bubbles {
   z-index: 1;
   height: 100%;
+  width: 100%;
   top: 0;
   position: absolute;
   pointer-events: none;

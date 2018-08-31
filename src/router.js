@@ -13,17 +13,31 @@ export default new Router({
             props: true
         },
         {
+            path: '/partition/:urlPartitionID',
+            name: 'accounts-partition',
+            component: D3BubbleGraph,
+            props: true
+        },
+        {
             path: '/',
             name: 'd3-bubble-graph',
             component: D3BubbleGraph
         },
         {
-          path: '/treemap',
-          name: 'treemap',
-          // route level code-splitting
-          // this generates a separate chunk (treemap.[hash].js) for this route
-          // which is lazy-loaded when the route is visited.
-          component: () => import('./views/Treemap.vue')
+            path: '/credits',
+            name: 'credits',
+            // route level code-splitting
+            // this generates a separate chunk (treemap.[hash].js) for this route
+            // which is lazy-loaded when the route is visited.
+            component: () => import('./views/Credit.vue')
+        },
+        {
+            path: '/treemap',
+            name: 'treemap',
+            // route level code-splitting
+            // this generates a separate chunk (treemap.[hash].js) for this route
+            // which is lazy-loaded when the route is visited.
+            component: () => import('./views/Treemap.vue')
         }
     ]
 })

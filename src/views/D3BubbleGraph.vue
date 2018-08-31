@@ -4,13 +4,13 @@
         <div class="g0v-partitions-header">
             <v-btn-toggle v-model="partitionID" mandatory>
                 <v-btn flat color="primary" value="default">
-                    dafault
+                    <router-link :to="{ name: 'd3-bubble-graph'}">default</router-link>
                 </v-btn>
                 <v-btn flat color="primary" value="top_partition">
-                    ministero
+                    <router-link :to="{ name: 'accounts-partition', params: { urlPartitionID: 'top_partition' }}">ministero</router-link>
                 </v-btn>
                 <v-btn flat color="primary" value="second_partition">
-                    missione
+                    <router-link :to="{ name: 'accounts-partition', params: { urlPartitionID: 'second_partition' }}">missione</router-link>
                 </v-btn>
             </v-btn-toggle>
         </div>
@@ -24,24 +24,54 @@
                 </div>
 
                 <div class="right-column">
-                    <TooltipBubble :currentNode="hoveredNode" :bgColor="hoveredNode.colorBg" v-if="showTooltip && !dialog" />
+
                 </div>
 
             </div>
-
+            <!--  -->
             <div class="g0v-bubble-chart">
                 <BudgetBubbles class="graph-layout" @click="onClick" @over="onMouseOver" @out="onMouseOut" :partitionID="partitionID" :partitionLabels="partitionLabels" />
             </div>
 
+            <TooltipBubble :style="{ top: hoveredNode.y + 'px' , left: hoveredNode.x + 'px' }" class="tooltip" :currentNode="hoveredNode" :bgColor="hoveredNode.colorBg" v-if="showTooltip && !dialog" />
+
         </div>
+
+        <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+            <v-card>
+                <v-toolbar dark color="primary">
+                    <v-btn icon dark @click.native="dialog = false; $router.push({ name: 'd3-bubble-graph'})">
+                        <v-icon>close</v-icon>
+                    </v-btn>
+                    <v-toolbar-title>Dettagli azione</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    <v-toolbar-items>
+                        <v-btn dark flat>
+                            <v-icon>fab fa-facebook</v-icon>
+                        </v-btn>
+                        <v-btn dark flat>
+                            <v-icon>fab fa-twitter</v-icon>
+                        </v-btn>
+                        <v-btn dark flat>
+                            <v-icon>file_copy</v-icon>
+                        </v-btn>
+                    </v-toolbar-items>
+                </v-toolbar>
+
+                <DetailBubble :selectedNode="selectedNode"></DetailBubble>
+            </v-card>
+        </v-dialog>
 
         <footer>
             <ul class="g0v-footer">
                 <li>
                     <a target="_blank" rel="noopener noreferrer" href="https://git.copernicani.it/g0v/web-budget">Seguici su Gitlab</a>
                 </li>
-                <li>
-                    <a target="_blank" rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+                <li class="g0v-credits">
+                    <router-link :to="{ name: 'credits' }">crediti</router-link>
+                </li>
+                <li class="g0v-license">
+                    <a  target="_blank" rel="license" href="http://creativecommons.org/licenses/by/4.0/">
                         <img alt="Creative Commons License" src="https://i.creativecommons.org/l/by/4.0/80x15.png" />
                     </a>
                 </li>
@@ -58,15 +88,10 @@ import TooltipBubble from "@/components/TooltipBubble.vue";
 import DetailBubble from "@/components/DetailBubble.vue";
 import BubbleGraphLegend from "@/components/BubbleGraphLegend.vue";
 
-import {
-  getAccounts,
-  getNodeDetails,
-  getPartitionLabels
-} from "@/utils/api.service.js";
-
 export default {
   props: {
-    code: String
+    code: String,
+    urlPartitionID: String
   },
   components: {
     BudgetBubbles,
@@ -90,30 +115,42 @@ export default {
   created() {
     if (this.code) {
       this.dialog = true;
-      getNodeDetails(this.code).then(res => {
-        this.selectedNode = res.data;
+      this.$http.getNodeDetails(this.code).then(res => {
+        this.selectedNode = res;
       });
     } else {
       this.dialog = false;
     }
   },
   mounted() {
-    getAccounts().then(res => {
-      this.datasetMeta = res.data.meta;
-    });
-    getPartitionLabels().then(res => {
-      this.partitionLabels = res.data;
+    Promise.all([
+      this.$http.getAccounts(),
+      this.$http.getPartitionLabels()
+    ]).then(responses => {
+      this.datasetMeta = responses[0].meta;
+      this.partitionLabels = responses[1];
+
+      if (this.urlPartitionID) {
+        console.log("this.urlPartitionID da d3-b-graph", this.urlPartitionID);
+        this.partitionID = this.urlPartitionID;
+      }
     });
   },
   watch: {
     $route(to, from) {
       if (to.name === "d3-bubble-graph") {
         this.dialog = false;
-      } else {
-        getNodeDetails(this.$route.params.code).then(res => {
-          this.selectedNode = res.data;
+        this.partitionID = "default";
+      }
+      if (to.name === "account-details") {
+        this.$http.getNodeDetails(this.$route.params.code).then(res => {
+          this.selectedNode = res;
         });
         this.dialog = true;
+      }
+      if (to.name === "accounts-partition") {
+        this.dialog = false;
+        this.partitionID = this.$route.params.urlPartitionID;
       }
     }
   },
@@ -131,8 +168,8 @@ export default {
       n.diff = "" + Math.round(node.d.diff * 100) / 100 + " %";
       n.colorBg = `${node.colorBg}`;
       n.darkerColor = node.darkerColor;
-      n.x = node.x;
-      n.y = node.y;
+      n.x = node.x + node.d.radius;
+      n.y = node.y + node.d.radius;
       this.hoveredNode = n;
       this.showTooltip = true;
     },
@@ -169,6 +206,13 @@ export default {
   height: 100%;
   width: 100%;
   pointer-events: none;
+}
+
+.tooltip {
+  top: 0;
+  left: 0;
+  z-index: 1;
+  position: absolute;
 }
 
 .g0v-content-grid {
@@ -222,6 +266,10 @@ footer {
   text-decoration: none;
 }
 
+.g0v-credits{
+    padding: 0 2rem;
+}
+
 .g0v-footer img {
   border-width: 0;
 }
@@ -232,6 +280,10 @@ footer {
   font-weight: 500;
   text-transform: uppercase;
   text-decoration: none;
+}
+
+.g0v-license{
+   margin-left: auto;
 }
 
 /* Global style */

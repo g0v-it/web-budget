@@ -28,9 +28,9 @@ export default {
 </script>
 <style>
 .bubble-tooltip {
-  width: 100%;
+  width: 25rem;
   height: 15rem;
-  position: absolute;
+
   /*  z-index: 20; */
   display: flex;
   flex-direction: column;
