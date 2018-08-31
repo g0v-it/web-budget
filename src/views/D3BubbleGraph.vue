@@ -17,14 +17,14 @@
 
         <div class="g0v-content">
 
-            <div class="g0v-content-grid">
+            <div v-if="partitionID=='default'" class="g0v-content-grid">
 
                 <div class="left-column">
-                    <BubbleGraphLegend v-if="partitionID=='default'" :datasetMeta="datasetMeta" />
+                    <BubbleGraphLegend :datasetMeta="datasetMeta" />
                 </div>
 
                 <div class="right-column">
-                    <TooltipBubble :currentNode="hoveredNode" :diff="hoveredNode.diff" :bgColor="hoveredNode.colorBg" v-if="showTooltip && !dialog" />
+                    <TooltipBubble :currentNode="hoveredNode" :bgColor="hoveredNode.colorBg" v-if="showTooltip && !dialog" />
                 </div>
 
             </div>
@@ -166,9 +166,9 @@ export default {
 }
 
 .g0v-bubble-chart {
-  /*   background: rgba(0, 0, 0, 0.342); */
   height: 100%;
   width: 100%;
+  pointer-events: none;
 }
 
 .g0v-content-grid {
@@ -177,20 +177,32 @@ export default {
   pointer-events: none;
   height: 100%;
   position: absolute;
-  z-index: 0;
   display: grid;
-  grid-template-areas: "left . . . right";
+  grid-template-areas: "left . . right";
   grid-auto-columns: 1fr;
 }
+@media (max-width: 1000px) {
+  .g0v-content-grid {
+    grid-template-areas: "left . right";
+  }
+}
+/* @media (max-width: 500px) {
+
+  .g0v-content-grid {
+      position: relative;
+    grid-template-areas:
+    'left'
+    '.'
+    'right';
+  }
+} */
 
 .left-column {
-  /*   background: rgba(220, 255, 221, 0.247); */
   position: relative;
   grid-area: left;
 }
 
 .right-column {
-  /*   background: rgba(220, 244, 255, 0.39); */
   position: relative;
   grid-area: right;
 }

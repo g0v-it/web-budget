@@ -23,14 +23,16 @@ export function fillColor(val) {
 
 export function calcCenterOfBlocks(childNodes) {
     let centers = [];
+    let offset = 24;
     for (const key in childNodes) {
         if (childNodes.hasOwnProperty(key)) {
             const c = {
                 x: childNodes[key].offsetLeft + childNodes[key].offsetWidth / 2,
-                y: childNodes[key].offsetTop + childNodes[key].offsetHeight / 2
+                y: childNodes[key].offsetTop + childNodes[key].offsetHeight / 2 + offset
             };
             centers.push(c);
         }
+        offset=0;
     }
     return centers;
 }

@@ -1,7 +1,7 @@
 <template>
-    <div ref="vis" id="vis">
+    <div ref="vis" class="vis">
         <div ref="grid" v-if="partitionID != 'default'" class="grid">
-            <div v-for="block in partitionBlocks" :key="block[partitionID]" class="card grid-block">
+            <div v-for="block in partitionBlocks" :key="block[partitionID]" class="grid-block">
                 <h3 class="subheading">{{block[partitionID]}}</h3>
                 <h3 class="title">€ {{block.amount}}</h3>
             </div>
@@ -18,7 +18,6 @@
 import { fillColor, calcCenterOfBlocks } from "@/utils/functions.js";
 import { getAccounts } from "@/utils/api.service.js";
 import * as d3 from "d3";
-
 
 let simulation;
 let velocityDecay = 0.2;
@@ -181,6 +180,7 @@ export default {
           return d.radius;
         });
 
+
       simulation = d3
         .forceSimulation()
         .velocityDecay(velocityDecay)
@@ -247,28 +247,29 @@ export default {
 </script>
 
 <style>
-#vis {
+.vis {
   position: relative;
   height: 100%;
   width: 100%;
-  padding: 1rem 0 0 0;
 }
 
-#vis svg {
+#bubbles {
   z-index: 1;
-  position: absolute;
+  height: 100%;
   top: 0;
+  position: absolute;
   pointer-events: none;
 }
 .grid {
   text-align: center;
   display: grid;
-  grid-gap: 1rem;
+  /*   grid-gap: 1rem; */
+  grid-row-gap: 2rem;
   grid-template-columns: repeat(4, 1fr);
-  grid-auto-rows: 30rem;
+  grid-auto-rows: 30rem 20rem 20rem 20rem 20rem 20rem 15rem 15rem 15rem;
 }
 .grid .subheading {
-  z-index: 1;
+  /*   z-index: 1; */
   text-align: center;
 }
 .grid .grid-block {
@@ -276,7 +277,7 @@ export default {
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  /*   justify-content: space-between; */
 }
 
 @media screen and (max-width: 900px) {
