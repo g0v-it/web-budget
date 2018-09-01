@@ -17,7 +17,7 @@
 
         <div class="g0v-content">
 
-            <div v-if="partitionID=='default'" class="g0v-content-grid">
+            <div v-if="partitionID=='default' && !urlPartitionID" class="g0v-content-grid">
 
                 <div class="left-column">
                     <BubbleGraphLegend :datasetMeta="datasetMeta" />
@@ -62,7 +62,7 @@
             </v-card>
         </v-dialog>
 
-        <footer>
+       <!--  <footer>
             <ul class="g0v-footer">
                 <li>
                     <a target="_blank" rel="noopener noreferrer" href="https://git.copernicani.it/g0v/web-budget">Seguici su Gitlab</a>
@@ -76,7 +76,7 @@
                     </a>
                 </li>
             </ul>
-        </footer>
+        </footer> -->
 
     </div>
 </template>
@@ -251,40 +251,6 @@ export default {
   grid-area: right;
 }
 
-footer {
-  height: 3rem;
-  width: 100;
-  padding: 0.5rem 0;
-}
-
-.g0v-footer {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  justify-content: space-between;
-  text-decoration: none;
-}
-
-.g0v-credits{
-    padding: 0 2rem;
-}
-
-.g0v-footer img {
-  border-width: 0;
-}
-
-.g0v-footer a {
-  color: rgba(0, 0, 0, 0.87);
-  font-size: 1rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  text-decoration: none;
-}
-
-.g0v-license{
-   margin-left: auto;
-}
 
 /* Global style */
 .card {
