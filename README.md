@@ -25,6 +25,33 @@ npm run serve
 npm run build
 ```
 
+### Configuration
+
+To customize the settings add a `config.js` file in the `public` directory 
+with this content and customize the parameters:
+
+```
+(function (window) {
+
+    window.__settings = window.__settings || {};
+
+    // API base endpoint
+    window.__settings.apiEndpoint = 'http://194.177.121.230:8080';
+
+}(this));
+```
+
+The configuration is read on page load and exposed in the object exported from `utils/configuration.js`
+
+```
+import Configuration from './utils/configuration'
+
+let settings = Configuration();
+let apiEndpoint = settings.current().apiEndpoint;
+``` 
+
+The configuration object is also exposed as the vue prototype attribute `$settings`
+
 ### Data
 
 All visualized data are extracted from [bdap portal](https://bdap-opendata.mef.gov.it/tema/bilancio-finanziario-dello-stato-0) and processed by a dedicated *smart data management platform* (DMP) compliant with the W3C Semantic Web standards. The platform and the datalake is available in the [data-budget repository](https://git.copernicani.it/g0v/data-budget)
