@@ -38,9 +38,10 @@ import * as d3 from "d3";
   //----------------------------------------------------------
 export default {
   props: {
-
+      values: Object
   },
   mounted(){
+      console.log('barre', this.values);
     //----------------------------------------------------------
     //DROW GRAPHIC BOUNDLE
     

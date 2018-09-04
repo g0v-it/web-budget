@@ -1,12 +1,12 @@
 <template>
     <div class="modal-layout">
         <div class="details">
-            <h2 class="azione">{{selectedNode.name}}</h2>
-            <h3 class="ministero">Ministero: {{selectedNode.top_level}}</h3>
-        <!--     <h3 class="missione">Missione: {{selectedNode.partitions.second_partition}}</h3> -->
-            <p>Spesa: € {{selectedNode.amount}}</p>
-            <p>Ultima spesa: € {{selectedNode.last_amount}}</p>
-            <!-- <GraphBubble style=""></GraphBubble> -->
+            <h2 class="azione">{{node.name}}</h2>
+            <h3 class="ministero">Ministero: {{node.top_level}}</h3>
+            <!--     <h3 class="missione">Missione: {{selectedNode.partitions.second_partition}}</h3> -->
+            <p>Spesa: € {{node.amount}}</p>
+            <p>Ultima spesa: € {{node.last_amount}}</p>
+            <!-- <GraphBubble :values="node.last_values" style=""></GraphBubble> -->
         </div>
         <div class="comments">
 
@@ -24,8 +24,16 @@ export default {
   props: {
     selectedNode: Object
   },
+  computed: {
+    node: function() {
+      return this.selectedNode;
+    }
+  },
   data() {
     return {};
+  },
+  mounted() {
+    console.log("node", this.selectedNode);
   },
   methods: {}
 };
@@ -50,18 +58,17 @@ export default {
   min-height: 100%;
 }
 
-.azione{
-    font-size: 2rem;
-    font-weight: 500;
-    margin: 1rem 0;
+.azione {
+  font-size: 2rem;
+  font-weight: 500;
+  margin: 1rem 0;
 }
-.ministero, .missione{
-    font-size: 1.5rem;
-    font-weight: 400;
-     margin: 1rem 0;
+.ministero,
+.missione {
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin: 1rem 0;
 }
-
-
 
 .comments {
   padding: 1rem;

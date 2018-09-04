@@ -58,8 +58,8 @@
                         </v-btn>
                     </v-toolbar-items>
                 </v-toolbar>
+                <DetailBubble v-if="dialog" :selected-node="budget.selectedNode"></DetailBubble>
 
-                <DetailBubble :selectedNode="budget.selectedNode"></DetailBubble>
             </v-card>
         </v-dialog>
 
