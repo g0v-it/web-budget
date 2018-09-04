@@ -4,7 +4,7 @@ export default function() {
         loaded: false,
 
         // default configuration
-        apiEndpoint: 'http://localhost:9990'
+        apiEndpoint: 'http://194.177.121.230:8080'
     }
 
 
