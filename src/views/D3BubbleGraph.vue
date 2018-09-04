@@ -2,7 +2,7 @@
     <div class="g0v-container">
 
         <div class="g0v-partitions-header">
-            <v-btn-toggle v-model="partitionID" mandatory>
+            <v-btn-toggle v-model="budget.selectedPartition" mandatory>
                 <v-btn flat color="primary" value="default" @click="$router.push({ name: 'd3-bubble-graph'})">
                     default
                 </v-btn>
@@ -17,10 +17,10 @@
 
         <div class="g0v-content">
 
-            <div v-if="partitionID=='default' && !urlPartitionID" class="g0v-content-grid">
+            <div v-if="budget.selectedPartition=='default' && !urlPartitionID" class="g0v-content-grid">
 
                 <div class="left-column">
-                    <BubbleGraphLegend :datasetMeta="datasetMeta" />
+                    <BubbleGraphLegend :datasetMeta="budget.meta" />
                 </div>
 
                 <div class="right-column">
@@ -30,10 +30,20 @@
             </div>
             <!--  -->
             <div class="g0v-bubble-chart">
-                <BudgetBubbles class="graph-layout" @click="onClick" @over="onMouseOver" @out="onMouseOut" :partitionID="partitionID" :partitionLabels="partitionLabels" />
+                <BudgetBubbles class="graph-layout"
+                               @click="onClick"
+                               @over="onMouseOver"
+                               @out="onMouseOut"
+                               :partitionID="budget.selectedPartition"
+                               :partitionLabels="budget.partitionLabels"
+                               :accounts="budget.accounts" />
             </div>
 
-            <TooltipBubble :style="{ top: hoveredNode.y + 'px' , left: hoveredNode.x + 'px' }" class="tooltip" :currentNode="hoveredNode" :bgColor="hoveredNode.colorBg" v-if="showTooltip && !dialog" />
+            <TooltipBubble :style="{ top: hoveredNode.y + 'px' , left: hoveredNode.x + 'px' }"
+                           class="tooltip"
+                           :currentNode="hoveredNode"
+                           :bgColor="hoveredNode.colorBg"
+                           v-if="showTooltip && !dialog" />
 
         </div>
 
@@ -58,7 +68,7 @@
                     </v-toolbar-items>
                 </v-toolbar>
 
-                <DetailBubble :selectedNode="selectedNode"></DetailBubble>
+                <DetailBubble :selectedNode="budget.selectedNode"></DetailBubble>
             </v-card>
         </v-dialog>
 
@@ -99,15 +109,14 @@ export default {
     DetailBubble,
     BubbleGraphLegend
   },
-
-  data: () => {
+  computed: {
+    budget: function() {
+      return this.$root.$data.budget.state;
+    }
+  },
+  data: function() {
     return {
       hoveredNode: {},
-      datasetMeta: {},
-
-      selectedNode: {},
-      partitionID: "default",
-      partitionLabels: {},
       showTooltip: false,
       dialog: false
     };
@@ -115,42 +124,27 @@ export default {
   created() {
     if (this.code) {
       this.dialog = true;
-      this.$http.getNodeDetails(this.code).then(res => {
-        this.selectedNode = res;
-      });
     } else {
       this.dialog = false;
     }
+    this.budgetStore().selectNode(this.code);
   },
   mounted() {
-    Promise.all([
-      this.$http.getAccounts(),
-      this.$http.getPartitionLabels()
-    ]).then(responses => {
-      this.datasetMeta = responses[0].meta;
-      this.partitionLabels = responses[1];
-
-      if (this.urlPartitionID) {
-        console.log("this.urlPartitionID da d3-b-graph", this.urlPartitionID);
-        this.partitionID = this.urlPartitionID;
-      }
-    });
+    this.budgetStore().selectPartition(this.urlPartitionID);
   },
   watch: {
     $route(to, from) {
       if (to.name === "d3-bubble-graph") {
         this.dialog = false;
-        this.partitionID = "default";
+        this.budgetStore().selectPartition("default");
       }
       if (to.name === "account-details") {
-        this.$http.getNodeDetails(this.$route.params.code).then(res => {
-          this.selectedNode = res;
-        });
+        this.budgetStore().selectNode(this.$route.params.code);
         this.dialog = true;
       }
       if (to.name === "accounts-partition") {
         this.dialog = false;
-        this.partitionID = this.$route.params.urlPartitionID;
+        this.budgetStore().selectPartition(this.$route.params.urlPartitionID);
       }
     }
   },
@@ -178,6 +172,9 @@ export default {
     },
     closeDialog(el) {
       this.dialog = false;
+    },
+    budgetStore() {
+      return this.$root.$data.budget;
     }
   }
 };
