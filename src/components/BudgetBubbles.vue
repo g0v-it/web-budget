@@ -44,8 +44,8 @@ function createNodes(rawData) {
       diff: (d.amount - d.last_amount) / d.last_amount * 100,
       partitions: d.partitions,
       tags: d.tags,
-      x: Math.random() * 900,
-      y: Math.random() * 900
+      x: Math.random() * 1000,
+      y: Math.random() * 500
     };
   });
 
@@ -65,10 +65,6 @@ export default {
   data: () => {
     return {
       partitionBlocks: [],
-      svgSize: {
-        height: 0,
-        width: 0
-      }
     };
   },
 
@@ -81,7 +77,7 @@ export default {
       }
     }
   },
-  /* created() {
+/*   beforeCreate() {
     if (this.partitionID !== "default") {
       this.partitionBlocks = this.partitionLabels[this.partitionID];
     } else {
@@ -91,8 +87,6 @@ export default {
   mounted() {
     this.$http.getAccounts().then(res => {
       this.chart(res.accounts);
-      this.svgSize.height = this.$refs.vis.offsetHeight;
-      this.svgSize.width = this.$refs.vis.offsetWidth;
       this.groupBubbles();
       console.log("mounted", this.partitionID);
       /* if (this.partitionID) {
@@ -105,8 +99,6 @@ export default {
 
   updated() {
     console.log("this.partitionID da  budget update", this.partitionID);
-    this.svgSize.height = this.$refs.vis.offsetHeight;
-    this.svgSize.width = this.$refs.vis.offsetWidth;
 
     if (this.partitionID === "default") {
       this.groupBubbles();
@@ -206,14 +198,14 @@ export default {
         d3
           .forceX()
           .strength(forceStrength)
-          .x(this.svgSize.width / 2)
+          .x(this.$refs.vis.offsetWidth / 2)
       );
       simulation.force(
         "y",
         d3
           .forceY()
           .strength(forceStrength)
-          .y(this.svgSize.height / 2)
+          .y(this.$refs.vis.offsetHeight / 2)
       );
 
       simulation.alpha(1).restart();

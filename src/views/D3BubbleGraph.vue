@@ -17,7 +17,7 @@
 
         <div class="g0v-content">
 
-            <div v-if="partitionID=='default' && !urlPartitionID" class="g0v-content-grid">
+            <div v-if="partitionID=='default' && urlPartitionID=='default'" class="g0v-content-grid">
 
                 <div class="left-column">
                     <BubbleGraphLegend :datasetMeta="datasetMeta" />
@@ -29,9 +29,9 @@
 
             </div>
             <!--  -->
-            <div class="g0v-bubble-chart">
-                <BudgetBubbles class="graph-layout" @click="onClick" @over="onMouseOver" @out="onMouseOut" :partitionID="partitionID" :partitionLabels="partitionLabels" />
-            </div>
+            <!--    <div class="g0v-bubble-chart"> -->
+            <BudgetBubbles class="g0v-bubble-chart" @click="onClick" @over="onMouseOver" @out="onMouseOut" :partitionID="partitionID" :partitionLabels="partitionLabels" />
+            <!--  </div> -->
 
             <TooltipBubble :style="{ top: hoveredNode.y + 'px' , left: hoveredNode.x + 'px' }" class="tooltip" :currentNode="hoveredNode" :bgColor="hoveredNode.colorBg" v-if="showTooltip && !dialog" />
 
@@ -62,22 +62,6 @@
             </v-card>
         </v-dialog>
 
-       <!--  <footer>
-            <ul class="g0v-footer">
-                <li>
-                    <a target="_blank" rel="noopener noreferrer" href="https://git.copernicani.it/g0v/web-budget">Seguici su Gitlab</a>
-                </li>
-                <li class="g0v-credits">
-                    <router-link :to="{ name: 'credits' }">crediti</router-link>
-                </li>
-                <li class="g0v-license">
-                    <a  target="_blank" rel="license" href="http://creativecommons.org/licenses/by/4.0/">
-                        <img alt="Creative Commons License" src="https://i.creativecommons.org/l/by/4.0/80x15.png" />
-                    </a>
-                </li>
-            </ul>
-        </footer> -->
-
     </div>
 </template>
 
@@ -91,7 +75,10 @@ import BubbleGraphLegend from "@/components/BubbleGraphLegend.vue";
 export default {
   props: {
     code: String,
-    urlPartitionID: String
+    urlPartitionID: {
+      type: String,
+      default: "default"
+    }
   },
   components: {
     BudgetBubbles,
@@ -103,11 +90,13 @@ export default {
   data: () => {
     return {
       hoveredNode: {},
-      datasetMeta: {},
-
       selectedNode: {},
-      partitionID: "default",
+
+      datasetMeta: {},
+      datasetAccounts: [],
       partitionLabels: {},
+
+      partitionID: "default",
       showTooltip: false,
       dialog: false
     };
@@ -123,6 +112,7 @@ export default {
     }
   },
   mounted() {
+      console.log('env', process.env.VUE_APP_API);
     Promise.all([
       this.$http.getAccounts(),
       this.$http.getPartitionLabels()
@@ -143,14 +133,14 @@ export default {
         this.partitionID = "default";
       }
       if (to.name === "account-details") {
-        this.$http.getNodeDetails(this.$route.params.code).then(res => {
+        this.$http.getNodeDetails(this.code).then(res => {
           this.selectedNode = res;
         });
         this.dialog = true;
       }
       if (to.name === "accounts-partition") {
         this.dialog = false;
-        this.partitionID = this.$route.params.urlPartitionID;
+        this.partitionID = this.urlPartitionID;
       }
     }
   },
@@ -250,7 +240,6 @@ export default {
   position: relative;
   grid-area: right;
 }
-
 
 /* Global style */
 .card {
