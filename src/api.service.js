@@ -1,6 +1,7 @@
 import { get } from 'axios';
+import Configuration from './utils/configuration'
 
-const apiEndpoint = 'http://194.177.121.230:8080';
+const apiEndpoint = Configuration().current().apiEndpoint;
 
 
 /**
