@@ -32,7 +32,19 @@ export function calcCenterOfBlocks(childNodes) {
             };
             centers.push(c);
         }
-        offset=0;
+        offset = 0;
     }
     return centers;
+}
+
+export function filterPassed(d, filters) {
+
+    if (filters.ministeri.length && filters.missioni.length) {
+        return filters.ministeri.includes(d.partitions.top_partition) && filters.missioni.includes(d.partitions.second_partition);
+    }
+    if (filters.ministeri.length || filters.missioni.length) {
+        return (filters.ministeri.includes(d.partitions.top_partition) || filters.missioni.includes(d.partitions.second_partition))
+    }
+    return true;
+
 }

@@ -109,7 +109,7 @@ export const BudgetData = () => {
 
     const selectPartition = (partition) => {
         __data.selectedPartition = partition || "default";
-        log(["selectedPartition", __data.selectedPartition]);
+        /* log(["selectedPartition", __data.selectedPartition]); */
     };
 
     readPartitionLabels();

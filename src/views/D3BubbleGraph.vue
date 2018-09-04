@@ -17,33 +17,24 @@
 
         <div class="g0v-content">
 
-            <div v-if="budget.selectedPartition=='default' && !urlPartitionID" class="g0v-content-grid">
+            <div v-if="budget.selectedPartition=='default'" class="g0v-content-grid">
 
                 <div class="left-column">
                     <BubbleGraphLegend :datasetMeta="budget.meta" />
                 </div>
 
                 <div class="right-column">
-
+                    <v-select class="select-ministero" :items="ministeri" v-model="filters.ministeri" label="Filtra per Ministero" multiple clearable deletable-chips chips hint="Scegli i ministeri a cui sei interessato" persistent-hint></v-select>
+                    <v-select class="select-missione" :items="missioni" v-model="filters.missioni" label="Filtra per Missione" block multiple clearable deletable-chips chips hint="Scegli le missioni a cui sei interessato" persistent-hint></v-select>
                 </div>
 
             </div>
             <!--  -->
             <div class="g0v-bubble-chart">
-                <BudgetBubbles class="graph-layout"
-                               @click="onClick"
-                               @over="onMouseOver"
-                               @out="onMouseOut"
-                               :partitionID="budget.selectedPartition"
-                               :partitionLabels="budget.partitionLabels"
-                               :accounts="budget.accounts" />
+                <BudgetBubbles class="graph-layout" @click="onClick" @over="onMouseOver" @out="onMouseOut" :filters="filters" :partitionID="budget.selectedPartition" :partitionLabels="budget.partitionLabels" :accounts="budget.accounts" />
             </div>
 
-            <TooltipBubble :style="{ top: hoveredNode.y + 'px' , left: hoveredNode.x + 'px' }"
-                           class="tooltip"
-                           :currentNode="hoveredNode"
-                           :bgColor="hoveredNode.colorBg"
-                           v-if="showTooltip && !dialog" />
+            <TooltipBubble :style="{ top: hoveredNode.y + 'px' , left: hoveredNode.x + 'px' }" class="tooltip" :currentNode="hoveredNode" :bgColor="hoveredNode.colorBg" v-if="showTooltip && !dialog" />
 
         </div>
 
@@ -90,35 +81,78 @@ export default {
       default: "default"
     }
   },
+
   components: {
     BudgetBubbles,
     TooltipBubble,
     DetailBubble,
     BubbleGraphLegend
   },
-  computed: {
-    budget: function() {
-      return this.$root.$data.budget.state;
-    }
-  },
+
   data: function() {
     return {
       hoveredNode: {},
+      filters: {
+        ministeri: [],
+        missioni: []
+      },
       showTooltip: false,
       dialog: false
     };
   },
+
+  computed: {
+    budget: function() {
+      return this.$root.$data.budget.state;
+    },
+    /* funzione temporanea, bisogna cambiare il json dell'api */
+    ministeri() {
+      let ministeri = [];
+      if (this.budget.partitionLabels["top_partition"]) {
+        for (
+          let i = 0;
+          i < this.budget.partitionLabels["top_partition"].length;
+          i++
+        ) {
+          const element = this.budget.partitionLabels["top_partition"][i][
+            "top_partition"
+          ];
+          ministeri.push(element);
+        }
+      }
+      return ministeri;
+    },
+    /* come ministeri prima */
+    missioni() {
+      let missioni = [];
+      if (this.budget.partitionLabels["second_partition"]) {
+        for (
+          let i = 0;
+          i < this.budget.partitionLabels["second_partition"].length;
+          i++
+        ) {
+          const element = this.budget.partitionLabels["second_partition"][i][
+            "second_partition"
+          ];
+          missioni.push(element);
+        }
+      }
+      return missioni;
+    }
+  },
+
   created() {
     if (this.code) {
       this.dialog = true;
+      this.budgetStore().selectNode(this.code);
     } else {
       this.dialog = false;
     }
-    this.budgetStore().selectNode(this.code);
-  },
-  mounted() {
     this.budgetStore().selectPartition(this.urlPartitionID);
   },
+
+  mounted() {},
+
   watch: {
     $route(to, from) {
       if (to.name === "d3-bubble-graph") {
@@ -135,6 +169,7 @@ export default {
       }
     }
   },
+
   methods: {
     onClick(node) {
       this.dialog = true;
@@ -208,22 +243,13 @@ export default {
   display: grid;
   grid-template-areas: "left . . right";
   grid-auto-columns: 1fr;
+  pointer-events: all;
 }
 @media (max-width: 1000px) {
   .g0v-content-grid {
     grid-template-areas: "left . right";
   }
 }
-/* @media (max-width: 500px) {
-
-  .g0v-content-grid {
-      position: relative;
-    grid-template-areas:
-    'left'
-    '.'
-    'right';
-  }
-} */
 
 .left-column {
   position: relative;
@@ -231,8 +257,14 @@ export default {
 }
 
 .right-column {
+  padding: 5rem 0;
   position: relative;
   grid-area: right;
+}
+
+.right-column .select-ministero,
+.select-missione {
+  margin-bottom: 3rem;
 }
 
 /* Global style */

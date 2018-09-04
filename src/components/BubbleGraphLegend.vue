@@ -61,10 +61,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  pointer-events: none;
-}
-.legend * {
-  pointer-events: all;
+/*   pointer-events: none; */
 }
 
 .legend-description .description {

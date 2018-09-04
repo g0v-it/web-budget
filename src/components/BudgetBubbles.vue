@@ -1,9 +1,10 @@
 <template>
     <div ref="vis" class="vis">
-        <div ref="grid" v-if="partitionID != 'default'" class="grid">
+        <div ref="grid" v-if="partitionID !== 'default'" class="grid">
             <div v-for="block in partitionBlocks" :key="block[partitionID]" class="grid-block">
                 <h3 class="subheading">{{block[partitionID]}}</h3>
-                <h3 class="title">€ {{block.amount}}</h3>
+                <!-- amount da calcolare in base al filtro -->
+                <!-- <h3 class="title">€ {{block.amount}}</h3> -->
             </div>
         </div>
 
@@ -12,9 +13,12 @@
 </template>
 
 <script>
-import { fillColor, calcCenterOfBlocks } from "@/utils/functions.js";
+import {
+  fillColor,
+  filterPassed,
+  calcCenterOfBlocks
+} from "@/utils/functions.js";
 import * as d3 from "d3";
-
 let simulation;
 let velocityDecay = 0.2;
 let forceStrength = 0.03;
@@ -61,40 +65,48 @@ export default {
   props: {
     accounts: Array,
     partitionID: String,
-    partitionLabels: Object
+    partitionLabels: Object,
+    filters: Object
   },
+
   data: () => {
-    return {
-      svgSize: {
-        height: 0,
-        width: 0
-      }
-    };
+    return {};
   },
+
   computed: {
     partitionBlocks: function() {
-      return this.partitionID !== "default" ? this.partitionLabels[this.partitionID] : [];
+      return this.partitionID !== "default"
+        ? this.partitionLabels[this.partitionID]
+        : [];
     }
   },
+
   watch: {
-    accounts: function(val,oldVal) {
+    filters: {
+      handler() {
+        this.filterBubbles();
+      },
+      deep: true
+    },
+    accounts: function(val, oldVal) {
       this.chart(val);
       this.toggleGrouping();
+      /* this.filterBubbles(); */
     }
   },
+
   mounted() {
-    this.svgSize.height = this.$refs.vis.offsetHeight;
-    this.svgSize.width = this.$refs.vis.offsetWidth;
     if (this.accounts.length > 0) {
       this.chart(this.accounts);
       this.toggleGrouping();
+      /* this.filterBubbles(); */
     }
   },
 
   updated() {
-    this.svgSize.height = this.$refs.vis.offsetHeight;
-    this.svgSize.width = this.$refs.vis.offsetWidth;
-    if (this.accounts.length > 0) this.toggleGrouping();
+    if (this.accounts.length > 0) {
+      this.toggleGrouping();
+    }
   },
 
   methods: {
@@ -160,6 +172,8 @@ export default {
         .attr("r", function(d) {
           return d.radius;
         });
+
+
 
       simulation = d3
         .forceSimulation()
@@ -239,6 +253,18 @@ export default {
 
         this.splitBubbles(groupCatId);
       }
+    },
+    filterBubbles() {
+      let bubbles = d3
+        .select("#bubbles")
+        .selectAll("circle")
+        .attr("opacity", d => {
+          if (filterPassed(d, this.filters)) {
+            return 1;
+          } else {
+            return 0.2;
+          }
+        });
     }
   }
 };
