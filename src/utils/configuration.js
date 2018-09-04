@@ -3,6 +3,8 @@ export default function() {
     let __current = {
         loaded: false,
 
+        debug: true,
+
         // default configuration
         apiEndpoint: 'http://194.177.121.230:8080'
     }

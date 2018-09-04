@@ -59,63 +59,42 @@ function createNodes(rawData) {
 /* Vue component */
 export default {
   props: {
+    accounts: Array,
     partitionID: String,
     partitionLabels: Object
   },
   data: () => {
     return {
-      partitionBlocks: [],
+      svgSize: {
+        height: 0,
+        width: 0
+      }
     };
   },
-
-  watch: {
-    partitionID: function() {
-      if (this.partitionID !== "default") {
-        this.partitionBlocks = this.partitionLabels[this.partitionID];
-      } else {
-        this.partitionBlocks = [];
-      }
+  computed: {
+    partitionBlocks: function() {
+      return this.partitionID !== "default" ? this.partitionLabels[this.partitionID] : [];
     }
   },
-/*   beforeCreate() {
-    if (this.partitionID !== "default") {
-      this.partitionBlocks = this.partitionLabels[this.partitionID];
-    } else {
-      this.partitionBlocks = [];
+  watch: {
+    accounts: function(val,oldVal) {
+      this.chart(val);
+      this.toggleGrouping();
     }
-  }, */
+  },
   mounted() {
-    this.$http.getAccounts().then(res => {
-      this.chart(res.accounts);
-      this.groupBubbles();
-      console.log("mounted", this.partitionID);
-      /* if (this.partitionID) {
-        this.partitionBlocks = this.partitionLabels[this.partitionID];
-        console.log("this.partitionID da  budget", this.partitionID);
-      } */
-    });
-    /* console.log('this.$refs.vis',this.$refs.vis.offsetHeight ); */
+    this.svgSize.height = this.$refs.vis.offsetHeight;
+    this.svgSize.width = this.$refs.vis.offsetWidth;
+    if (this.accounts.length > 0) {
+      this.chart(this.accounts);
+      this.toggleGrouping();
+    }
   },
 
   updated() {
-    console.log("this.partitionID da  budget update", this.partitionID);
-
-    if (this.partitionID === "default") {
-      this.groupBubbles();
-    } else {
-      let centers = calcCenterOfBlocks(this.$refs.grid.childNodes);
-
-      for (let i = 0; i < this.partitionBlocks.length; i++) {
-        centers[i].value = this.partitionBlocks[i][this.partitionID];
-      }
-
-      let groupCatId = {
-        partition: this.partitionID,
-        labels: centers
-      };
-
-      this.splitBubbles(groupCatId);
-    }
+    this.svgSize.height = this.$refs.vis.offsetHeight;
+    this.svgSize.width = this.$refs.vis.offsetWidth;
+    if (this.accounts.length > 0) this.toggleGrouping();
   },
 
   methods: {
@@ -242,6 +221,24 @@ export default {
 
       // @v4 We can reset the alpha value and restart the simulation
       simulation.alpha(1).restart();
+    },
+    toggleGrouping() {
+      if (this.partitionID === "default") {
+        this.groupBubbles();
+      } else {
+        let centers = calcCenterOfBlocks(this.$refs.grid.childNodes);
+
+        for (let i = 0; i < this.partitionBlocks.length; i++) {
+          centers[i].value = this.partitionBlocks[i][this.partitionID];
+        }
+
+        let groupCatId = {
+          partition: this.partitionID,
+          labels: centers
+        };
+
+        this.splitBubbles(groupCatId);
+      }
     }
   }
 };
