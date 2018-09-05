@@ -1,12 +1,12 @@
 <template>
     <div class="modal-layout">
         <div class="details">
-            <h2 class="azione">{{node.name}}</h2>
-            <h3 class="ministero">Ministero: {{node.top_level}}</h3>
+            <h2 class="azione">{{selectedNode.name}}</h2>
+            <h3 class="ministero">Ministero: {{selectedNode.top_level}}</h3>
             <!--     <h3 class="missione">Missione: {{selectedNode.partitions.second_partition}}</h3> -->
-            <p>Spesa: € {{node.amount}}</p>
-            <p>Ultima spesa: € {{node.last_amount}}</p>
-            <!-- <GraphBubble :values="node.last_values" style=""></GraphBubble> -->
+            <p>Spesa: € {{selectedNode.amount}}</p>
+            <p>Ultima spesa: € {{selectedNode.last_amount}}</p>
+            <!-- <GraphBubble :values="selectedNode.last_values" style=""></GraphBubble> -->
         </div>
         <div class="comments">
 
@@ -17,23 +17,23 @@
 import GraphBubble from "@/components/GraphBubble.vue";
 
 export default {
-  name: "detail-bubble",
   components: {
     GraphBubble
   },
   props: {
     selectedNode: Object
   },
-  computed: {
-    node: function() {
-      return this.selectedNode;
+  watch: {
+    selectedNode(newVal, oldVal) {
+        /* viene chiamato quando selectedNode cambia */
+      console.log("new", newVal);
     }
   },
   data() {
     return {};
   },
   mounted() {
-    console.log("node", this.selectedNode);
+    console.log("vecchio valore", this.selectedNode);
   },
   methods: {}
 };

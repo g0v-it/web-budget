@@ -58,7 +58,7 @@
                         </v-btn>
                     </v-toolbar-items>
                 </v-toolbar>
-                <DetailBubble v-if="dialog" :selected-node="budget.selectedNode"></DetailBubble>
+                <DetailBubble  :selected-node="budget.selectedNode"></DetailBubble>
 
             </v-card>
         </v-dialog>
@@ -184,8 +184,8 @@ export default {
       n.diff = "" + Math.round(node.d.diff * 100) / 100 + " %";
       n.colorBg = `${node.colorBg}`;
       n.darkerColor = node.darkerColor;
-      n.x = node.x + node.d.radius;
-      n.y = node.y + node.d.radius;
+      n.x = node.x + node.d.radius / 1.4142;
+      n.y = node.y + node.d.radius / 1.4142;
       this.hoveredNode = n;
       this.showTooltip = true;
     },
