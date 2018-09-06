@@ -328,7 +328,6 @@ export default {
   z-index: 2;
 }
 #bubbles {
-  z-index: 1;
   height: 100%;
   width: 100%;
   top: 0;
@@ -355,6 +354,7 @@ export default {
   grid-row-gap: 2rem;
   grid-template-columns: repeat(4, 1fr);
   grid-auto-rows: 30rem 20rem 20rem 20rem 20rem 20rem 15rem 15rem 15rem;
+  pointer-events: all;
 }
 .grid .subheading {
   /*   z-index: 1; */

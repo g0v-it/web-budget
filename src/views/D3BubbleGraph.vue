@@ -19,26 +19,26 @@
         </div>
 
         <div class="g0v-content">
-                <div v-if="budget.selectedPartition=='default'" class="g0v-content-grid">
+            <div v-if="budget.selectedPartition=='default'" class="g0v-content-grid">
 
-                    <div class="left-column">
-                        <BubbleGraphLegend :datasetMeta="budget.meta" />
-                    </div>
-
-                    <div class="right-column">
-                        <v-select class="select-ministero"
-                            @change="$router.replace({ name: 'd3-bubble-graph', query: filters})"
-                            :items="ministeri" 
-                            v-model="filters.top_partition" 
-                            label="Filtra per Ministero" multiple clearable deletable-chips chips hint="Scegli i ministeri a cui sei interessato" persistent-hint></v-select>
-                        <v-select class="select-missione" 
-                            @change="$router.replace({ name: 'd3-bubble-graph', query: filters})"
-                            :items="missioni" 
-                            v-model="filters.second_partition" 
-                            label="Filtra per Missione" block multiple clearable deletable-chips chips hint="Scegli le missioni a cui sei interessato" persistent-hint></v-select>
-                    </div>
-
+                <div class="left-column">
+                    <BubbleGraphLegend :datasetMeta="budget.meta" />
                 </div>
+
+                <div class="right-column">
+                    <v-select class="select-ministero"
+                        @change="$router.replace({ name: 'd3-bubble-graph', query: filters})"
+                        :items="ministeri" 
+                        v-model="filters.top_partition" 
+                        label="Filtra per Ministero" multiple clearable deletable-chips chips hint="Scegli i ministeri a cui sei interessato" persistent-hint></v-select>
+                    <v-select class="select-missione" 
+                        @change="$router.replace({ name: 'd3-bubble-graph', query: filters})"
+                        :items="missioni" 
+                        v-model="filters.second_partition" 
+                        label="Filtra per Missione" block multiple clearable deletable-chips chips hint="Scegli le missioni a cui sei interessato" persistent-hint></v-select>
+                </div>
+
+            </div>
 
             <div class="g0v-bubble-chart">
                 <BudgetBubbles
