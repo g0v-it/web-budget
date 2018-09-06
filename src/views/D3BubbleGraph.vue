@@ -3,38 +3,61 @@
 
         <div class="g0v-partitions-header">
             <v-btn-toggle v-model="budget.selectedPartition" mandatory>
-                <v-btn flat color="primary" value="default" @click="$router.push({ name: 'd3-bubble-graph'})">
+                <v-btn flat color="primary" value="default" 
+                    @click="$router.push({ name: 'd3-bubble-graph',query: filters})">
                     default
                 </v-btn>
-                <v-btn flat color="primary" value="top_partition" @click="$router.push({ name: 'accounts-partition', params: { urlPartitionID: 'top_partition' }})">
+                <v-btn flat color="primary" value="top_partition" 
+                    @click="$router.push({ name: 'accounts-partition', params: { urlPartitionID: 'top_partition' },query: filters})">
                     ministero
                 </v-btn>
-                <v-btn flat color="primary" value="second_partition" @click="$router.push({ name: 'accounts-partition', params: { urlPartitionID: 'second_partition' }})">
+                <v-btn flat color="primary" value="second_partition" 
+                    @click="$router.push({ name: 'accounts-partition', params: { urlPartitionID: 'second_partition' },query: filters})">
                     missione
                 </v-btn>
             </v-btn-toggle>
         </div>
 
         <div class="g0v-content">
+                <div v-if="budget.selectedPartition=='default'" class="g0v-content-grid">
 
-            <div v-if="budget.selectedPartition=='default'" class="g0v-content-grid">
+                    <div class="left-column">
+                        <BubbleGraphLegend :datasetMeta="budget.meta" />
+                    </div>
 
-                <div class="left-column">
-                    <BubbleGraphLegend :datasetMeta="budget.meta" />
+                    <div class="right-column">
+                        <v-select class="select-ministero"
+                            @change="$router.replace({ name: 'd3-bubble-graph', query: filters})"
+                            :items="ministeri" 
+                            v-model="filters.top_partition" 
+                            label="Filtra per Ministero" multiple clearable deletable-chips chips hint="Scegli i ministeri a cui sei interessato" persistent-hint></v-select>
+                        <v-select class="select-missione" 
+                            @change="$router.replace({ name: 'd3-bubble-graph', query: filters})"
+                            :items="missioni" 
+                            v-model="filters.second_partition" 
+                            label="Filtra per Missione" block multiple clearable deletable-chips chips hint="Scegli le missioni a cui sei interessato" persistent-hint></v-select>
+                    </div>
+
                 </div>
 
-                <div class="right-column">
-                    <v-select class="select-ministero" :items="ministeri" v-model="filters.top_partition" label="Filtra per Ministero" multiple clearable deletable-chips chips hint="Scegli i ministeri a cui sei interessato" persistent-hint></v-select>
-                    <v-select class="select-missione" :items="missioni" v-model="filters.second_partition" label="Filtra per Missione" block multiple clearable deletable-chips chips hint="Scegli le missioni a cui sei interessato" persistent-hint></v-select>
-                </div>
-
-            </div>
-            <!--  -->
             <div class="g0v-bubble-chart">
-                <BudgetBubbles class="graph-layout" @click="onClick" @over="onMouseOver" @out="onMouseOut" :filters="filters" :partitionID="budget.selectedPartition" :partitionLabels="budget.partitionLabels" :accounts="budget.accounts" />
+                <BudgetBubbles
+                    @click="onClick" 
+                    @over="onMouseOver" 
+                    @out="onMouseOut" 
+                    :filters="filters" 
+                    :partitionID="budget.selectedPartition" 
+                    :partitionLabels="budget.partitionLabels" 
+                    :accounts="budget.accounts" />
             </div>
 
-            <TooltipBubble :style="{ top: hoveredNode.y + 'px' , left: hoveredNode.x + 'px' }" class="tooltip" :currentNode="hoveredNode" :bgColor="hoveredNode.colorBg" v-if="showTooltip && !dialog" />
+            <transition name="fade">
+                <TooltipBubble  class="tooltip"
+                    :style="{ top: hoveredNode.y + 'px' , left: hoveredNode.x + 'px' }" 
+                    :currentNode="hoveredNode" 
+                    :bgColor="hoveredNode.colorBg" 
+                    v-if="showTooltip && !dialog" />
+            </transition>
 
         </div>
 
@@ -58,7 +81,7 @@
                         </v-btn>
                     </v-toolbar-items>
                 </v-toolbar>
-                <DetailBubble  :selected-node="budget.selectedNode"></DetailBubble>
+                <DetailBubble :selected-node="budget.selectedNode"></DetailBubble>
 
             </v-card>
         </v-dialog>
@@ -148,10 +171,32 @@ export default {
     } else {
       this.dialog = false;
     }
+
+    /* gestire la stringa singola */
+    if (Array.isArray(this.$route.query.top_partition)) {
+      /* this.$route.query.top_partition.map(i => {
+        this.filters.top_partition.push(i);
+      }); */
+      this.filters.top_partition = this.$route.query.top_partition;
+    } else if (this.$route.query.top_partition) {
+      this.filters.top_partition.push(this.$route.query.top_partition);
+    }
+    if (Array.isArray(this.$route.query.second_partition)) {
+      /* this.$route.query.second_partition.map(i => {
+        this.filters.second_partition.push(i);
+      }); */
+      this.filters.second_partition = this.$route.query.second_partition;
+    } else if (this.$route.query.second_partition) {
+      this.filters.second_partition.push(this.$route.query.second_partition);
+    }
+
     this.budgetStore().selectPartition(this.urlPartitionID);
   },
 
-  mounted() {},
+  mounted() {
+    /*   console.log('query ', this.$route.query);
+      this.filters=this.$route.query */
+  },
 
   watch: {
     $route(to, from) {
@@ -160,13 +205,30 @@ export default {
         this.budgetStore().selectPartition("default");
       }
       if (to.name === "account-details") {
-        this.budgetStore().selectNode(this.$route.params.code);
+        this.budgetStore().selectNode(to.params.code);
         this.dialog = true;
       }
       if (to.name === "accounts-partition") {
         this.dialog = false;
-        this.budgetStore().selectPartition(this.$route.params.urlPartitionID);
+        this.budgetStore().selectPartition(to.params.urlPartitionID);
       }
+
+      /* Filters query */
+   /*    if (Array.isArray(to.query.top_partition)) {
+        to.query.second_partition.map(i => {
+          this.filters.second_partition.push(i);
+        });
+      } else if (to.query.top_partition) {
+        this.filters.top_partition.push(to.query.top_partition);
+      }
+      if (Array.isArray(to.query.second_partition)) {
+        to.query.second_partition.map(i => {
+          this.filters.second_partition.push(i);
+        });
+      } else if (to.query.second_partition) {
+        this.filters.second_partition.push(to.query.second_partition);
+      } */
+      /* ============== */
     }
   },
 
@@ -191,9 +253,6 @@ export default {
     },
     onMouseOut(node) {
       this.showTooltip = false;
-    },
-    closeDialog(el) {
-      this.dialog = false;
     },
     budgetStore() {
       return this.$root.$data.budget;
@@ -232,6 +291,14 @@ export default {
   left: 0;
   z-index: 1;
   position: absolute;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 
 .g0v-content-grid {

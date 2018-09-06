@@ -25,16 +25,13 @@ export default {
   },
   watch: {
     selectedNode(newVal, oldVal) {
-        /* viene chiamato quando selectedNode cambia */
-      console.log("new", newVal);
+      /* viene chiamato quando selectedNode cambia */
     }
   },
   data() {
     return {};
   },
-  mounted() {
-    console.log("vecchio valore", this.selectedNode);
-  },
+  mounted() {},
   methods: {}
 };
 </script>

@@ -1,18 +1,18 @@
 <template>
     <div ref="vis" class="vis">
-       
+
         <div ref="grid" v-if="partitionID !== 'default'" class="grid">
             <div v-for="block in partitionBlocks" :key="block[partitionID]" class="grid-block">
                 <h3 class="subheading">{{block[partitionID]}}</h3>
                 <!-- amount da calcolare in base al filtro -->
-                 <h3 class="title">€ {{block.amount}}</h3>
-                 
+                <h3 class="title">€ {{block.amount}}</h3>
+
             </div>
         </div>
 
         <svg id="bubbles"></svg>
-        <h3 class="overthetop" v-if="partitionID==='default'">totale spesa: € {{total}}</h3>
-        <h3 class="overthetop" v-if="show_total_filtered">totale spesa bolle visibili: € {{total_filtered}}</h3>
+        <!--         <h3 class="overthetop" v-if="partitionID==='default'">totale spesa: € {{total}}</h3>
+        <h3 class="overthetop" v-if="show_total_filtered">totale spesa bolle visibili: € {{total_filtered}}</h3> -->
     </div>
 </template>
 
@@ -23,6 +23,7 @@ import {
   calcCenterOfBlocks
 } from "@/utils/functions.js";
 import * as d3 from "d3";
+import { debounce } from "lodash";
 let simulation;
 let velocityDecay = 0.2;
 let forceStrength = 0.03;
@@ -42,7 +43,6 @@ function createNodes(rawData) {
     .range([3, 90])
     .domain([minAmount, maxAmount]);
   let myNodes = rawData.map(function(d) {
-    
     return {
       id: d.code,
       name: d.name,
@@ -56,7 +56,6 @@ function createNodes(rawData) {
       y: Math.random() * 500
     };
   });
-  console.log(myNodes);
 
   /*   myNodes = myNodes.sort((a,b)=>{
         return b.amount - a.amount;
@@ -77,14 +76,13 @@ export default {
   data: () => {
     return {
       total: 0,
-      show_total_filtered:false,
+      show_total_filtered: false,
       total_filtered: 0,
-      total_partition_filtered: {}
+      total_partition_filtered: { top_partition: {}, second_partition: {} }
     };
   },
 
   computed: {
-    
     partitionBlocks: function() {
       return this.partitionID !== "default"
         ? this.partitionLabels[this.partitionID]
@@ -94,10 +92,16 @@ export default {
 
   watch: {
     filters: {
-      handler() {
-        this.show_total_filtered=this.partitionID==="default" && (this.filters.top_partition.length!==0  || this.filters.second_partition.length!==0)
-        this.filterBubbles();
-      },
+      handler: debounce(
+        function() {
+          this.show_total_filtered =
+            this.partitionID === "default" &&
+            (this.filters.top_partition.length !== 0 ||
+              this.filters.second_partition.length !== 0);
+          this.filterBubbles();
+        },
+        500
+      ),
       deep: true
     },
     accounts: function(val, oldVal) {
@@ -109,7 +113,7 @@ export default {
 
   mounted() {
     console.log(this.partitionID);
-    
+
     if (this.accounts.length > 0) {
       this.chart(this.accounts);
       this.toggleGrouping();
@@ -157,8 +161,6 @@ export default {
         .attr("stroke", function(d) {
           return d3.rgb(fillColor(d.diff)).darker();
         })
-        .attr("stroke-width", 1)
-        .attr("pointer-events", "all")
         .on("click", d => {
           this.$emit("click", d);
         })
@@ -267,29 +269,50 @@ export default {
       }
     },
     filterBubbles() {
-      this.total=0;
-      this.total_filtered=0;
-      this.total_partition_filtered={top_partition:[],second_partition:[]};
+      this.total = 0;
+      this.total_filtered = 0;
+      this.total_partition_filtered = {
+        top_partition: {},
+        second_partition: {}
+      };
+
       let bubbles = d3
         .select("#bubbles")
         .selectAll("circle")
-        .attr("opacity", d => {
-        
-          if(this.total_partition_filtered.top_partition[d.partitions.top_partition]==undefined)
-            this.total_partition_filtered.top_partition[d.partitions.top_partition]=0;
-          if(this.total_partition_filtered.second_partition[d.partitions.second_partition]==undefined)
-            this.total_partition_filtered.second_partition[d.partitions.second_partition]=0;
-          this.total+=parseFloat(d.amount);
+        .classed("disabled", d => {
+          if (
+            this.total_partition_filtered.top_partition[
+              d.partitions.top_partition
+            ] == undefined
+          )
+            this.total_partition_filtered.top_partition[
+              d.partitions.top_partition
+            ] = 0;
+          if (
+            this.total_partition_filtered.second_partition[
+              d.partitions.second_partition
+            ] == undefined
+          )
+            this.total_partition_filtered.second_partition[
+              d.partitions.second_partition
+            ] = 0;
+          this.total += parseFloat(d.amount);
           if (filterPassed(d, this.filters)) {
-            this.total_partition_filtered.top_partition[d.partitions.top_partition]+=parseFloat(d.amount);
-            this.total_partition_filtered.second_partition[d.partitions.second_partition]+=parseFloat(d.amount);
-            this.total_filtered+=parseFloat(d.amount);
-            return 1;
+            this.total_partition_filtered.top_partition[
+              d.partitions.top_partition
+            ] += parseFloat(d.amount);
+            this.total_partition_filtered.second_partition[
+              d.partitions.second_partition
+            ] += parseFloat(d.amount);
+            this.total_filtered += parseFloat(d.amount);
+            return false;
           } else {
-            return 0.2;
+            return true;
           }
         });
-        console.log(this.total_partition_filtered);
+      console.log("filtered partitions", this.total_partition_filtered);
+      console.log('total', this.total);
+      console.log('total filtered', this.total_filtered);
     }
   }
 };
@@ -312,6 +335,19 @@ export default {
   position: absolute;
   pointer-events: none;
 }
+
+#bubbles circle.bubble {
+  pointer-events: all;
+  stroke-width: 1px;
+  opacity: 1;
+  transition: opacity 0.5s;
+}
+
+#bubbles circle.disabled {
+  pointer-events: none;
+  opacity: 0.2;
+}
+
 .grid {
   text-align: center;
   display: grid;
