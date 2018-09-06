@@ -24,8 +24,8 @@
                 </div>
 
                 <div class="right-column">
-                    <v-select class="select-ministero" :items="ministeri" v-model="filters.ministeri" label="Filtra per Ministero" multiple clearable deletable-chips chips hint="Scegli i ministeri a cui sei interessato" persistent-hint></v-select>
-                    <v-select class="select-missione" :items="missioni" v-model="filters.missioni" label="Filtra per Missione" block multiple clearable deletable-chips chips hint="Scegli le missioni a cui sei interessato" persistent-hint></v-select>
+                    <v-select class="select-ministero" :items="ministeri" v-model="filters.top_partition" label="Filtra per Ministero" multiple clearable deletable-chips chips hint="Scegli i ministeri a cui sei interessato" persistent-hint></v-select>
+                    <v-select class="select-missione" :items="missioni" v-model="filters.second_partition" label="Filtra per Missione" block multiple clearable deletable-chips chips hint="Scegli le missioni a cui sei interessato" persistent-hint></v-select>
                 </div>
 
             </div>
@@ -93,8 +93,8 @@ export default {
     return {
       hoveredNode: {},
       filters: {
-        ministeri: [],
-        missioni: []
+        top_partition: [],
+        second_partition: []
       },
       showTooltip: false,
       dialog: false

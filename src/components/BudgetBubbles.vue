@@ -1,14 +1,18 @@
 <template>
     <div ref="vis" class="vis">
+       
         <div ref="grid" v-if="partitionID !== 'default'" class="grid">
             <div v-for="block in partitionBlocks" :key="block[partitionID]" class="grid-block">
                 <h3 class="subheading">{{block[partitionID]}}</h3>
                 <!-- amount da calcolare in base al filtro -->
-                <!-- <h3 class="title">€ {{block.amount}}</h3> -->
+                 <h3 class="title">€ {{block.amount}}</h3>
+                 
             </div>
         </div>
 
         <svg id="bubbles"></svg>
+        <h3 class="overthetop" v-if="partitionID==='default'">totale spesa: € {{total}}</h3>
+        <h3 class="overthetop" v-if="show_total_filtered">totale spesa bolle visibili: € {{total_filtered}}</h3>
     </div>
 </template>
 
@@ -37,8 +41,8 @@ function createNodes(rawData) {
     .exponent(0.5)
     .range([3, 90])
     .domain([minAmount, maxAmount]);
-
   let myNodes = rawData.map(function(d) {
+    
     return {
       id: d.code,
       name: d.name,
@@ -52,6 +56,7 @@ function createNodes(rawData) {
       y: Math.random() * 500
     };
   });
+  console.log(myNodes);
 
   /*   myNodes = myNodes.sort((a,b)=>{
         return b.amount - a.amount;
@@ -70,10 +75,16 @@ export default {
   },
 
   data: () => {
-    return {};
+    return {
+      total: 0,
+      show_total_filtered:false,
+      total_filtered: 0,
+      total_partition_filtered: {}
+    };
   },
 
   computed: {
+    
     partitionBlocks: function() {
       return this.partitionID !== "default"
         ? this.partitionLabels[this.partitionID]
@@ -84,6 +95,7 @@ export default {
   watch: {
     filters: {
       handler() {
+        this.show_total_filtered=this.partitionID==="default" && (this.filters.top_partition.length!==0  || this.filters.second_partition.length!==0)
         this.filterBubbles();
       },
       deep: true
@@ -91,11 +103,13 @@ export default {
     accounts: function(val, oldVal) {
       this.chart(val);
       this.toggleGrouping();
-      /* this.filterBubbles(); */
+      this.filterBubbles();
     }
   },
 
   mounted() {
+    console.log(this.partitionID);
+    
     if (this.accounts.length > 0) {
       this.chart(this.accounts);
       this.toggleGrouping();
@@ -172,8 +186,6 @@ export default {
         .attr("r", function(d) {
           return d.radius;
         });
-
-
 
       simulation = d3
         .forceSimulation()
@@ -255,16 +267,29 @@ export default {
       }
     },
     filterBubbles() {
+      this.total=0;
+      this.total_filtered=0;
+      this.total_partition_filtered={top_partition:[],second_partition:[]};
       let bubbles = d3
         .select("#bubbles")
         .selectAll("circle")
         .attr("opacity", d => {
+        
+          if(this.total_partition_filtered.top_partition[d.partitions.top_partition]==undefined)
+            this.total_partition_filtered.top_partition[d.partitions.top_partition]=0;
+          if(this.total_partition_filtered.second_partition[d.partitions.second_partition]==undefined)
+            this.total_partition_filtered.second_partition[d.partitions.second_partition]=0;
+          this.total+=parseFloat(d.amount);
           if (filterPassed(d, this.filters)) {
+            this.total_partition_filtered.top_partition[d.partitions.top_partition]+=parseFloat(d.amount);
+            this.total_partition_filtered.second_partition[d.partitions.second_partition]+=parseFloat(d.amount);
+            this.total_filtered+=parseFloat(d.amount);
             return 1;
           } else {
             return 0.2;
           }
         });
+        console.log(this.total_partition_filtered);
     }
   }
 };
@@ -276,7 +301,9 @@ export default {
   height: 100%;
   width: 100%;
 }
-
+.overthetop {
+  z-index: 2;
+}
 #bubbles {
   z-index: 1;
   height: 100%;
