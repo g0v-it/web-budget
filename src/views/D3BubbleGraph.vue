@@ -22,18 +22,18 @@
             <div v-if="budget.selectedPartition=='default'" class="g0v-content-grid">
 
                 <div class="left-column">
-                    <BubbleGraphLegend :datasetMeta="budget.meta" />
+                    <BubbleGraphLegend :datasetMeta="budget.meta"  />
                 </div>
 
                 <div class="right-column">
                     <v-select class="select-ministero"
                         @change="$router.replace({ name: 'd3-bubble-graph', query: filters})"
-                        :items="ministeri" 
+                        :items="top_partitions" 
                         v-model="filters.top_partition" 
                         label="Filtra per Ministero" multiple clearable deletable-chips chips hint="Scegli i ministeri a cui sei interessato" persistent-hint></v-select>
                     <v-select class="select-missione" 
                         @change="$router.replace({ name: 'd3-bubble-graph', query: filters})"
-                        :items="missioni" 
+                        :items="second_partitions" 
                         v-model="filters.second_partition" 
                         label="Filtra per Missione" block multiple clearable deletable-chips chips hint="Scegli le missioni a cui sei interessato" persistent-hint></v-select>
                 </div>
@@ -64,7 +64,7 @@
         <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
             <v-card>
                 <v-toolbar dark color="primary">
-                    <v-btn icon dark @click.native="dialog = false; $router.push({ name: 'd3-bubble-graph'})">
+                    <v-btn icon dark @click.native="dialog = false; $router.push({ name: 'd3-bubble-graph',query: filters})">
                         <v-icon>close</v-icon>
                     </v-btn>
                     <v-toolbar-title>Dettagli azione</v-toolbar-title>
@@ -95,6 +95,7 @@ import BudgetBubbles from "@/components/BudgetBubbles.vue";
 import TooltipBubble from "@/components/TooltipBubble.vue";
 import DetailBubble from "@/components/DetailBubble.vue";
 import BubbleGraphLegend from "@/components/BubbleGraphLegend.vue";
+import func from "./vue-temp/vue-editor-bridge";
 
 export default {
   props: {
@@ -128,8 +129,15 @@ export default {
     budget: function() {
       return this.$root.$data.budget.state;
     },
+    /*   totAmount: function() {
+      let tot = 0;
+      this.budget.partitionLabels.top_partition.map(i => {
+        tot += i.amount;
+      });
+      return tot;
+    }, */
     /* funzione temporanea, bisogna cambiare il json dell'api */
-    ministeri() {
+    top_partitions() {
       let ministeri = [];
       if (this.budget.partitionLabels["top_partition"]) {
         for (
@@ -146,7 +154,7 @@ export default {
       return ministeri;
     },
     /* come ministeri prima */
-    missioni() {
+    second_partitions() {
       let missioni = [];
       if (this.budget.partitionLabels["second_partition"]) {
         for (
@@ -172,19 +180,13 @@ export default {
       this.dialog = false;
     }
 
-    /* gestire la stringa singola */
     if (Array.isArray(this.$route.query.top_partition)) {
-      /* this.$route.query.top_partition.map(i => {
-        this.filters.top_partition.push(i);
-      }); */
       this.filters.top_partition = this.$route.query.top_partition;
     } else if (this.$route.query.top_partition) {
       this.filters.top_partition.push(this.$route.query.top_partition);
     }
+
     if (Array.isArray(this.$route.query.second_partition)) {
-      /* this.$route.query.second_partition.map(i => {
-        this.filters.second_partition.push(i);
-      }); */
       this.filters.second_partition = this.$route.query.second_partition;
     } else if (this.$route.query.second_partition) {
       this.filters.second_partition.push(this.$route.query.second_partition);
@@ -193,10 +195,7 @@ export default {
     this.budgetStore().selectPartition(this.urlPartitionID);
   },
 
-  mounted() {
-    /*   console.log('query ', this.$route.query);
-      this.filters=this.$route.query */
-  },
+  mounted() {},
 
   watch: {
     $route(to, from) {
@@ -212,26 +211,8 @@ export default {
         this.dialog = false;
         this.budgetStore().selectPartition(to.params.urlPartitionID);
       }
-
-      /* Filters query */
-   /*    if (Array.isArray(to.query.top_partition)) {
-        to.query.second_partition.map(i => {
-          this.filters.second_partition.push(i);
-        });
-      } else if (to.query.top_partition) {
-        this.filters.top_partition.push(to.query.top_partition);
-      }
-      if (Array.isArray(to.query.second_partition)) {
-        to.query.second_partition.map(i => {
-          this.filters.second_partition.push(i);
-        });
-      } else if (to.query.second_partition) {
-        this.filters.second_partition.push(to.query.second_partition);
-      } */
-      /* ============== */
     }
   },
-
   methods: {
     onClick(node) {
       this.dialog = true;

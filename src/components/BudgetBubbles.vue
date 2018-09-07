@@ -11,8 +11,7 @@
         </div>
 
         <svg id="bubbles"></svg>
-        <!--         <h3 class="overthetop" v-if="partitionID==='default'">totale spesa: € {{total}}</h3>
-        <h3 class="overthetop" v-if="show_total_filtered">totale spesa bolle visibili: € {{total_filtered}}</h3> -->
+        
     </div>
 </template>
 
@@ -74,12 +73,7 @@ export default {
   },
 
   data: () => {
-    return {
-      total: 0,
-      show_total_filtered: false,
-      total_filtered: 0,
-      total_partition_filtered: { top_partition: {}, second_partition: {} }
-    };
+    return {};
   },
 
   computed: {
@@ -92,19 +86,13 @@ export default {
 
   watch: {
     filters: {
-      handler: debounce(
-        function() {
-          this.show_total_filtered =
-            this.partitionID === "default" &&
-            (this.filters.top_partition.length !== 0 ||
-              this.filters.second_partition.length !== 0);
-          this.filterBubbles();
-        },
-        500
-      ),
+      handler: debounce(function() {
+        this.filterBubbles();
+      }, 500),
       deep: true
     },
     accounts: function(val, oldVal) {
+      console.log("watch acco");
       this.chart(val);
       this.toggleGrouping();
       this.filterBubbles();
@@ -112,12 +100,11 @@ export default {
   },
 
   mounted() {
-    console.log(this.partitionID);
-
     if (this.accounts.length > 0) {
+      console.log(this.partitionID);
       this.chart(this.accounts);
       this.toggleGrouping();
-      /* this.filterBubbles(); */
+      this.filterBubbles();
     }
   },
 
@@ -165,7 +152,7 @@ export default {
           this.$emit("click", d);
         })
         .on("mouseover", function(d) {
-          this.style["stroke-width"] = 2;
+          this.style["stroke-width"] = 3;
           temp.$emit("over", {
             d,
             colorBg: fillColor(d.diff),
@@ -269,50 +256,16 @@ export default {
       }
     },
     filterBubbles() {
-      this.total = 0;
-      this.total_filtered = 0;
-      this.total_partition_filtered = {
-        top_partition: {},
-        second_partition: {}
-      };
-
       let bubbles = d3
         .select("#bubbles")
         .selectAll("circle")
         .classed("disabled", d => {
-          if (
-            this.total_partition_filtered.top_partition[
-              d.partitions.top_partition
-            ] == undefined
-          )
-            this.total_partition_filtered.top_partition[
-              d.partitions.top_partition
-            ] = 0;
-          if (
-            this.total_partition_filtered.second_partition[
-              d.partitions.second_partition
-            ] == undefined
-          )
-            this.total_partition_filtered.second_partition[
-              d.partitions.second_partition
-            ] = 0;
-          this.total += parseFloat(d.amount);
           if (filterPassed(d, this.filters)) {
-            this.total_partition_filtered.top_partition[
-              d.partitions.top_partition
-            ] += parseFloat(d.amount);
-            this.total_partition_filtered.second_partition[
-              d.partitions.second_partition
-            ] += parseFloat(d.amount);
-            this.total_filtered += parseFloat(d.amount);
             return false;
           } else {
             return true;
           }
         });
-      console.log("filtered partitions", this.total_partition_filtered);
-      console.log('total', this.total);
-      console.log('total filtered', this.total_filtered);
     }
   }
 };
@@ -323,9 +276,6 @@ export default {
   position: relative;
   height: 100%;
   width: 100%;
-}
-.overthetop {
-  z-index: 2;
 }
 #bubbles {
   height: 100%;

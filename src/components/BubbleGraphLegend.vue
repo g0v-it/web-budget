@@ -7,6 +7,7 @@
                 <br>
                 <a target="_blank" :href="datasetMeta.source">Dataset</a> aggiornato al {{datasetMeta.update}}
             </p>
+           
         </div>
         <!--  <svg class="legend-radius">
             <circle vector-effect="non-scaling-stroke" cx="137.5000000000001" cy="141.49999999999991" r="15" fill="none" stroke-width="1" stroke="rgb(190,190,190)" />
@@ -61,7 +62,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-/*   pointer-events: none; */
+  /*   pointer-events: none; */
 }
 
 .legend-description .description {
