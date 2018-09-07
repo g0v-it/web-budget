@@ -22,7 +22,7 @@
             <div v-if="budget.selectedPartition=='default'" class="g0v-content-grid">
 
                 <div class="left-column">
-                    <BubbleGraphLegend :datasetMeta="budget.meta"  />
+                    <BubbleGraphLegend :datasetMeta="budget.meta" :totAmount="totAmount"  />
                 </div>
 
                 <div class="right-column">
@@ -52,7 +52,7 @@
             </div>
 
             <transition name="fade">
-                <TooltipBubble  class="tooltip"
+                <TooltipBubble class="tooltip"
                     :style="{ top: hoveredNode.y + 'px' , left: hoveredNode.x + 'px' }" 
                     :currentNode="hoveredNode" 
                     :bgColor="hoveredNode.colorBg" 
@@ -95,7 +95,6 @@ import BudgetBubbles from "@/components/BudgetBubbles.vue";
 import TooltipBubble from "@/components/TooltipBubble.vue";
 import DetailBubble from "@/components/DetailBubble.vue";
 import BubbleGraphLegend from "@/components/BubbleGraphLegend.vue";
-import func from "./vue-temp/vue-editor-bridge";
 
 export default {
   props: {
@@ -129,13 +128,15 @@ export default {
     budget: function() {
       return this.$root.$data.budget.state;
     },
-    /*   totAmount: function() {
+    totAmount: function() {
       let tot = 0;
-      this.budget.partitionLabels.top_partition.map(i => {
-        tot += i.amount;
-      });
+      if (this.budget.partitionLabels.top_partition) {
+        this.budget.partitionLabels.top_partition.map(i => {
+          tot += parseFloat(i.amount);
+        });
+      }
       return tot;
-    }, */
+    },
     /* funzione temporanea, bisogna cambiare il json dell'api */
     top_partitions() {
       let ministeri = [];

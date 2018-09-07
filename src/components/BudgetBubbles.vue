@@ -306,8 +306,8 @@ export default {
   grid-auto-rows: 30rem 20rem 20rem 20rem 20rem 20rem 15rem 15rem 15rem;
   pointer-events: all;
 }
-.grid .subheading {
-  /*   z-index: 1; */
+.grid .subheading,.grid .title {
+    z-index: 1;
   text-align: center;
 }
 .grid .grid-block {
@@ -317,6 +317,9 @@ export default {
   flex-direction: column;
   /*   justify-content: space-between; */
 }
+
+
+
 
 @media screen and (max-width: 900px) {
   .grid {

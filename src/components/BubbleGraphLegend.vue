@@ -7,7 +7,7 @@
                 <br>
                 <a target="_blank" :href="datasetMeta.source">Dataset</a> aggiornato al {{datasetMeta.update}}
             </p>
-           
+           <p>Spese totali dello Stato: <b>€ {{totAmount}}</b></p>
         </div>
         <!--  <svg class="legend-radius">
             <circle vector-effect="non-scaling-stroke" cx="137.5000000000001" cy="141.49999999999991" r="15" fill="none" stroke-width="1" stroke="rgb(190,190,190)" />
@@ -50,7 +50,8 @@
 <script>
 export default {
   props: {
-    datasetMeta: Object
+    datasetMeta: Object,
+    totAmount: Number
   }
 };
 </script>
