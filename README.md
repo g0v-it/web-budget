@@ -48,15 +48,15 @@ import Configuration from './utils/configuration'
 
 let settings = Configuration();
 let apiEndpoint = settings.current().apiEndpoint;
-``` 
+```
 
 The configuration object is also exposed as the vue prototype attribute `$settings`
 
 ### Data
 
-All visualized data are extracted from [bdap portal](https://bdap-opendata.mef.gov.it/tema/bilancio-finanziario-dello-stato-0) and processed by a dedicated *smart data management platform* (DMP) compliant with the W3C Semantic Web standards. The platform and the datalake is available in the [data-budget repository](https://git.copernicani.it/g0v/data-budget)
+All visualized data are extracted from [bdap portal](https://bdap-opendata.mef.gov.it/tema/bilancio-finanziario-dello-stato-0) and processed by a dedicated *smart data management platform* (DMP) compliant with the W3C Semantic Web standards. The platform is available in the [data-budget repository](https://git.copernicani.it/g0v/data-budget)
 
-The web application connects to data management platform through an api server endpoint available at the address http://v1.api.budget.g0v.it:8080/. You can also run your private instance of the platform (see data-budget repo for more info )
+The web application connects to data management platform through an REST endpoint available at the address http://data.budget.g0v.it/api/v1. You can also run your private instance of the platform (see data-budget repo for more info )
 
 
 ## Support
@@ -65,10 +65,10 @@ For answers you may not find in here or in the Wiki, avoid posting issues. Feel 
 
 ## Credits
 
-- Miah Mohd Ehtesham (miahmohd98 at gmail.com) [CodeView](http://CodeView.Cloud) and Leonardo Longhi (leonardolonghi64 at gmail.com) from [DataRecipe](http://DataChef.Cloud) from [CodeView](http://CodeView.Cloud) for the webapp code design.
-- Enrico Fagnoni (enrico at linkeddata.center) from [LinkedData.Center](http://linkeddata.center) for developing the smart data management platform 
+- [Miah Mohd Ehtesham](https://github.com/miahmohd), [Leonardo Longhi](https://github.com/LeonardoLonghi) and [Luca Mearelli](https://github.com/luca) for the webapp code design.
+- [Enrico Fagnoni](https://github.com/ecow), [Yassine Ouahidi](https://github.com/YassineOuahidi) and [LinkedData.Center](http://linkeddata.center) for the smart data management platform 
 - [Mike Bostock](https://bost.ocks.org/mike/) for the [D3.js library](https://d3js.org/)
-- [Evan You] The [Vue community](https://vuejs.org) for the great framework
+- [Evan You](http://evanyou.me/) and he [Vue community](https://vuejs.org) for the great framework
 
 Thanks to all project contributors, to the [Copernicani community](https://copernicani.it/) and to the [g0v asia community](http://g0v.asia) for ideas and support.
 
