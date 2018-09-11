@@ -39,11 +39,11 @@ export function calcCenterOfBlocks(childNodes) {
 
 export function filterPassed(d, filters) {
 
-    if (filters.ministeri.length && filters.missioni.length) {
-        return filters.ministeri.includes(d.partitions.top_partition) && filters.missioni.includes(d.partitions.second_partition);
+    if (filters.top_partition.length && filters.second_partition.length) {
+        return filters.top_partition.includes(d.partitions.top_partition) && filters.second_partition.includes(d.partitions.second_partition);
     }
-    if (filters.ministeri.length || filters.missioni.length) {
-        return (filters.ministeri.includes(d.partitions.top_partition) || filters.missioni.includes(d.partitions.second_partition))
+    if (filters.top_partition.length || filters.second_partition.length) {
+        return (filters.top_partition.includes(d.partitions.top_partition) || filters.second_partition.includes(d.partitions.second_partition))
     }
     return true;
 

@@ -3,45 +3,68 @@
 
         <div class="g0v-partitions-header">
             <v-btn-toggle v-model="budget.selectedPartition" mandatory>
-                <v-btn flat color="primary" value="default" @click="$router.push({ name: 'd3-bubble-graph'})">
+                <v-btn flat color="primary" value="default" 
+                    @click="$router.push({ name: 'd3-bubble-graph',query: filters})">
                     default
                 </v-btn>
-                <v-btn flat color="primary" value="top_partition" @click="$router.push({ name: 'accounts-partition', params: { urlPartitionID: 'top_partition' }})">
+                <v-btn flat color="primary" value="top_partition" 
+                    @click="$router.push({ name: 'accounts-partition', params: { urlPartitionID: 'top_partition' },query: filters})">
                     ministero
                 </v-btn>
-                <v-btn flat color="primary" value="second_partition" @click="$router.push({ name: 'accounts-partition', params: { urlPartitionID: 'second_partition' }})">
+                <v-btn flat color="primary" value="second_partition" 
+                    @click="$router.push({ name: 'accounts-partition', params: { urlPartitionID: 'second_partition' },query: filters})">
                     missione
                 </v-btn>
             </v-btn-toggle>
         </div>
 
         <div class="g0v-content">
-
             <div v-if="budget.selectedPartition=='default'" class="g0v-content-grid">
 
                 <div class="left-column">
-                    <BubbleGraphLegend :datasetMeta="budget.meta" />
+                    <BubbleGraphLegend :datasetMeta="budget.meta" :totAmount="totAmount"  />
                 </div>
 
                 <div class="right-column">
-                    <v-select class="select-ministero" :items="ministeri" v-model="filters.ministeri" label="Filtra per Ministero" multiple clearable deletable-chips chips hint="Scegli i ministeri a cui sei interessato" persistent-hint></v-select>
-                    <v-select class="select-missione" :items="missioni" v-model="filters.missioni" label="Filtra per Missione" block multiple clearable deletable-chips chips hint="Scegli le missioni a cui sei interessato" persistent-hint></v-select>
+                    <v-select class="select-ministero"
+                        @change="$router.replace({ name: 'd3-bubble-graph', query: filters})"
+                        :items="top_partitions" 
+                        v-model="filters.top_partition" 
+                        label="Filtra per Ministero" multiple clearable deletable-chips chips hint="Scegli i ministeri a cui sei interessato" persistent-hint></v-select>
+                    <v-select class="select-missione" 
+                        @change="$router.replace({ name: 'd3-bubble-graph', query: filters})"
+                        :items="second_partitions" 
+                        v-model="filters.second_partition" 
+                        label="Filtra per Missione" block multiple clearable deletable-chips chips hint="Scegli le missioni a cui sei interessato" persistent-hint></v-select>
                 </div>
 
             </div>
-            <!--  -->
+
             <div class="g0v-bubble-chart">
-                <BudgetBubbles class="graph-layout" @click="onClick" @over="onMouseOver" @out="onMouseOut" :filters="filters" :partitionID="budget.selectedPartition" :partitionLabels="budget.partitionLabels" :accounts="budget.accounts" />
+                <BudgetBubbles
+                    @click="onClick" 
+                    @over="onMouseOver" 
+                    @out="onMouseOut" 
+                    :filters="filters" 
+                    :partitionID="budget.selectedPartition" 
+                    :partitionLabels="budget.partitionLabels" 
+                    :accounts="budget.accounts" />
             </div>
 
-            <TooltipBubble :style="{ top: hoveredNode.y + 'px' , left: hoveredNode.x + 'px' }" class="tooltip" :currentNode="hoveredNode" :bgColor="hoveredNode.colorBg" v-if="showTooltip && !dialog" />
+            <transition name="fade">
+                <TooltipBubble class="tooltip"
+                    :style="{ top: hoveredNode.y + 'px' , left: hoveredNode.x + 'px' }" 
+                    :currentNode="hoveredNode" 
+                    :bgColor="hoveredNode.colorBg" 
+                    v-if="showTooltip && !dialog" />
+            </transition>
 
         </div>
 
         <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
             <v-card>
                 <v-toolbar dark color="primary">
-                    <v-btn icon dark @click.native="dialog = false; $router.push({ name: 'd3-bubble-graph'})">
+                    <v-btn icon dark @click.native="dialog = false; $router.push({ name: 'd3-bubble-graph',query: filters})">
                         <v-icon>close</v-icon>
                     </v-btn>
                     <v-toolbar-title>Dettagli azione</v-toolbar-title>
@@ -58,8 +81,8 @@
                         </v-btn>
                     </v-toolbar-items>
                 </v-toolbar>
+                <DetailBubble :selected-node="budget.selectedNode"></DetailBubble>
 
-                <DetailBubble :selectedNode="budget.selectedNode"></DetailBubble>
             </v-card>
         </v-dialog>
 
@@ -93,8 +116,8 @@ export default {
     return {
       hoveredNode: {},
       filters: {
-        ministeri: [],
-        missioni: []
+        top_partition: [],
+        second_partition: []
       },
       showTooltip: false,
       dialog: false
@@ -105,8 +128,17 @@ export default {
     budget: function() {
       return this.$root.$data.budget.state;
     },
+    totAmount: function() {
+      let tot = 0;
+      if (this.budget.partitionLabels.top_partition) {
+        this.budget.partitionLabels.top_partition.map(i => {
+          tot += parseFloat(i.amount);
+        });
+      }
+      return tot;
+    },
     /* funzione temporanea, bisogna cambiare il json dell'api */
-    ministeri() {
+    top_partitions() {
       let ministeri = [];
       if (this.budget.partitionLabels["top_partition"]) {
         for (
@@ -123,7 +155,7 @@ export default {
       return ministeri;
     },
     /* come ministeri prima */
-    missioni() {
+    second_partitions() {
       let missioni = [];
       if (this.budget.partitionLabels["second_partition"]) {
         for (
@@ -148,6 +180,19 @@ export default {
     } else {
       this.dialog = false;
     }
+
+    if (Array.isArray(this.$route.query.top_partition)) {
+      this.filters.top_partition = this.$route.query.top_partition;
+    } else if (this.$route.query.top_partition) {
+      this.filters.top_partition.push(this.$route.query.top_partition);
+    }
+
+    if (Array.isArray(this.$route.query.second_partition)) {
+      this.filters.second_partition = this.$route.query.second_partition;
+    } else if (this.$route.query.second_partition) {
+      this.filters.second_partition.push(this.$route.query.second_partition);
+    }
+
     this.budgetStore().selectPartition(this.urlPartitionID);
   },
 
@@ -160,16 +205,15 @@ export default {
         this.budgetStore().selectPartition("default");
       }
       if (to.name === "account-details") {
-        this.budgetStore().selectNode(this.$route.params.code);
+        this.budgetStore().selectNode(to.params.code);
         this.dialog = true;
       }
       if (to.name === "accounts-partition") {
         this.dialog = false;
-        this.budgetStore().selectPartition(this.$route.params.urlPartitionID);
+        this.budgetStore().selectPartition(to.params.urlPartitionID);
       }
     }
   },
-
   methods: {
     onClick(node) {
       this.dialog = true;
@@ -184,16 +228,13 @@ export default {
       n.diff = "" + Math.round(node.d.diff * 100) / 100 + " %";
       n.colorBg = `${node.colorBg}`;
       n.darkerColor = node.darkerColor;
-      n.x = node.x + node.d.radius;
-      n.y = node.y + node.d.radius;
+      n.x = node.x + node.d.radius / 1.4142;
+      n.y = node.y + node.d.radius / 1.4142;
       this.hoveredNode = n;
       this.showTooltip = true;
     },
     onMouseOut(node) {
       this.showTooltip = false;
-    },
-    closeDialog(el) {
-      this.dialog = false;
     },
     budgetStore() {
       return this.$root.$data.budget;
@@ -232,6 +273,14 @@ export default {
   left: 0;
   z-index: 1;
   position: absolute;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 
 .g0v-content-grid {

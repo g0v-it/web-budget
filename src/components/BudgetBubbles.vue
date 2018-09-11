@@ -1,14 +1,17 @@
 <template>
     <div ref="vis" class="vis">
+
         <div ref="grid" v-if="partitionID !== 'default'" class="grid">
             <div v-for="block in partitionBlocks" :key="block[partitionID]" class="grid-block">
                 <h3 class="subheading">{{block[partitionID]}}</h3>
                 <!-- amount da calcolare in base al filtro -->
-                <!-- <h3 class="title">€ {{block.amount}}</h3> -->
+                <h3 class="title">€ {{block.amount}}</h3>
+
             </div>
         </div>
 
         <svg id="bubbles"></svg>
+        
     </div>
 </template>
 
@@ -19,6 +22,7 @@ import {
   calcCenterOfBlocks
 } from "@/utils/functions.js";
 import * as d3 from "d3";
+import { debounce } from "lodash";
 let simulation;
 let velocityDecay = 0.2;
 let forceStrength = 0.03;
@@ -37,7 +41,6 @@ function createNodes(rawData) {
     .exponent(0.5)
     .range([3, 90])
     .domain([minAmount, maxAmount]);
-
   let myNodes = rawData.map(function(d) {
     return {
       id: d.code,
@@ -83,23 +86,25 @@ export default {
 
   watch: {
     filters: {
-      handler() {
+      handler: debounce(function() {
         this.filterBubbles();
-      },
+      }, 500),
       deep: true
     },
     accounts: function(val, oldVal) {
+      console.log("watch acco");
       this.chart(val);
       this.toggleGrouping();
-      /* this.filterBubbles(); */
+      this.filterBubbles();
     }
   },
 
   mounted() {
     if (this.accounts.length > 0) {
+      console.log(this.partitionID);
       this.chart(this.accounts);
       this.toggleGrouping();
-      /* this.filterBubbles(); */
+      this.filterBubbles();
     }
   },
 
@@ -143,13 +148,11 @@ export default {
         .attr("stroke", function(d) {
           return d3.rgb(fillColor(d.diff)).darker();
         })
-        .attr("stroke-width", 1)
-        .attr("pointer-events", "all")
         .on("click", d => {
           this.$emit("click", d);
         })
         .on("mouseover", function(d) {
-          this.style["stroke-width"] = 2;
+          this.style["stroke-width"] = 3;
           temp.$emit("over", {
             d,
             colorBg: fillColor(d.diff),
@@ -172,8 +175,6 @@ export default {
         .attr("r", function(d) {
           return d.radius;
         });
-
-
 
       simulation = d3
         .forceSimulation()
@@ -258,11 +259,11 @@ export default {
       let bubbles = d3
         .select("#bubbles")
         .selectAll("circle")
-        .attr("opacity", d => {
+        .classed("disabled", d => {
           if (filterPassed(d, this.filters)) {
-            return 1;
+            return false;
           } else {
-            return 0.2;
+            return true;
           }
         });
     }
@@ -276,15 +277,26 @@ export default {
   height: 100%;
   width: 100%;
 }
-
 #bubbles {
-  z-index: 1;
   height: 100%;
   width: 100%;
   top: 0;
   position: absolute;
   pointer-events: none;
 }
+
+#bubbles circle.bubble {
+  pointer-events: all;
+  stroke-width: 1px;
+  opacity: 1;
+  transition: opacity 0.5s;
+}
+
+#bubbles circle.disabled {
+  pointer-events: none;
+  opacity: 0.2;
+}
+
 .grid {
   text-align: center;
   display: grid;
@@ -292,9 +304,10 @@ export default {
   grid-row-gap: 2rem;
   grid-template-columns: repeat(4, 1fr);
   grid-auto-rows: 30rem 20rem 20rem 20rem 20rem 20rem 15rem 15rem 15rem;
+  pointer-events: all;
 }
-.grid .subheading {
-  /*   z-index: 1; */
+.grid .subheading,.grid .title {
+    z-index: 1;
   text-align: center;
 }
 .grid .grid-block {
@@ -304,6 +317,9 @@ export default {
   flex-direction: column;
   /*   justify-content: space-between; */
 }
+
+
+
 
 @media screen and (max-width: 900px) {
   .grid {
