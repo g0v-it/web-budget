@@ -22,3 +22,5 @@ yarn-error.log*
 
 # Configuration
 public/config.js
+.project
+.settings/
