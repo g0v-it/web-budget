@@ -1,92 +1,105 @@
 <template>
-    <div class="g0v-container">
+  <div class="g0v-container">
+    <div class="g0v-partitions-header">
+      <v-btn-toggle v-model="budget.selectedPartition" mandatory>
+        <v-btn
+          flat color="primary"
+          value="default" @click="$router.push({ name: 'd3-bubble-graph',query: filters})"
+        >
+          default
+        </v-btn>
+        <v-btn
+          flat color="primary"
+          value="top_partition" @click="$router.push({ name: 'accounts-partition', params: { urlPartitionID: 'top_partition' },query: filters})"
+        >
+          ministero
+        </v-btn>
+        <v-btn
+          flat color="primary"
+          value="second_partition" @click="$router.push({ name: 'accounts-partition', params: { urlPartitionID: 'second_partition' },query: filters})"
+        >
+          missione
+        </v-btn>
+      </v-btn-toggle>
+    </div>
 
-        <div class="g0v-partitions-header">
-            <v-btn-toggle v-model="budget.selectedPartition" mandatory>
-                <v-btn flat color="primary" value="default" 
-                    @click="$router.push({ name: 'd3-bubble-graph',query: filters})">
-                    default
-                </v-btn>
-                <v-btn flat color="primary" value="top_partition" 
-                    @click="$router.push({ name: 'accounts-partition', params: { urlPartitionID: 'top_partition' },query: filters})">
-                    ministero
-                </v-btn>
-                <v-btn flat color="primary" value="second_partition" 
-                    @click="$router.push({ name: 'accounts-partition', params: { urlPartitionID: 'second_partition' },query: filters})">
-                    missione
-                </v-btn>
-            </v-btn-toggle>
+    <div class="g0v-content">
+      <div v-if="budget.selectedPartition=='default'" class="g0v-content-grid">
+
+        <div class="left-column">
+          <BubbleGraphLegend :dataset-meta="budget.meta" :tot-amount="totAmount" />
         </div>
 
-        <div class="g0v-content">
-            <div v-if="budget.selectedPartition=='default'" class="g0v-content-grid">
-
-                <div class="left-column">
-                    <BubbleGraphLegend :datasetMeta="budget.meta" :totAmount="totAmount"  />
-                </div>
-
-                <div class="right-column">
-                    <v-select class="select-ministero"
-                        @change="$router.replace({ name: 'd3-bubble-graph', query: filters})"
-                        :items="top_partitions" 
-                        v-model="filters.top_partition" 
-                        label="Filtra per Ministero" multiple clearable deletable-chips chips hint="Scegli i ministeri a cui sei interessato" persistent-hint></v-select>
-                    <v-select class="select-missione" 
-                        @change="$router.replace({ name: 'd3-bubble-graph', query: filters})"
-                        :items="second_partitions" 
-                        v-model="filters.second_partition" 
-                        label="Filtra per Missione" block multiple clearable deletable-chips chips hint="Scegli le missioni a cui sei interessato" persistent-hint></v-select>
-                </div>
-
-            </div>
-
-            <div class="g0v-bubble-chart">
-                <BudgetBubbles
-                    @click="onClick" 
-                    @over="onMouseOver" 
-                    @out="onMouseOut" 
-                    :filters="filters" 
-                    :partitionID="budget.selectedPartition" 
-                    :partitionLabels="budget.partitionLabels" 
-                    :accounts="budget.accounts" />
-            </div>
-
-
-            <TooltipBubble class="tooltip"
-                :style="{ top: hoveredNode.y + 'px' , left: hoveredNode.x + 'px' }" 
-                :currentNode="hoveredNode" 
-                :bgColor="hoveredNode.colorBg" 
-                v-if="showTooltip && !dialog" />
-
-
+        <div class="right-column">
+          <v-select
+            class="select-ministero" @change="$router.replace({ name: 'd3-bubble-graph', query: filters})"
+            :items="top_partitions" v-model="filters.top_partition"
+            label="Filtra per Ministero" multiple
+            clearable deletable-chips
+            chips hint="Scegli i ministeri a cui sei interessato"
+            persistent-hint
+          />
+          <v-select
+            class="select-missione" @change="$router.replace({ name: 'd3-bubble-graph', query: filters})"
+            :items="second_partitions" v-model="filters.second_partition"
+            label="Filtra per Missione" block
+            multiple clearable
+            deletable-chips chips
+            hint="Scegli le missioni a cui sei interessato" persistent-hint
+          />
         </div>
 
-        <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
-            <v-card>
-                <v-toolbar dark color="primary">
-                    <v-btn icon dark @click.native="dialog = false; $router.push({ name: 'd3-bubble-graph',query: filters})">
-                        <v-icon>close</v-icon>
-                    </v-btn>
-                    <v-toolbar-title>Dettagli azione</v-toolbar-title>
-                    <v-spacer></v-spacer>
-                    <v-toolbar-items>
-                        <v-btn dark flat>
-                            <v-icon>fab fa-facebook</v-icon>
-                        </v-btn>
-                        <v-btn dark flat>
-                            <v-icon>fab fa-twitter</v-icon>
-                        </v-btn>
-                        <v-btn dark flat>
-                            <v-icon>file_copy</v-icon>
-                        </v-btn>
-                    </v-toolbar-items>
-                </v-toolbar>
-                <DetailBubble :selected-node="budget.selectedNode"></DetailBubble>
+      </div>
 
-            </v-card>
-        </v-dialog>
+      <div class="g0v-bubble-chart">
+        <BudgetBubbles
+          @click="onClick" @over="onMouseOver"
+          @out="onMouseOut" :filters="filters"
+          :partition-id="budget.selectedPartition" :partition-labels="budget.partitionLabels"
+          :accounts="budget.accounts"
+        />
+      </div>
+
+      <TooltipBubble
+        class="tooltip" :style="{ top: hoveredNode.y + 'px' , left: hoveredNode.x + 'px' }"
+        :current-node="hoveredNode" :bg-color="hoveredNode.colorBg"
+        v-if="showTooltip && !dialog"
+      />
 
     </div>
+
+    <v-dialog
+      v-model="dialog" fullscreen
+      hide-overlay transition="dialog-bottom-transition"
+    >
+      <v-card>
+        <v-toolbar dark color="primary">
+          <v-btn
+            icon dark
+            @click.native="dialog = false; $router.push({ name: 'd3-bubble-graph',query: filters})"
+          >
+            <v-icon>close</v-icon>
+          </v-btn>
+          <v-toolbar-title>Dettagli azione</v-toolbar-title>
+          <v-spacer />
+          <v-toolbar-items>
+            <v-btn dark flat>
+              <v-icon>fab fa-facebook</v-icon>
+            </v-btn>
+            <v-btn dark flat>
+              <v-icon>fab fa-twitter</v-icon>
+            </v-btn>
+            <v-btn dark flat>
+              <v-icon>file_copy</v-icon>
+            </v-btn>
+          </v-toolbar-items>
+        </v-toolbar>
+        <DetailBubble :selected-node="budget.selectedNode" />
+
+      </v-card>
+    </v-dialog>
+
+  </div>
 </template>
 
 <script>
@@ -98,7 +111,10 @@ import BubbleGraphLegend from "@/components/BubbleGraphLegend.vue";
 
 export default {
   props: {
-    code: String,
+    code: {
+      type: String,
+      default: ""
+    },
     urlPartitionID: {
       type: String,
       default: "default"
@@ -202,7 +218,7 @@ export default {
   mounted() {},
 
   watch: {
-    $route(to, from) {
+    $route(to) {
       if (to.name === "d3-bubble-graph") {
         this.budgetStore().selectPartition("default");
         this.dialog = false;
@@ -234,7 +250,7 @@ export default {
       this.hoveredNode = n;
       this.showTooltip = true;
     },
-    onMouseOut(node) {
+    onMouseOut() {
       this.showTooltip = false;
     },
     budgetStore() {

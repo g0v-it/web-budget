@@ -3,15 +3,17 @@
 
         <div ref="grid" v-if="partitionID !== 'default'" class="grid">
             <div v-for="block in partitionBlocks" :key="block[partitionID]" class="grid-block">
-                <h3 class="subheading">{{block[partitionID]}}</h3>
+                <h3 class="subheading">{{ block[partitionID] }}</h3>
                 <!-- amount da calcolare in base al filtro -->
-                <h3 class="title"><amount :amount="Number(block.amount)"/></h3>
+                <h3 class="title">
+                    <amount :amount="Number(block.amount)" />
+                </h3>
 
             </div>
         </div>
 
-        <svg id="bubbles"></svg>
-        
+        <svg id="bubbles" />
+
     </div>
 </template>
 
@@ -48,7 +50,7 @@ function createNodes(rawData) {
       top_level: d.top_level,
       radius: radiusScale(+d.amount),
       amount: d.amount,
-      diff: (d.amount - d.last_amount) / d.last_amount * 100,
+      diff: ((d.amount - d.last_amount) / d.last_amount) * 100,
       partitions: d.partitions,
       tags: d.tags,
       x: Math.random() * 1000,
@@ -57,9 +59,9 @@ function createNodes(rawData) {
   });
 
   /*   myNodes = myNodes.sort((a,b)=>{
-        return b.amount - a.amount;
-    })
- */
+          return b.amount - a.amount;
+      })
+   */
   return myNodes;
 }
 
@@ -91,7 +93,7 @@ export default {
       }, 500),
       deep: true
     },
-    accounts: function(val, oldVal) {
+    accounts: function(val) {
       console.log("watch acco");
       this.chart(val);
       this.toggleGrouping();
