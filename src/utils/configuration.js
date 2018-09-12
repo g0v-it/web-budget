@@ -6,7 +6,7 @@ export default function() {
         debug: true,
 
         // default configuration
-        apiEndpoint: 'http://194.177.121.230:8080'
+        apiEndpoint: 'http://data.budget.g0v.it/api/v1'
     }
 
 
