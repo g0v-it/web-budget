@@ -5,7 +5,7 @@
             <div v-for="block in partitionBlocks" :key="block[partitionID]" class="grid-block">
                 <h3 class="subheading">{{block[partitionID]}}</h3>
                 <!-- amount da calcolare in base al filtro -->
-                <h3 class="title">€ {{block.amount}}</h3>
+                <h3 class="title"><amount :amount="Number(block.amount)"/></h3>
 
             </div>
         </div>
@@ -156,10 +156,6 @@ export default {
           temp.$emit("over", {
             d,
             colorBg: fillColor(d.diff),
-            darkerColor: d3
-              .rgb(fillColor(d.diff))
-              .darker()
-              .hex(),
             x: d.x,
             y: d.y
           });
@@ -306,8 +302,9 @@ export default {
   grid-auto-rows: 30rem 20rem 20rem 20rem 20rem 20rem 15rem 15rem 15rem;
   pointer-events: all;
 }
-.grid .subheading,.grid .title {
-    z-index: 1;
+.grid .subheading,
+.grid .title {
+  z-index: 1;
   text-align: center;
 }
 .grid .grid-block {
@@ -317,9 +314,6 @@ export default {
   flex-direction: column;
   /*   justify-content: space-between; */
 }
-
-
-
 
 @media screen and (max-width: 900px) {
   .grid {

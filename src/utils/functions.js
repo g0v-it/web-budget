@@ -1,7 +1,7 @@
 export function fillColor(val) {
-    /* if (val === Infinity) {
-        return '#000000'
-    } */
+    if (!isFinite(val)) {
+        return '#AAAAAA'
+    }
     let color = "#D84B2A";
     if (val > -25) {
         color = "#EE9586";

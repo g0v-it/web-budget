@@ -51,13 +51,13 @@
                     :accounts="budget.accounts" />
             </div>
 
-            <transition name="fade">
-                <TooltipBubble class="tooltip"
-                    :style="{ top: hoveredNode.y + 'px' , left: hoveredNode.x + 'px' }" 
-                    :currentNode="hoveredNode" 
-                    :bgColor="hoveredNode.colorBg" 
-                    v-if="showTooltip && !dialog" />
-            </transition>
+
+            <TooltipBubble class="tooltip"
+                :style="{ top: hoveredNode.y + 'px' , left: hoveredNode.x + 'px' }" 
+                :currentNode="hoveredNode" 
+                :bgColor="hoveredNode.colorBg" 
+                v-if="showTooltip && !dialog" />
+
 
         </div>
 
@@ -174,6 +174,7 @@ export default {
   },
 
   created() {
+    /* Init dialog from url params */
     if (this.code) {
       this.dialog = true;
       this.budgetStore().selectNode(this.code);
@@ -181,6 +182,7 @@ export default {
       this.dialog = false;
     }
 
+    /* Init filters from url params */
     if (Array.isArray(this.$route.query.top_partition)) {
       this.filters.top_partition = this.$route.query.top_partition;
     } else if (this.$route.query.top_partition) {
@@ -193,6 +195,7 @@ export default {
       this.filters.second_partition.push(this.$route.query.second_partition);
     }
 
+    /* init partition form url params */
     this.budgetStore().selectPartition(this.urlPartitionID);
   },
 
@@ -201,16 +204,16 @@ export default {
   watch: {
     $route(to, from) {
       if (to.name === "d3-bubble-graph") {
-        this.dialog = false;
         this.budgetStore().selectPartition("default");
+        this.dialog = false;
       }
       if (to.name === "account-details") {
         this.budgetStore().selectNode(to.params.code);
         this.dialog = true;
       }
       if (to.name === "accounts-partition") {
-        this.dialog = false;
         this.budgetStore().selectPartition(to.params.urlPartitionID);
+        this.dialog = false;
       }
     }
   },
@@ -221,15 +224,13 @@ export default {
       this.$router.push({ name: "account-details", params: { code: node.id } });
     },
     onMouseOver(node) {
-      let n = {};
-      n.topLevel = node.d.top_level;
-      n.name = node.d.name;
-      n.amount = `€ ${node.d.amount}`;
-      n.diff = "" + Math.round(node.d.diff * 100) / 100 + " %";
-      n.colorBg = `${node.colorBg}`;
-      n.darkerColor = node.darkerColor;
-      n.x = node.x + node.d.radius / 1.4142;
-      n.y = node.y + node.d.radius / 1.4142;
+      let n = {
+        ...node.d,
+        colorBg: node.colorBg,
+        x: node.x + node.d.radius / 1.4142,
+        y: node.y + node.d.radius / 1.4142
+      };
+
       this.hoveredNode = n;
       this.showTooltip = true;
     },
@@ -252,10 +253,6 @@ export default {
   flex-direction: column;
 }
 
-/* .g0v-partitions-header{
-    height: 3rem;
-} */
-
 .g0v-content {
   margin: 1rem 0 0 0;
   position: relative;
@@ -273,14 +270,6 @@ export default {
   left: 0;
   z-index: 1;
   position: absolute;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.2s;
-}
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0;
 }
 
 .g0v-content-grid {

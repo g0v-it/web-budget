@@ -1,7 +1,7 @@
 <template>
     <div class="bubble-tooltip card">
         <v-card-title class=" tooltipTitle headline grey lighten-2" primary-title>
-            <p>{{currentNode.topLevel}}</p>
+            <p>{{currentNode.top_level}}</p>
         </v-card-title>
         <v-card-text class="tooltipText">
             <p>{{currentNode.name}}</p>
@@ -9,10 +9,10 @@
         <div class="numberContainer">
 
             <div class="amount">
-                <h3>{{currentNode.amount}}</h3>
+                <h3><amount :amount="Number(currentNode.amount)" /></h3>
             </div>
             <div class="diff" :style="{backgroundColor:bgColor}">
-                <h3>{{currentNode.diff}}</h3>
+                <h3><rate :rate="currentNode.diff" /></h3>
             </div>
 
         </div>
