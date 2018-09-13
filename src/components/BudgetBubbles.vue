@@ -1,9 +1,9 @@
 <template>
     <div ref="vis" class="vis">
 
-        <div ref="grid" v-if="partitionID !== 'default'" class="grid">
-            <div v-for="block in partitionBlocks" :key="block[partitionID]" class="grid-block">
-                <h3 class="subheading">{{ block[partitionID] }}</h3>
+        <div ref="grid" v-if="partitionId !== 'default'" class="grid">
+            <div v-for="block in partitionBlocks" :key="block[partitionId]" class="grid-block">
+                <h3 class="subheading">{{ block[partitionId] }}</h3>
                 <!-- amount da calcolare in base al filtro -->
                 <h3 class="title">
                     <amount :amount="Number(block.amount)" />
@@ -50,7 +50,7 @@ function createNodes(rawData) {
       top_level: d.top_level,
       radius: radiusScale(+d.amount),
       amount: d.amount,
-      diff: ((d.amount - d.last_amount) / d.last_amount) * 100,
+      diff: (d.amount - d.last_amount) / d.last_amount * 100,
       partitions: d.partitions,
       tags: d.tags,
       x: Math.random() * 1000,
@@ -69,7 +69,7 @@ function createNodes(rawData) {
 export default {
   props: {
     accounts: Array,
-    partitionID: String,
+    partitionId: String,
     partitionLabels: Object,
     filters: Object
   },
@@ -80,8 +80,8 @@ export default {
 
   computed: {
     partitionBlocks: function() {
-      return this.partitionID !== "default"
-        ? this.partitionLabels[this.partitionID]
+      return this.partitionId !== "default"
+        ? this.partitionLabels[this.partitionId]
         : [];
     }
   },
@@ -103,7 +103,7 @@ export default {
 
   mounted() {
     if (this.accounts.length > 0) {
-      console.log(this.partitionID);
+      console.log(this.partitionId);
       this.chart(this.accounts);
       this.toggleGrouping();
       this.filterBubbles();
@@ -236,17 +236,17 @@ export default {
       simulation.alpha(1).restart();
     },
     toggleGrouping() {
-      if (this.partitionID === "default") {
+      if (this.partitionId === "default") {
         this.groupBubbles();
       } else {
         let centers = calcCenterOfBlocks(this.$refs.grid.childNodes);
 
         for (let i = 0; i < this.partitionBlocks.length; i++) {
-          centers[i].value = this.partitionBlocks[i][this.partitionID];
+          centers[i].value = this.partitionBlocks[i][this.partitionId];
         }
 
         let groupCatId = {
-          partition: this.partitionID,
+          partition: this.partitionId,
           labels: centers
         };
 

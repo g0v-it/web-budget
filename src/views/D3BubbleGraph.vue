@@ -54,9 +54,9 @@
       <div class="g0v-bubble-chart">
         <BudgetBubbles
           @click="onClick" @over="onMouseOver"
-          @out="onMouseOut" :filters="filters"
+          @out="onMouseOut"
           :partition-id="budget.selectedPartition" :partition-labels="budget.partitionLabels"
-          :accounts="budget.accounts"
+          :accounts="budget.accounts" :filters="filters"
         />
       </div>
 
