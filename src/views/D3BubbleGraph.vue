@@ -230,7 +230,6 @@ export default {
         x: node.x + node.d.radius / 1.4142,
         y: node.y + node.d.radius / 1.4142
       };
-
       this.hoveredNode = n;
       this.showTooltip = true;
     },

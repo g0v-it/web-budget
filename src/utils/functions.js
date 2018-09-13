@@ -3,19 +3,19 @@ export function fillColor(val) {
         return '#AAAAAA'
     }
     let color = "#D84B2A";
-    if (val > -25) {
+    if (val > -0.25) {
         color = "#EE9586";
     }
-    if (val > -5) {
+    if (val > -0.05) {
         color = "#E4B7B2";
     }
     if (val >= 0) {
         color = "#BECCAE";
     }
-    if (val > 5) {
+    if (val > 0.05) {
         color = "#9CAF84";
     }
-    if (val > 25) {
+    if (val > 0.25) {
         color = "#7AA25C";
     }
     return color;

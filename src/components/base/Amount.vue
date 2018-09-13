@@ -5,26 +5,26 @@
 </template>
 
 <script>
+import numeral from '@/utils/numeralCustomizations';
+import Configuration from '@/utils/configuration'
+
 export default {
   name: "amount",
   props: {
     amount: {
-      type: Number,
+      type: [String, Number],
       default: "N/A"
     },
-    maximumSignificantDigits: {
-      type: Number,
-      default: 3
+    format: {
+      type: String,
+      default: Configuration().current().amountFormat
     }
   },
   computed: {
     normalize() {
-      if (isFinite(this.amount)) {
-        return this.amount.toLocaleString("it-IT", {
-          style: "currency",
-          currency: "EUR",
-          maximumSignificantDigits: this.maximumSignificantDigits
-        });
+      let amt = Number(this.amount);
+      if (isFinite(amt)) {
+        return numeral(amt).format(this.format);
       }
       return "N/A";
     }

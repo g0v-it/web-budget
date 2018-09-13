@@ -4,8 +4,8 @@
             <h2 class="azione">{{selectedNode.name}}</h2>
             <h3 class="ministero">Ministero: {{selectedNode.top_level}}</h3>
             <!--     <h3 class="missione">Missione: {{selectedNode.partitions.second_partition}}</h3> -->
-            <p>Spesa: € {{selectedNode.amount}}</p>
-            <p>Ultima spesa: € {{selectedNode.last_amount}}</p>
+            <p>Spesa: <amount :amount="selectedNode.amount" /></p>
+            <p>Ultima spesa: <amount :amount="selectedNode.last_amount" /></p>
             <!-- <GraphBubble :values="selectedNode.last_values" style=""></GraphBubble> -->
         </div>
         <div class="comments">
