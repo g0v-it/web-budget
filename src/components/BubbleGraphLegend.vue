@@ -11,7 +11,7 @@
 
         </div>
         <div>
-            <a href=""><v-img :src="logo_mef" class="g0v-mef-logo" max-width="100px"></v-img></a>
+            <a href="http://www.mef.gov.it/"><v-img :src="logo_mef" class="g0v-mef-logo" max-width="100px"></v-img></a>
             <small>Elaborazione su dati del Ministero dell'Economia e delle Finanze</small>
         </div>
         <!--  <svg class="legend-radius">
