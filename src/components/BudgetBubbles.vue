@@ -1,18 +1,24 @@
 <template>
-    <div ref="vis" class="vis">
+  <div ref="vis" class="vis">
 
-        <div ref="grid" v-if="partitionId !== 'default'" class="grid">
-            <div v-for="block in partitionBlocks" :key="block[partitionId]" class="grid-block">
-                <h3 class="subheading">{{ block[partitionId] }}</h3>
-                <!-- amount da calcolare in base al filtro -->
-                <h3 class="title"><amount :amount="block.amount"/></h3>
+    <div
+      ref="grid" v-if="partitionId !== 'default'"
+      class="grid"
+    >
+      <div
+        v-for="block in partitionBlocks" :key="block[partitionId]"
+        class="grid-block"
+      >
+        <h3 class="subheading">{{ block[partitionId] }}</h3>
+        <!-- amount da calcolare in base al filtro -->
+        <h3 class="title"><amount :amount="block.filteredAmount" /></h3>
 
-            </div>
-        </div>
-
-        <svg id="bubbles" />
-
+      </div>
     </div>
+
+    <svg id="bubbles" />
+
+  </div>
 </template>
 
 <script>
@@ -90,18 +96,18 @@ export default {
         this.filterBubbles();
       }, 500),
       deep: true
-    },
-    accounts: function(val) {
+    }
+    /*     accounts: function(val) {
       console.log("watch acco");
       this.chart(val);
       this.toggleGrouping();
       this.filterBubbles();
-    }
+    } */
   },
 
   mounted() {
     if (this.accounts.length > 0) {
-      console.log(this.partitionId);
+      console.log("mounted");
       this.chart(this.accounts);
       this.toggleGrouping();
       this.filterBubbles();
@@ -109,9 +115,8 @@ export default {
   },
 
   updated() {
-    if (this.accounts.length > 0) {
-      this.toggleGrouping();
-    }
+    console.log("updated");
+    this.toggleGrouping();
   },
 
   methods: {
