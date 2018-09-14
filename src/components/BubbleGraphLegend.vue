@@ -8,6 +8,11 @@
                 <a target="_blank" :href="datasetMeta.source">Dataset</a> aggiornato al {{datasetMeta.update}}
             </p>
            <p>Spese totali dello Stato: <b> <amount :amount="totAmount" /></b></p>
+
+        </div>
+        <div>
+            <a href=""><v-img :src="logo_mef" class="g0v-mef-logo" max-width="100px"></v-img></a>
+            <small>Elaborazione su dati del Ministero dell'Economia e delle Finanze</small>
         </div>
         <!--  <svg class="legend-radius">
             <circle vector-effect="non-scaling-stroke" cx="137.5000000000001" cy="141.49999999999991" r="15" fill="none" stroke-width="1" stroke="rgb(190,190,190)" />
@@ -52,7 +57,13 @@ export default {
   props: {
     datasetMeta: Object,
     totAmount: Number
+  },
+  computed: {
+    logo_mef () {
+      return require('@/assets/logo_mef.svg')
+    }
   }
+
 };
 </script>
 

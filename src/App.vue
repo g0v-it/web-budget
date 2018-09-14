@@ -1,27 +1,32 @@
 <template>
     <v-app>
-        <v-navigation-drawer temporary v-model="drawer" app>
-            <v-list>
-
-                <v-list-tile value="true" v-for="(item, i) in items" :key="i">
-
-                    <v-list-tile-action>
-                        <v-icon v-html="item.icon"></v-icon>
-                    </v-list-tile-action>
-                    <v-list-tile-content>
-                        <v-list-tile-title>
-                            <router-link v-bind:to="item.path" v-text="item.title"></router-link>
-                        </v-list-tile-title>
-                    </v-list-tile-content>
-
-                </v-list-tile>
-
-            </v-list>
-        </v-navigation-drawer>
-
         <v-toolbar app :clipped-left="clipped">
-            <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-            <v-toolbar-title v-text="title"></v-toolbar-title>
+            <img :src="logo_copernicani_orizzontale" class="g0v-header-logo">
+            <v-flex class="text-xs-left">
+                <v-toolbar-title v-text="title" class="g0v-header-title"></v-toolbar-title>
+            </v-flex>
+
+            <v-menu :nudge-width="100">
+                <v-toolbar-title slot="activator">
+                    <v-icon>arrow_drop_down</v-icon>
+                </v-toolbar-title>
+
+                <v-list>
+                    <v-list-tile value="true" v-for="(item, i) in items" :key="i">
+
+                        <v-list-tile-action>
+                            <v-icon v-html="item.icon"></v-icon>
+                        </v-list-tile-action>
+                        <v-list-tile-content>
+                            <v-list-tile-title>
+                                <router-link v-bind:to="item.path" v-text="item.title"></router-link>
+                            </v-list-tile-title>
+                        </v-list-tile-content>
+
+                    </v-list-tile>
+                </v-list>
+            </v-menu>
+
         </v-toolbar>
 
         <v-content>
@@ -71,10 +76,15 @@ export default {
           path: "/credits"
         }
       ],
-      title: "Budget.g0v.it"
+      title: ""
     };
   },
-  methods: {}
+  methods: {},
+  computed: {
+    logo_copernicani_orizzontale () {
+      return require('@/assets/copernicani_orizzontale.png')
+    }
+  }
 };
 </script>
 
@@ -116,6 +126,13 @@ footer {
 
 .g0v-license{
    margin-left: auto;
+}
+
+.g0v-header-logo {
+    max-height: 90%;
+}
+.g0v-header-title {
+    margin-left:1em;
 }
 
 </style>
