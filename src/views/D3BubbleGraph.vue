@@ -77,7 +77,7 @@
         <v-toolbar dark color="primary">
           <v-btn
             icon dark
-            @click.native="dialog = false; $router.push({ name: 'd3-bubble-graph',query: budget.filters})"
+            @click.native="dialog = false;"
           >
             <v-icon>close</v-icon>
           </v-btn>
