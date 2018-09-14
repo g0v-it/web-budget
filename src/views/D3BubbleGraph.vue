@@ -145,13 +145,15 @@ export default {
       return this.$root.$data.budget.state;
     },
     totAmount: function() {
-      let tot = 0;
+      let amount = 0;
+      let filteredAmount = 0;
       if (this.budget.partitionLabels.top_partition) {
         this.budget.partitionLabels.top_partition.map(i => {
-          tot += parseFloat(i.filteredAmount);
+          filteredAmount += parseFloat(i.filteredAmount);
+          amount += parseFloat(i.amount);
         });
       }
-      return tot;
+      return { amount, filteredAmount };
     },
     /* funzione temporanea, bisogna cambiare il json dell'api */
     top_partitions() {

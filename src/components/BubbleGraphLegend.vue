@@ -5,8 +5,8 @@
       <p class="description">
         <a target="_blank" :href="datasetMeta.source">{{ datasetMeta.description }} aggiornato al {{ datasetMeta.update }}</a>
       </p>
-      <p>Spese dello Stato: <b> <amount :amount="totAmount" /></b></p>
-
+      <p>Spese totali: <b> <amount :amount="totAmount.amount" /></b></p>
+      <p>Spese filtrate: <b> <amount :amount="totAmount.filteredAmount" /></b></p>
     </div>
     <div>
       <a href="http://www.mef.gov.it/"><v-img

@@ -1,28 +1,27 @@
-import Configuration from '@/utils/configuration'
+import Configuration from "@/utils/configuration";
 
-import numeral from 'numeral';
+import numeral from "numeral";
 
 // import 'numeral/locales';
-numeral.register('locale', 'it', {
+numeral.register("locale", "it", {
   delimiters: {
-    thousands: '.',
-    decimal: ','
+    thousands: ".",
+    decimal: ","
   },
   abbreviations: {
-    thousand: 'mila',
-    million: 'mil',
-    billion: 'mld',
-    trillion: 'trl'
+    thousand: "mila",
+    million: "milioni",
+    billion: "miliardi",
+    trillion: "trilioni"
   },
-  ordinal: function (number) {
-    return 'º';
+  ordinal: function(number) {
+    return "º";
   },
   currency: {
-    symbol: '€'
+    symbol: "€"
   }
 });
 
 numeral.locale(Configuration().current().locale);
 
 export default numeral;
-
