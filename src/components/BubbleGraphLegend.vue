@@ -57,7 +57,7 @@
 export default {
   props: {
     datasetMeta: Object,
-    totAmount: Number
+    totAmount: Object
   },
   computed: {
     logo_mef() {
