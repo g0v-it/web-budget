@@ -6,7 +6,7 @@ export default function() {
 
     locale: "it",
 
-    amountFormat: "$ 0.0, a",
+    amountFormat: "$ 0,0. ",
 
     rateFormat: "+0.0 %",
 
