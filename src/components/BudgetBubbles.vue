@@ -5,9 +5,7 @@
             <div v-for="block in partitionBlocks" :key="block[partitionId]" class="grid-block">
                 <h3 class="subheading">{{ block[partitionId] }}</h3>
                 <!-- amount da calcolare in base al filtro -->
-                <h3 class="title">
-                    <amount :amount="Number(block.amount)" />
-                </h3>
+                <h3 class="title"><amount :amount="block.amount"/></h3>
 
             </div>
         </div>
@@ -50,7 +48,7 @@ function createNodes(rawData) {
       top_level: d.top_level,
       radius: radiusScale(+d.amount),
       amount: d.amount,
-      diff: (d.amount - d.last_amount) / d.last_amount * 100,
+      diff: (d.amount - d.last_amount) / d.last_amount,
       partitions: d.partitions,
       tags: d.tags,
       x: Math.random() * 1000,

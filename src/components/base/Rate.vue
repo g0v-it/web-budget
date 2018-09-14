@@ -5,6 +5,9 @@
 </template>
 
 <script>
+import numeral from '@/utils/numeralCustomizations';
+import Configuration from '@/utils/configuration'
+
 export default {
   name: "rate",
   props: {
@@ -12,19 +15,16 @@ export default {
       type: Number,
       default: "N/A"
     },
-    maximumFractionDigits: {
-      type: Number,
-      default: 2
+    format: {
+      type: String,
+      default: Configuration().current().rateFormat
     }
   },
   computed: {
     normalize() {
-      if (isFinite(this.rate))
-        return (
-          this.rate.toLocaleString("it-IT", {
-            maximumFractionDigits: this.maximumFractionDigits
-          }) + "%"
-        );
+      if (isFinite(this.rate)) {
+        return numeral(this.rate).format(this.format);
+      }
       return "N/A";
     }
   }

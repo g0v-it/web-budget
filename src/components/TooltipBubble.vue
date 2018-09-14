@@ -9,7 +9,7 @@
         <div class="numberContainer">
 
             <div class="amount">
-                <h3><amount :amount="Number(currentNode.amount)" /></h3>
+                <h3><amount :amount="currentNode.amount" /></h3>
             </div>
             <div class="diff" :style="{backgroundColor:bgColor}">
                 <h3><rate :rate="currentNode.diff" /></h3>
