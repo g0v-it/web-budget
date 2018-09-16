@@ -8,7 +8,7 @@ export default function() {
 
     amountFormat: "$ 0,0. ",
 
-    rateFormat: "+0.0 %",
+    rateFormat: "0.0 %",
 
     // default configuration
     apiEndpoint: "http://data.budget.g0v.it/api/v1"

@@ -14,6 +14,7 @@ export const BudgetData = () => {
     meta: {},
     accounts: [],
     partitionLabels: {},
+    filteredTot: {},
     selectedNode: {},
     selectedPartition: "default",
     filters: {
@@ -48,13 +49,13 @@ export const BudgetData = () => {
       post(`${__apiEndpoint}/filter`, __data.filters)
     ])
       .then(response => {
-        console.log("partlabel");
         let partitionLabels = response[0].data;
         let filteredTot = response[1].data;
         __data.partitionLabels = computeNewFilteredTotals(
           partitionLabels,
           filteredTot
         );
+        __data.filteredTot = filteredTot;
       })
       .catch(err => {
         log(err);
@@ -149,8 +150,6 @@ export const BudgetData = () => {
       get(`${__apiEndpoint}/partition_labels`),
       post(`${__apiEndpoint}/filter`, __data.filters)
     ]).then(response => {
-      //__data.partitionLabels = response[1].data;
-      console.log("filters", __data.filters);
       let partitionLabels = response[1].data;
       let filteredTot = response[2].data;
       __data.partitionLabels = computeNewFilteredTotals(
@@ -159,6 +158,7 @@ export const BudgetData = () => {
       );
       __data.accounts = response[0].data.accounts;
       __data.meta = response[0].data.meta;
+      __data.filteredTot = filteredTot;
     });
   };
 

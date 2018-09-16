@@ -2,13 +2,12 @@
   <div class="legend">
     <div class="legend-description">
       <h2 class="title">Legge dello stato {{ datasetMeta.year }}</h2>
-      <p class="description">
-        <a target="_blank" :href="datasetMeta.source">{{ datasetMeta.description }} aggiornato al {{ datasetMeta.update }}</a>
-      </p>
+      <p class="description">{{ datasetMeta.description }}</p>
+      <p><a target="_blank" :href="datasetMeta.source">Dataset</a> aggiornato al {{ datasetMeta.update }}</p>
       <p>Spese totali: <b> <amount :amount="totAmount.amount" /></b></p>
       <p>Spese filtrate: <b> <amount :amount="totAmount.filteredAmount" /></b></p>
     </div>
-    <div>
+    <div class="legend-mef">
       <a href="http://www.mef.gov.it/"><v-img
         :src="logo_mef" class="g0v-mef-logo"
         max-width="100px"
@@ -69,11 +68,11 @@ export default {
 
 <style>
 .legend {
-  padding: 7rem 0;
+  padding: 3em 0;
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   /*   pointer-events: none; */
 }
 
@@ -81,8 +80,12 @@ export default {
   padding: 1rem 0;
   margin: 0;
 }
-.legend-radius {
-  flex: 2;
+.legend-mef {
+  margin: 1em 0;
+}
+.legend-colors {
+  margin-top: auto;
+  max-width: 25em;
 }
 .legend-colors .colors {
   list-style: none;
