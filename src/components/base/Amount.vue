@@ -1,19 +1,19 @@
 <template>
-    <span>
-        {{normalize}}
-    </span>
+  <span>
+    {{ normalize }}
+  </span>
 </template>
 
 <script>
-import numeral from '@/utils/numeralCustomizations';
-import Configuration from '@/utils/configuration'
+import numeral from "@/utils/numeralCustomizations";
+import Configuration from "@/utils/configuration";
 
 export default {
-  name: "amount",
+  name: "Amount",
   props: {
     amount: {
       type: [String, Number],
-      default: "N/A"
+      default: Infinity
     },
     format: {
       type: String,

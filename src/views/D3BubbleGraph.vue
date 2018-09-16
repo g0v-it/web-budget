@@ -223,7 +223,7 @@ export default {
   mounted() {
     readPartitionLabels = debounce(
       this.budgetStore().readPartitionLabels,
-      2000
+      1000
     );
   },
 
@@ -252,6 +252,17 @@ export default {
     onMouseOver(node) {
       let n = {
         ...node.d,
+        percentageOfTheTotalAmount: node.d.amount / this.totAmount.amount,
+        percentageOfTheTopParition:
+          node.d.amount /
+          this.budget.filteredTot.top_partition_label[
+            node.d.partitions.top_partition
+          ],
+        percentageOfTheSecondParition:
+          node.d.amount /
+          this.budget.filteredTot.second_partition_label[
+            node.d.partitions.second_partition
+          ],
         colorBg: node.colorBg,
         x: node.x + node.d.radius / 1.4142,
         y: node.y + node.d.radius / 1.4142
@@ -280,6 +291,7 @@ export default {
 .g0v-container {
   padding: 24px 24px 0 24px;
   height: 100%;
+  width: 100%;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -289,6 +301,7 @@ export default {
   margin: 1rem 0 0 0;
   position: relative;
   height: 100%;
+  width: 100%;
 }
 
 .g0v-bubble-chart {

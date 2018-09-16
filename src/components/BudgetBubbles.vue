@@ -56,7 +56,6 @@ function createNodes(rawData) {
       amount: d.amount,
       diff: (d.amount - d.last_amount) / d.last_amount,
       partitions: d.partitions,
-      tags: d.tags,
       x: Math.random() * 1000,
       y: Math.random() * 500
     };

@@ -1,22 +1,28 @@
 <template>
-    <div class="bubble-tooltip card">
-        <v-card-title class=" tooltipTitle headline grey lighten-2" primary-title>
-            <p>{{currentNode.top_level}}</p>
-        </v-card-title>
-        <v-card-text class="tooltipText">
-            <p>{{currentNode.name}}</p>
-        </v-card-text>
-        <div class="numberContainer">
+  <div class="bubble-tooltip card">
+    <v-card-title class=" tooltipTitle headline grey lighten-2" primary-title>
+      <p>{{ currentNode.top_level }}</p>
+    </v-card-title>
+    <v-card-text class="tooltipText">
+      <h3>{{ currentNode.name }}</h3>
+      <p>Percentuale occupato: </p>
+      <ul>
+        <li>sul totale del bilancio: <b><rate :rate="currentNode.percentageOfTheTotalAmount" /></b></li>
+        <li>sul ministero di appartenenza : <b><rate :rate="currentNode.percentageOfTheTopParition" /></b></li>
+        <li>sulla missione di appartenenza: <b><rate :rate="currentNode.percentageOfTheSecondParition" /></b></li>
+      </ul>
+    </v-card-text>
+    <div class="numberContainer">
 
-            <div class="amount">
-                <h3><amount :amount="currentNode.amount" /></h3>
-            </div>
-            <div class="diff" :style="{backgroundColor:bgColor}">
-                <h3><rate :rate="currentNode.diff" /></h3>
-            </div>
+      <div class="amount">
+        <h3><amount :amount="currentNode.amount" /></h3>
+      </div>
+      <div class="diff" :style="{backgroundColor:bgColor}">
+        <h3><rate :rate="currentNode.diff" /></h3>
+      </div>
 
-        </div>
     </div>
+  </div>
 </template>
 <script>
 export default {
@@ -29,7 +35,7 @@ export default {
 <style>
 .bubble-tooltip {
   width: 25rem;
-  height: 15rem;
+  min-height: 15rem;
 
   /*  z-index: 20; */
   display: flex;
@@ -37,7 +43,7 @@ export default {
   justify-content: space-between;
 }
 .tooltipTitle {
-  padding: 0rem;
+  padding: 0;
   text-align: center;
 }
 
@@ -48,14 +54,14 @@ export default {
 }
 
 .tooltipText {
-  padding: 0rem;
+  padding: 1em;
+}
+
+.tooltipText h3 {
+  margin: 0 0 1em 0;
+  font-weight: 500;
 }
 .tooltipText p {
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-top: 0.5rem;
-  padding-bottom: 0.1rem;
-  font-size: 13px;
   margin: 0rem;
 }
 .numberContainer {
@@ -92,4 +98,3 @@ export default {
   width: 8rem;
 }
 </style>
-
