@@ -6,7 +6,7 @@
             <!--     <h3 class="missione">Missione: {{selectedNode.partitions.second_partition}}</h3> -->
             <p>Spesa: € {{selectedNode.amount}}</p>
             <p>Ultima spesa: € {{selectedNode.last_amount}}</p>
-            <!-- <GraphBubble :values="selectedNode.last_values" style=""></GraphBubble> -->
+            <GraphBubble :values="history" style=""></GraphBubble> -->
         </div>
         <div class="comments">
 
@@ -25,11 +25,14 @@ export default {
   },
   watch: {
     selectedNode(newVal, oldVal) {
-      /* viene chiamato quando selectedNode cambia */
+      newVal.past_values["2018"]=this.selectedNode.amount
+      this.history=newVal.past_values;
     }
   },
   data() {
-    return {};
+    return {
+      history:{}
+    };
   },
   mounted() {},
   methods: {}
