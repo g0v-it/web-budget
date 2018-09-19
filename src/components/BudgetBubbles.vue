@@ -1,18 +1,24 @@
 <template>
-    <div ref="vis" class="vis">
+  <div ref="vis" class="vis">
 
-        <div ref="grid" v-if="partitionID !== 'default'" class="grid">
-            <div v-for="block in partitionBlocks" :key="block[partitionID]" class="grid-block">
-                <h3 class="subheading">{{block[partitionID]}}</h3>
-                <!-- amount da calcolare in base al filtro -->
-                <h3 class="title">€ {{block.amount}}</h3>
+    <div
+      ref="grid" v-if="partitionId !== 'default'"
+      class="grid"
+    >
+      <div
+        v-for="block in partitionBlocks" :key="block[partitionId]"
+        class="grid-block"
+      >
+        <h3 class="subheading">{{ block[partitionId] }}</h3>
+        <!-- amount da calcolare in base al filtro -->
+        <h3 class="title"><amount :amount="block.filteredAmount" /></h3>
 
-            </div>
-        </div>
-
-        <svg id="bubbles"></svg>
-        
+      </div>
     </div>
+
+    <svg id="bubbles" />
+
+  </div>
 </template>
 
 <script>
@@ -48,18 +54,17 @@ function createNodes(rawData) {
       top_level: d.top_level,
       radius: radiusScale(+d.amount),
       amount: d.amount,
-      diff: (d.amount - d.last_amount) / d.last_amount * 100,
+      diff: (d.amount - d.last_amount) / d.last_amount,
       partitions: d.partitions,
-      tags: d.tags,
       x: Math.random() * 1000,
       y: Math.random() * 500
     };
   });
 
   /*   myNodes = myNodes.sort((a,b)=>{
-        return b.amount - a.amount;
-    })
- */
+          return b.amount - a.amount;
+      })
+   */
   return myNodes;
 }
 
@@ -67,7 +72,7 @@ function createNodes(rawData) {
 export default {
   props: {
     accounts: Array,
-    partitionID: String,
+    partitionId: String,
     partitionLabels: Object,
     filters: Object
   },
@@ -78,8 +83,8 @@ export default {
 
   computed: {
     partitionBlocks: function() {
-      return this.partitionID !== "default"
-        ? this.partitionLabels[this.partitionID]
+      return this.partitionId !== "default"
+        ? this.partitionLabels[this.partitionId]
         : [];
     }
   },
@@ -90,18 +95,18 @@ export default {
         this.filterBubbles();
       }, 500),
       deep: true
-    },
-    accounts: function(val, oldVal) {
+    }
+    /*     accounts: function(val) {
       console.log("watch acco");
       this.chart(val);
       this.toggleGrouping();
       this.filterBubbles();
-    }
+    } */
   },
 
   mounted() {
     if (this.accounts.length > 0) {
-      console.log(this.partitionID);
+      console.log("mounted");
       this.chart(this.accounts);
       this.toggleGrouping();
       this.filterBubbles();
@@ -109,9 +114,8 @@ export default {
   },
 
   updated() {
-    if (this.accounts.length > 0) {
-      this.toggleGrouping();
-    }
+    console.log("updated");
+    this.toggleGrouping();
   },
 
   methods: {
@@ -156,10 +160,6 @@ export default {
           temp.$emit("over", {
             d,
             colorBg: fillColor(d.diff),
-            darkerColor: d3
-              .rgb(fillColor(d.diff))
-              .darker()
-              .hex(),
             x: d.x,
             y: d.y
           });
@@ -238,17 +238,17 @@ export default {
       simulation.alpha(1).restart();
     },
     toggleGrouping() {
-      if (this.partitionID === "default") {
+      if (this.partitionId === "default") {
         this.groupBubbles();
       } else {
         let centers = calcCenterOfBlocks(this.$refs.grid.childNodes);
 
         for (let i = 0; i < this.partitionBlocks.length; i++) {
-          centers[i].value = this.partitionBlocks[i][this.partitionID];
+          centers[i].value = this.partitionBlocks[i][this.partitionId];
         }
 
         let groupCatId = {
-          partition: this.partitionID,
+          partition: this.partitionId,
           labels: centers
         };
 
@@ -306,8 +306,9 @@ export default {
   grid-auto-rows: 30rem 20rem 20rem 20rem 20rem 20rem 15rem 15rem 15rem;
   pointer-events: all;
 }
-.grid .subheading,.grid .title {
-    z-index: 1;
+.grid .subheading,
+.grid .title {
+  z-index: 1;
   text-align: center;
 }
 .grid .grid-block {
@@ -317,9 +318,6 @@ export default {
   flex-direction: column;
   /*   justify-content: space-between; */
 }
-
-
-
 
 @media screen and (max-width: 900px) {
   .grid {

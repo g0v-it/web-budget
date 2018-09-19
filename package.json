@@ -10,6 +10,7 @@
     "axios": "^0.18.0",
     "d3": "^5.7.0",
     "express": "^4.16.3",
+    "numeral": "^2.0.6",
     "vue": "^2.5.17",
     "vue-router": "^3.0.1",
     "vuetify": "^1.2.3"
@@ -18,6 +19,10 @@
     "@babel/polyfill": "^7.0.0-beta.49",
     "@vue/cli-plugin-babel": "^3.0.1",
     "@vue/cli-service": "^3.0.1",
+    "eslint": "^5.5.0",
+    "eslint-config-prettier": "^3.0.1",
+    "eslint-plugin-prettier": "^2.6.2",
+    "eslint-plugin-vue": "^5.0.0-beta.3",
     "vue-cli-plugin-vuetify": "^0.1.6",
     "vue-template-compiler": "^2.5.17"
   },

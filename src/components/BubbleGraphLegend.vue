@@ -1,15 +1,20 @@
 <template>
-    <div class="legend">
-        <div class="legend-description">
-            <h2 class="title">Legge dello stato {{datasetMeta.year}}</h2>
-            <p class="description">
-                Previsioni di spese suddivise per capitolo.
-                <br>
-                <a target="_blank" :href="datasetMeta.source">Dataset</a> aggiornato al {{datasetMeta.update}}
-            </p>
-           <p>Spese totali dello Stato: <b>€ {{totAmount}}</b></p>
-        </div>
-        <!--  <svg class="legend-radius">
+  <div class="legend">
+    <div class="legend-description">
+      <h2 class="title">Legge dello stato {{ datasetMeta.year }}</h2>
+      <p class="description">{{ datasetMeta.description }}</p>
+      <p><a target="_blank" :href="datasetMeta.source">Dataset</a> aggiornato al {{ datasetMeta.update }}</p>
+      <p>Spese totali: <b> <amount :amount="totAmount.amount" /></b></p>
+      <p>Spese filtrate: <b> <amount :amount="totAmount.filteredAmount" /></b></p>
+    </div>
+    <div class="legend-mef">
+      <a href="http://www.mef.gov.it/"><v-img
+        :src="logo_mef" class="g0v-mef-logo"
+        max-width="100px"
+      /></a>
+      <small>Elaborazione su dati del Ministero dell'Economia e delle Finanze</small>
+    </div>
+    <!--  <svg class="legend-radius">
             <circle vector-effect="non-scaling-stroke" cx="137.5000000000001" cy="141.49999999999991" r="15" fill="none" stroke-width="1" stroke="rgb(190,190,190)" />
             <circle vector-effect="non-scaling-stroke" cx="115.00000000000009" cy="160.5" r="4" fill="none" stroke-width="1" stroke="rgb(190,190,190)" />
             <circle vector-effect="non-scaling-stroke" cx="208" cy="105.49999999999994" r="50" fill="none" stroke-width="1" stroke="rgb(190,190,190)" />
@@ -24,45 +29,50 @@
             </g>
         </svg> -->
 
-        <div class="legend-colors">
-            <p>I colori indicano i tagli e gli incrementi dall'ultimo rendiconto spese disponibile</p>
-            <ul class="colors">
-                <li class="change-dec3"></li>
-                <li class="change-dec2"></li>
-                <li class="change-dec1"></li>
-                <li class="change-inc1"></li>
-                <li class="change-inc2"></li>
-                <li class="change-inc3"></li>
-            </ul>
-            <p></p>
-            <ul class="labels">
-                <li>-25%</li>
-                <li>-5%</li>
-                <li>0</li>
-                <li>+5%</li>
-                <li>+25%</li>
-            </ul>
-        </div>
-
+    <div class="legend-colors">
+      <p>I colori indicano i tagli e gli incrementi dall'ultimo rendiconto spese disponibile</p>
+      <ul class="colors">
+        <li class="change-dec3" />
+        <li class="change-dec2" />
+        <li class="change-dec1" />
+        <li class="change-inc1" />
+        <li class="change-inc2" />
+        <li class="change-inc3" />
+      </ul>
+      <p />
+      <ul class="labels">
+        <li>-25%</li>
+        <li>-5%</li>
+        <li>0</li>
+        <li>+5%</li>
+        <li>+25%</li>
+      </ul>
     </div>
+
+  </div>
 </template>
 
 <script>
 export default {
   props: {
     datasetMeta: Object,
-    totAmount: Number
+    totAmount: Object
+  },
+  computed: {
+    logo_mef() {
+      return require("@/assets/logo_mef.svg");
+    }
   }
 };
 </script>
 
 <style>
 .legend {
-  padding: 7rem 0;
+  padding: 3em 0;
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   /*   pointer-events: none; */
 }
 
@@ -70,8 +80,12 @@ export default {
   padding: 1rem 0;
   margin: 0;
 }
-.legend-radius {
-  flex: 2;
+.legend-mef {
+  margin: 1em 0;
+}
+.legend-colors {
+  margin-top: auto;
+  max-width: 25em;
 }
 .legend-colors .colors {
   list-style: none;
@@ -133,4 +147,3 @@ export default {
   background: #7aa25c;
 }
 </style>
-

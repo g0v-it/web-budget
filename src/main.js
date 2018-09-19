@@ -1,11 +1,18 @@
-import '@babel/polyfill'
-import Vue from 'vue'
-import './plugins/vuetify'
-import App from './App.vue'
-import router from './router'
-import * as api from './api.service.js'
+import "@babel/polyfill";
+import Vue from "vue";
+import "./plugins/vuetify";
+import App from "./App.vue";
+import router from "./router";
 
-Vue.config.productionTip = false
+import Rate from "./components/base/Rate.vue";
+import Amount from "./components/base/Amount.vue";
+
+import * as api from "./api.service.js";
+
+Vue.config.productionTip = false;
+
+Vue.component("rate", Rate);
+Vue.component("amount", Amount);
 
 new Vue({
   data: {
@@ -13,4 +20,4 @@ new Vue({
   },
   router,
   render: h => h(App)
-}).$mount('#app')
+}).$mount("#app");
