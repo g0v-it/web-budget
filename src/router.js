@@ -32,12 +32,12 @@ export default new Router({
             component: () => import('./views/Credit.vue')
         },
         {
-            path: '/treemap',
-            name: 'treemap',
+            path: '/table',
+            name: 'accounts-table',
             // route level code-splitting
             // this generates a separate chunk (treemap.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
-            component: () => import('./views/Treemap.vue')
+            component: () => import('./views/AccountsTable.vue')
         }
     ]
 })

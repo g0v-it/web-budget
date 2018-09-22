@@ -287,7 +287,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .g0v-container {
   padding: 24px 24px 0 24px;
   height: 100%;

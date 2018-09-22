@@ -71,13 +71,13 @@ export default {
       items: [
         {
           icon: "bubble_chart",
-          title: "Bubble Graph",
+          title: "Bubble Chart",
           path: "/"
         },
         {
-          icon: "pie_chart",
-          title: "Another Graph",
-          path: "/treemap"
+          icon: "table_chart",
+          title: "Accounts Table",
+          path: "/table"
         },
         {
           icon: "",
