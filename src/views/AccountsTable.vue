@@ -61,6 +61,7 @@
 export default {
   data() {
     return {
+      accounts: [],
       pagination: {
         sortBy: "amount",
         descending: true
@@ -78,13 +79,6 @@ export default {
   computed: {
     budget: function() {
       return this.$root.$data.budget.state;
-    },
-    accounts: function() {
-      return this.budget.accounts.map(item => {
-        item.rate = (item.amount - item.last_amount) / item.last_amount;
-        item.rate = isFinite(item.rate) ? item.rate : NaN;
-        return item;
-      });
     }
   },
   methods: {
@@ -99,7 +93,13 @@ export default {
   },
   mounted() {
     if (!this.budget.accounts.length) {
-      this.$root.$data.budget.readAccounts();
+      this.$root.$data.budget.readAccounts().then(res => {
+        this.accounts = res.data.accounts.map(item => {
+          item.rate = (item.amount - item.last_amount) / item.last_amount;
+          item.rate = isFinite(item.rate) ? item.rate : NaN;
+          return item;
+        });
+      });
     }
   }
 };

@@ -84,7 +84,7 @@ export default {
     "svg name name"
     "svg top second"
     "svg amount rate";
-  grid-auto-columns: 1fr;
+  grid-auto-columns: 1fr 2fr 2fr;
 }
 
 .bubble {
