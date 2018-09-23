@@ -270,9 +270,9 @@ export default {
       this.hoveredNode = n;
       this.showTooltip = true;
     },
-    onMouseOut() {
-      this.showTooltip = false;
-    },
+    // onMouseOut() {
+    //   this.showTooltip = false;
+    // },
     onFiltersChange() {
       this.$router.replace({
         name: "d3-bubble-graph",

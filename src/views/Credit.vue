@@ -1,62 +1,48 @@
 <template>
     <div class="container">
-        <h1 id="webbudget">Budget.g0v.it</h1>
+        <h1 id="credits">Crediti</h1>
 
-        <p>Una web app interattiva che visualizza il dati del bilancio italiano.</p>
-
-        <p>Questa applicazione si ispira ai progetti sviluppati dalla
-            <a href="http://gov.asia/">community di g0v</a> per
-            <a href="https://github.com/g0v/twbudget">Taiwan</a> e
-            <a href="https://github.com/tony1223/tw-budget-platform">Taipey</a>
-        </p>
-
-        <p>g0v is a decentralized civic tech community to advocate transparency of information and build tech solutions for citizens to participate in public affairs from the bottom up. The g0v community was born in Taiwan thanks to
-            <a href="https://de.wikipedia.org/wiki/Audrey_Tang">Audrey Tang</a>,
-            <a href="https://github.com/clkao">Chia-liang Kao</a> and many others.</p>
-
-        <h2 id="data">Data</h2>
-        <p> Tutti i dati visualizzati sono estratti dal
-            <a href="https://bdap-opendata.mef.gov.it/tema/bilancio-finanziario-dello-stato-0">portale BDAP</a> e processati da uno
-            <em>smart data management platform</em> (DMP) compatibile con gli standards del W3C Semantic Web. La piattaforma è disponibile
-            <a href="https://git.copernicani.it/g0v/data-budget">qui</a>.
-        </p>
-
-        <h2 id="credits">Credits</h2>
+        <p>Questa applicazione è stata sviluppata grazie al fondamentale contributo di:</p>
 
         <ul>
-            <li>
-                <a href="https://github.com/miahmohd">Miah Mohd Ehtesham</a>,
-                <a href="https://github.com/LeonardoLonghi">Leonardo Longhi</a> and
-                <a href="https://github.com/luca">Luca Mearelli</a> for the webapp code design.</li>
-
-            <li>
-                <a href="https://github.com/ecow">Enrico Fagnoni</a>,
-                <a href="https://github.com/YassineOuahidi">Yassine Ouahidi</a> and
-                <a href="http://linkeddata.center">LinkedData.Center</a> for the smart data management platform </li>
-
-            <li>
-                <a href="https://bost.ocks.org/mike/">Mike Bostock</a> for the
-                <a href="https://d3js.org/">D3.js library</a>
-            </li>
-
-            <li>
-                <a href="http://evanyou.me/">Evan You</a> and he
-                <a href="https://vuejs.org">Vue community</a> for the great framework</li>
+            <li><a href="https://github.com/miahmohd">Miah Mohd Ehtesham</a>,
+                <a href="https://github.com/LeonardoLonghi">Leonardo Longhi</a> e
+                <a href="https://github.com/luca">Luca Mearelli</a> per l&#8217; sviluppo del codice di visualizzazione
+                dei dati.</li>
+            <li><a href="https://github.com/ecow">Enrico Fagnoni</a>,
+                <a href="https://github.com/YassineOuahidi">Yassine Ouahidi</a> e
+                <a href="http://linkeddata.center">LinkedData.Center</a> lo svilppo della piattavorma di gestione
+                dei dati</li>
         </ul>
 
-        <p>Thanks to all project contributors, to the
-            <a href="https://copernicani.it/">Copernicani community</a> and to the
-            <a href="http://g0v.asia">g0v asia community</a> for ideas and support.</p>
+        <p>Tutto il codidice, sia relativo alla visualizzazione sia della piattaforma di gestione dei dati è disponibile
+            con licenza Open Source su GitHub rispettivamente nei  repository
+            https://github.com/g0v-it/web-budget e https://github.com/g0v-it/data-budget</p>
 
-        <h3 id="license">License</h3>
+        <p>Un ringraziamento di cuore a tutti i contributori  e  alle comunità che hanno sviluppato le librerie di
+            codice senza cui questo progetto non esisterebbe. In particolare a  <a href="https://bost.ocks.org/mike/">Mike Bostock</a>
+            per la realizzazione della libreria grafica <a href="https://d3js.org/">D3.js library</a>,
+            <a href="http://evanyou.me/">Evan You</a> tutta la <a href="https://vuejs.org">Vue community</a> per il
+            framework Javascript e a
+            <a href="http://linkeddata.center/"><img :src="logo_linkeddatacenter" height="30px" style="vertical-align:middle;"/>
+                LinkedData.Center</a> per aver messo a disposizione la sua piattaforma SDaaS - community edition.</p>
 
-        <p class="license">The MIT License (MIT). Please see License File for more information.</p>
+        <p>Infine grazie a tutti i  <a href="https://copernicani.it/">Copernicani</a>, a
+            <a href="https://de.wikipedia.org/wiki/Audrey_Tang">Audrey Tang</a>,
+            <a href="https://github.com/clkao">Chia-liang Kao</a> e a tutta la <a href="http://g0v.asia">comunità g0v
+                in asia</a> per il supporto e i preziosi consigli.</p>
     </div>
 
 </template>
 
 <script>
-export default {};
+export default {
+    computed: {
+      logo_linkeddatacenter() {
+        return require("@/assets/linkeddatacenter.svg");
+      }
+    }
+};
 </script>
 
 <style scoped>
