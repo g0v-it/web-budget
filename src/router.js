@@ -32,8 +32,8 @@ export default new Router({
             component: () => import('./views/Credit.vue')
         },
         {
-            path: '/terms_and_conditions',
-            name: 'terms_and_conditions',
+            path: '/terms-and-conditions',
+            name: 'terms-and-conditions',
             component: () => import('./views/TermsAndConditions.vue')
         },
         {

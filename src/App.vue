@@ -48,7 +48,7 @@
           <router-link :to="{ name: 'credits' }">crediti</router-link>
         </li>
         <li>
-          <router-link :to="{ name: 'terms_and_conditions' }">termini d'uso</router-link>
+          <router-link :to="{ name: 'terms-and-conditions' }">termini d'uso</router-link>
         </li>
         <li class="g0v-license">
           <a
@@ -90,7 +90,7 @@ export default {
         {
           icon: "account_balance",
           title: "Termini d'uso",
-          path: "/terms_and_conditions"
+          path: "/terms-and-conditions"
         }
       ],
       title: ""
