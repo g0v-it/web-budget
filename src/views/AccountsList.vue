@@ -10,6 +10,7 @@
           <circle
             :r="radiusScale(account.amount)" :fill="fillColor(rate(account))"
             cx="100" cy="100"
+            :stroke="rgb(fillColor(rate(account))).darker()" stroke-width="2"
           />
         </svg>
       </div>
@@ -56,7 +57,8 @@ export default {
         .domain([this.minAmount, this.maxAmount]);
     },
     radiusScale: Function,
-    fillColor
+    fillColor,
+    rgb: rgb
   },
   mounted() {
     if (!this.budget.accounts.length) {
