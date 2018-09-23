@@ -80,6 +80,11 @@ export default {
           path: "/table"
         },
         {
+          icon: "view_list",
+          title: "Accounts List",
+          path: "/list"
+        },
+        {
           icon: "",
           title: "Crediti",
           path: "/credits"

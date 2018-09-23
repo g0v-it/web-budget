@@ -1,5 +1,5 @@
 <template>
-  <div class="g0v-container">
+  <div class="container">
 
 
     <div class="g0v-table-container">
@@ -41,11 +41,11 @@
 
 
           <template slot="items" slot-scope="props">
-            <td class="account-name">{{ props.item.name }}</td>
-            <td class="account-amount"><amount :amount="props.item.amount" format="$ 0.0 a" /></td>
-            <td class="account-amount"><rate :rate="props.item.rate" format="+0.0 %" /></td>
-            <td class="account-top">{{ props.item.partitions.top_partition }}</td>
-            <td class="account-second">{{ props.item.partitions.second_partition }}</td>
+            <td class="account-name" width="35%">{{ props.item.name }}</td>
+            <td class="account-amount" width="10%"><amount :amount="props.item.amount" format="$ 0.0 a" /></td>
+            <td class="account-amount" width="10%"><rate :rate="props.item.rate" format="+0.0 %" /></td>
+            <td class="account-top" width="15%">{{ props.item.partitions.top_partition }}</td>
+            <td class="account-second" width="">{{ props.item.partitions.second_partition }}</td>
           </template>
 
           <template slot="pageText" slot-scope="props">
@@ -106,10 +106,6 @@ export default {
 </script>
 
 <style scoped>
-.g0v-container {
-  margin: 3em 2em;
-  /*  padding: 2em 2em; */
-}
 .g0v-table-container {
   background-color: #aaaaaa;
 }
@@ -125,14 +121,8 @@ td::first-letter {
 .account-name {
   /*   font-size: 1.1em !important; */
   font-weight: 500;
-  width: 30%;
 }
-.account-amount {
-  width: 10%;
-}
-.account-top {
-  width: 15%;
-}
+
 /* .account-second {
   width: auto;
 } */

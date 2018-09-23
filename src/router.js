@@ -27,17 +27,20 @@ export default new Router({
             path: '/credits',
             name: 'credits',
             // route level code-splitting
-            // this generates a separate chunk (treemap.[hash].js) for this route
+            // this generates a separate chunk (credit.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
             component: () => import('./views/Credit.vue')
         },
         {
             path: '/table',
             name: 'accounts-table',
-            // route level code-splitting
-            // this generates a separate chunk (treemap.[hash].js) for this route
-            // which is lazy-loaded when the route is visited.
             component: () => import('./views/AccountsTable.vue')
+        }
+        ,
+        {
+            path: '/list',
+            name: 'accounts-list',
+            component: () => import('./views/AccountsList.vue')
         }
     ]
 })

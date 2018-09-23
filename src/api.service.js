@@ -80,14 +80,14 @@ export const BudgetData = () => {
    *  ]
    */
   const readAccounts = () => {
-    get(`${__apiEndpoint}/accounts`)
-      .then(response => {
+    return get(`${__apiEndpoint}/accounts`);
+    /* .then(response => {
         __data.accounts = response.data.accounts;
         __data.meta = response.data.meta;
       })
       .catch(err => {
         log(err);
-      });
+      }); */
   };
 
   /**
