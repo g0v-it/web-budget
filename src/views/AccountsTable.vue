@@ -41,7 +41,9 @@
 
 
           <template slot="items" slot-scope="props">
-            <td class="account-name" width="35%">{{ props.item.name }}</td>
+            <td class="account-name" width="35%">
+              {{ props.item.name }} <router-link :to="{name:'account-details', params:{code:props.item.code}}"><v-icon small color="blue">link</v-icon></router-link>
+            </td>
             <td class="account-amount" width="10%"><amount :amount="props.item.amount" format="$ 0.0 a" /></td>
             <td class="account-amount" width="10%"><rate :rate="props.item.rate" format="+0.0 %" /></td>
             <td class="account-top" width="15%">{{ props.item.partitions.top_partition }}</td>
@@ -101,6 +103,11 @@ export default {
         });
       });
     }
+    this.accounts = this.budget.accounts.map(item => {
+      item.rate = (item.amount - item.last_amount) / item.last_amount;
+      item.rate = isFinite(item.rate) ? item.rate : NaN;
+      return item;
+    });
   }
 };
 </script>
@@ -121,6 +128,8 @@ td::first-letter {
 .account-name {
   /*   font-size: 1.1em !important; */
   font-weight: 500;
+}
+.account-name a {
 }
 
 /* .account-second {

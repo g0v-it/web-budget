@@ -30,7 +30,7 @@
         </svg> -->
 
     <div class="legend-colors">
-      <p>I colori indicano i tagli e gli incrementi dall'ultimo rendiconto spese disponibile</p>
+      <small>Tagli e gli incrementi dall'ultimo rendiconto spese disponibile</small>
       <ul class="colors">
         <li class="change-dec3" />
         <li class="change-dec2" />
@@ -39,7 +39,7 @@
         <li class="change-inc2" />
         <li class="change-inc3" />
       </ul>
-      <p />
+
       <ul class="labels">
         <li>-25%</li>
         <li>-5%</li>
@@ -89,7 +89,7 @@ export default {
 }
 .legend-colors .colors {
   list-style: none;
-  margin: 0;
+  margin: 0.5em 0;
   padding: 0;
   width: 100%;
   height: 1rem;
@@ -106,11 +106,6 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: center;
-}
-
-.legend-colors p {
-  margin: 0.5rem 0;
-  font-size: 0.9rem;
 }
 
 .labels li {
