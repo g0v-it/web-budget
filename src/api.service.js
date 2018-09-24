@@ -109,13 +109,8 @@ export const BudgetData = () => {
    */
   const selectNode = id => {
     if (id) {
-      get(`${__apiEndpoint}/account/${id}`)
-        .then(response => {
-          __data.selectedNode = response.data;
-        })
-        .catch(err => {
-          log(err);
-        });
+     return  get(`${__apiEndpoint}/account/${id}`)
+        
     } else {
       __data.selectedNode = {};
     }
