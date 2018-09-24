@@ -9,47 +9,41 @@
 import * as d3 from "d3";
 //---------------------------------------------------------
 //BOUNDARIES
-    let margin = 80;
-    let width = 500-2*margin;
-    let height = 420 - 2 * margin;
-    let barSeparation=0.4;
-    let animationDuration=1000;
-    let min;
-    let max;
-    let data=[];
-    let t;
-    let svg;
-    let chart;
+  let margin = 80;
+  let width = 500-2*margin;
+  let height = 420 - 2 * margin;
+  let barSeparation=0.4;
+  let animationDuration=1000;
+  let min;
+  let max;
+  let data=[];
+  let t;
+  let svg;
+  let chart;
   //---------------------------------------------------------
   //SCALE FUNCTIONS
-    let xScale;
-    let yScale;
-    const optimize= function(input){
-      let output=[]
-      Object.keys(input).forEach(element => {
-      output.push({year:element,value:parseFloat(input[element])/1000000000})
-      });
-      console.log(output);
-      return(output);
-      
-    }
+  let xScale;
+  let yScale;
+  const optimize= function(input){
+    let output=[]
+    Object.keys(input).forEach(element => {
+      output.push({year:element,value:parseFloat(input[element])/1000000.0})
+    });
+    return(output);    
+   }
   //----------------------------------------------------------
-export default {
-  props: {
-      values: Object
-  },
-  watch: {
-    values(newVal, oldVal) {
-      if(newVal!={}){
-        data=optimize(this.values)
-        max = d3.max(data, function(d) { return parseFloat(d.value);} );
-        max+=max*5/100
-        min = d3.min(data, function(d) { return parseFloat(d.value);} );
-        min-= min/5*100
-        yScale = d3.scalePow().exponent(1).range([height, 0]).domain([0, max]);
-        xScale = d3.scaleBand().range([0, width]).domain(data.map((s) => s.year)).padding(barSeparation)
-          //----------------------------------------------------------
-    //DROW GRAPHIC BOUNDLE
+  export default {
+    props: { values: Object},
+    mounted() {
+      data=optimize(this.values)
+      max = d3.max(data, function(d) { return parseFloat(d.value);} );
+      //min = d3.min(data, function(d) { return parseFloat(d.value);} );
+      min=0;
+      max+=max*5/100;
+      yScale = d3.scalePow().exponent(2).range([height, 0]).domain([min, max]);
+      xScale = d3.scaleBand().range([0, width]).domain(data.map((s) => s.year)).padding(barSeparation)
+  //----------------------------------------------------------
+  //DROW GRAPHIC BOUNDLE
     
     t = d3.transition().duration(animationDuration);
     svg = d3.select('#svgPlaceholder');
@@ -60,15 +54,15 @@ export default {
     chart.append('g').call(d3.axisLeft(yScale));
     //Y LINES
     chart.append('g').attr('class', 'grid').call(d3.axisLeft().scale(yScale).tickSize(-width, 0, 0).tickFormat(''));
-    //LABEL X AXIS
+    //LABEL Y AXIS
     svg.append('text')
       .attr('class', 'label')
       .attr('x', -(height / 2) - margin)
       .attr('y', margin / 2.4)
       .attr('transform', 'rotate(-90)')
       .attr('text-anchor', 'middle')
-      .text('Bilions');
-    //LABEL Y AXIS
+      .text('Milions');
+    //LABEL X AXIS
      svg.append('text')
       .attr('class', 'label')
       .attr('x', width / 2 + margin)
@@ -78,11 +72,10 @@ export default {
         const barGroups = chart.selectAll()
         .data(data)
         .enter()
-        .append('g')
-        
+        .append('g')  
         barGroups.append('rect')
           .attr('class', 'bar')
-          .attr('x', (g) => xScale(parseInt(g.year)))
+          .attr('x', (g) => xScale(g.year))
           .attr('y', (g) => yScale(min))
           .attr("height", 0)
           .attr('width', xScale.bandwidth())
@@ -110,7 +103,7 @@ export default {
             .attr('fill', 'white')
             .attr('text-anchor', 'middle')
             .text((a, idx) => {
-              const divergence = (a.value - actual.value).toFixed(1)
+              const divergence = ((actual.value - a.value)*100/a.value).toFixed(1)
               let text = ''
               if (divergence > 0) text += '+'
               text += `${divergence}%`
@@ -137,18 +130,16 @@ export default {
     barGroups 
       .append('text').attr('class', 'valueText')
       .attr('x', (a) => xScale(a.year) + xScale.bandwidth() / 2)
-      .attr('y', (a) => yScale(0) - 10)
+      .attr('y', (a) => yScale(min) - 10)
       .attr('text-anchor', 'middle')
-      .text((a) => `${a.value}%`)
+      .text((a) => `${a.value}`)
       .transition(t).tween("text", function(d) {
         const v0 =0;//start
         const v1 = d.value;//target
         const i = d3.interpolateRound(v0, v1);
         
         return t => {this.textContent = i(t)};
-      }); 
-      }
-    }
+      });   
   },
 };
 </script>
@@ -189,7 +180,6 @@ div .graphSvg {
 
 text.valueText {
   font-size: 14px;
-  fill: #ffffff;
 }
 
 path {
@@ -234,5 +224,3 @@ text.source {
   font-size: 10px;
 }
 </style>
-
-

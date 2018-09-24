@@ -9,7 +9,7 @@ export default new Router({
         {
             path: '/account/:code',
             name: 'account-details',
-            component: D3BubbleGraph,
+            component: () => import('./views/AccountDetails.vue'),
             props: true
         },
         {
