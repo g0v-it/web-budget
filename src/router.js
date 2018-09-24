@@ -32,6 +32,11 @@ export default new Router({
             component: () => import('./views/Credit.vue')
         },
         {
+            path: '/terms-and-conditions',
+            name: 'terms-and-conditions',
+            component: () => import('./views/TermsAndConditions.vue')
+        },
+        {
             path: '/treemap',
             name: 'treemap',
             // route level code-splitting

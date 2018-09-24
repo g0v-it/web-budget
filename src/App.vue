@@ -47,6 +47,9 @@
         <li class="g0v-credits">
           <router-link :to="{ name: 'credits' }">crediti</router-link>
         </li>
+        <li>
+          <router-link :to="{ name: 'terms-and-conditions' }">termini d'uso</router-link>
+        </li>
         <li class="g0v-license">
           <a
             target="_blank" rel="license"
@@ -80,9 +83,14 @@ export default {
           path: "/treemap"
         },
         {
-          icon: "",
+          icon: "people",
           title: "Crediti",
           path: "/credits"
+        },
+        {
+          icon: "account_balance",
+          title: "Termini d'uso",
+          path: "/terms-and-conditions"
         }
       ],
       title: ""
