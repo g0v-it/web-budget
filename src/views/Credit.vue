@@ -11,7 +11,7 @@
         dei dati.</li>
       <li><a href="https://github.com/ecow">Enrico Fagnoni</a>,
         <a href="https://github.com/YassineOuahidi">Yassine Ouahidi</a> e
-        <a href="http://linkeddata.center">LinkedData.Center</a> lo svilppo della piattavorma di gestione
+        <a href="http://linkeddata.center">LinkedData.Center</a> lo svilppo della piattaforma di gestione
         dei dati</li>
     </ul>
 
