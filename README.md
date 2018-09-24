@@ -35,8 +35,18 @@ with this content and customize the parameters:
 
     window.__settings = window.__settings || {};
 
+    // Application Locale
+    window.__settings.locale = 'it',
+
+    // Format for currency values
+    window.__settings.amountFormat = '$ 0,0. ',
+
+    // Format for percentages
+    window.__settings.rateFormat = '0.0 %',
+
     // API base endpoint
-    window.__settings.apiEndpoint = 'http://194.177.121.230:8080';
+    window.__settings.apiEndpoint = 'http://data.budget.g0v.it/api/v1';
+
 
 }(this));
 ```
@@ -58,6 +68,41 @@ All visualized data are extracted from [bdap portal](https://bdap-opendata.mef.g
 
 The web application connects to data management platform through an REST endpoint available at the address http://data.budget.g0v.it/api/v1. You can also run your private instance of the platform (see data-budget repo for more info )
 
+## Docker
+
+the project contains a `Dockerfile` which uses a two-stages build process: it first creates an image with the full node.js environment where the `npm build` 
+step is run and then it creates an image containing only the compiled application files and the nginx server to serv them.
+
+The final docker image runs a script that at startup generates the `config.js` file from environment variables, this allows
+whoever runs the image to customize the application configuration simply by passing the right environment.
+
+These are the available environment variables and the corresponding configuration parameter:
+
+- `G0V_LOCALE` -> `locale` (the application Locale)
+- `G0V_AMOUNT_FORMAT` -> `amountFormat` (the format for currency values)
+- `G0V_RATE_FORMAT` -> `rateFormat` (the format for percentages)
+- `G0V_API_ENDPOINT` -> `apiEndpoint` (the API base endpoint)
+
+The `docker` directory contains the nginx configuration and the command run by the image.
+
+To build the image a `Makefile` is provided that builds and tags the image:
+ 
+```$bash
+make build
+``` 
+
+The `NAME` and `VERSION` variables in the `Makefile` set the docker image name and tag (look at the file to see the details).  
+
+The image exposes the web server on port `8080`.
+
+For example to run the built image, specifying an API endpoint and listening on port 9999:
+
+```$bash
+docker run -i -t --rm \
+       -e G0V_API_ENDPOINT=http://data.budget.g0v.it/api/v1 \
+       -p 9990:8080 \
+       web-budget-g0v:0.0.1
+```
 
 ## Support
 
