@@ -1,14 +1,38 @@
 <template>
-    <div><svg class="chart js-chart"></svg></div>
+  <div class="cds-container">
+    <div><svg class="chart js-chart pie-chart"></svg></div>
+    <div class="cds-detail">
+      <h3>{{name}}</h3>
+      <h3>€{{amount}}</h3>
+      <h2>{{percentage}} %</h2>
+    </div>
+  </div>
 </template>
 <script>
 import * as d3 from "d3";
 //---------------------------------------------------------
 //BUILDER
-  let width=500;
+  let cdsSpeed=2000
+  let width=400;
   let height=500;
-  let outerRadius=150;
-  let innerRadius=0;
+  let outerRadius=180;
+  let innerRadius=110;
+  let currentElement=0;
+  let slices;
+  let intervalID;
+  let updateDetail=function(context,overed_index){
+    for (let index = 0; index < slices.length; index++) { 
+        slices[index].classList.remove("selected")
+      }
+      console.log(overed_index)
+      if(overed_index!=-1){
+        currentElement=overed_index
+      }
+      slices[currentElement].classList.add("selected")
+      context.amount=slices[currentElement].__data__.data.amount
+      context.name=slices[currentElement].__data__.data.name
+      currentElement=(currentElement+1)%slices.length;
+  }
    /* global d3, document, window */
   function pieChart (options) {
     var animationDuration = 750,
@@ -31,14 +55,6 @@ import * as d3 from "d3";
       };
     }
 
-    function exitTween (d) {
-      var end = Object.assign({}, this._current, { startAngle: this._current.endAngle });
-      var i = d3.interpolate(d, end);
-      return function(t) {
-        return arc(i(t));
-      };
-    }
-
     function joinKey (d) {
       return d.data.name;
     }
@@ -46,31 +62,19 @@ import * as d3 from "d3";
     function pieChart (context) {
       
       var slices = context.selectAll('.slice').data(pie(data), joinKey);
-
-      var oldSlices = slices.exit();
-
       var newSlices = slices.enter().append('path')
         .each(function(d) { this._current = Object.assign({}, d, { startAngle: d.endAngle }); })
         .attr('class', 'slice')
-        .style('fill', function (d) { return color(joinKey(d)); });
-
+        .style('fill', function (d) { return color(joinKey(d)); })
       var t = d3.transition().duration(animationDuration);
 
       arc.innerRadius(innerRadius).outerRadius(outerRadius);
 
-      oldSlices
-        .transition(t)
-          .attrTween('d', exitTween)
-          .remove();
+      
 
       var t2 = t.transition();
       slices
         .transition(t2)
-          .attrTween('d', updateTween);
-
-      var t3 = t2.transition();
-      newSlices
-        .transition(t3)
           .attrTween('d', updateTween);
     }
 
@@ -91,101 +95,77 @@ import * as d3 from "d3";
 //---------------------------------------------------------
 export default {
   props: { values: Object},
+  data(){
+    return {
+      name:"",
+      amount:"",
+    }
+  },
+  computed:{
+    percentage:function(){
+      if (this.amount==undefined){
+        return 0;
+      }else{
+        return this.amount*100/this.values.sum;
+      }
+    }
+  },
   mounted() {
-   
-    var chart_obj = pieChart().outerRadius(outerRadius).innerRadius(innerRadius);
-    var svg = d3.select('.js-chart').attr('width', width).attr('height', height);
-    console.log(this.values);
-    
-    var domPieChart = svg.append('g')
+    let chart_obj = pieChart().outerRadius(outerRadius).innerRadius(innerRadius);
+    let svg = d3.select('.js-chart').attr('width', width).attr('height', height);
+    let domPieChart = svg.append('g')
     .attr('class', 'pie-chart')
     .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')')
     .call(chart_obj.data(this.values.lower_partition));
     domPieChart.call(chart_obj.data(this.values.lower_partition));
+    //UPDATE CDS DETAIL
+    slices=d3.selectAll('.slice')._groups[0]
+    d3.selectAll('.slice')
+      .on('mouseenter',(actual,i)=>{
+        window.clearInterval(intervalID)
+        updateDetail(this,i)
+      })
+      .on('mouseleave',()=>{
+        intervalID=window.setInterval(()=>{updateDetail(this,-1)}, cdsSpeed);
+      });
+    updateDetail(this,-1);
+    intervalID=window.setInterval(()=>{updateDetail(this,-1)}, cdsSpeed);
   }
   
 }
 </script>
 <style>
-.cardGraph {
+.selected{
+  stroke-width: 3!important;
+  opacity: 0.5;
+}
+.slice{
+  stroke-width: 0.3;
+}
+.cds-container {
+  margin: 0;
+  padding: 1rem 1rem;
+  min-height: 30rem;
   width: 100%;
-  height: 30rem;
-  /* position: absolute; */
-/*   z-index: 20; */
+  /* height: 100vh; */
+  text-align: start;
+  display: grid;
+  /*   grid-gap: 1rem; */
+  grid-row-gap: 2rem;
+  grid-column-gap: 2rem;
+  grid-template-columns: repeat(2, 1fr);
+  pointer-events: all;
 }
-#tooltipTitle {
-  padding: 0rem;
-  text-align: center;
+.pie-chart{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-content: left;
 }
-
-#tooltipTitle p {
-  width: 100%;
-  font-size: 13px;
-  margin: 0px;
-}
-
-
-div.graphContainer {
-  width: 100%;
-  height: 100%;
-  margin: auto;
-  background-color: #ffffff;
-}
-
-div .graphSvg {
-  width: 100%;
-  height: 100%;
-}
-
-.bar {
-  fill: #4682B4;
-}
-
-text.valueText {
-  font-size: 14px;
-  fill: #ffffff;
-}
-
-path {
-  stroke: gray;
-}
-
-line {
-  stroke: gray;
-}
-
-line#limit {
-  stroke: #FED966;
-  stroke-width: 3;
-  stroke-dasharray: 3 6;
-}
-
-.grid path {
-  stroke-width: 0;
-}
-
-.grid .tick line {
-  stroke: #9FAAAE;
-  stroke-opacity: 0.3;
-}
-
-text.divergence {
-  font-size: 12px;
-  fill: #000000;
-}
-
-text.value {
-  font-size: 14px;
-}
-
-
-text.label {
-  font-size: 14px;
-  font-weight: 400;
-}
-
-text.source {
-  font-size: 10px;
+.cds-detail{
+  position: relative;
+  display: flex;
+  flex-direction: column;
 }
 </style>
 

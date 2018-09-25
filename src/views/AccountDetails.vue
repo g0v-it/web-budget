@@ -18,13 +18,21 @@
             </div>
       </v-card>
       <v-card  class="grid-block history">
+        <v-card-title primary-title>
+            <div>
+              <div class="headline">Storico dell'azione</div>
+            </div>
+          </v-card-title>
         <HistoryChart v-if="download_completed"  :values="history" style=""></HistoryChart>
       </v-card>
       <v-card class="grid-block partition">
-        <CdsChart v-if="download_completed" :values="{lower_partition:currentNode.cds}" style=""></CdsChart>
-        <div class="cds-list"></div>
+        <div>
+              <div class="headline">Suddivisione in capitoli di spesa</div>
+        </div>
+        <CdsChart v-if="download_completed" :values="{lower_partition:currentNode.cds,sum:currentNode.amount}" style=""></CdsChart>
       </v-card>
       <v-card class="grid-block comments">
+        <h1>Spazio per social</h1>
       </v-card>
     </div>
 
@@ -107,7 +115,6 @@ export default {
 }
 .comments {
   padding: 1rem;
-  background: #ececec;
 }
 
 
