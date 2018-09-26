@@ -156,7 +156,6 @@ export default {
   },
 
   created() {
-
     /* Init filters from url params */
     if (Array.isArray(this.$route.query.top_partition)) {
       this.budget.filters.top_partition = this.$route.query.top_partition;
@@ -236,7 +235,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .g0v-container {
   padding: 24px 24px 0 24px;
   height: 100%;

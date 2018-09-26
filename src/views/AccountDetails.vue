@@ -1,46 +1,40 @@
 <template>
-    <div  class="modal-layout">
-      <v-card  class="grid-block details">  
-          <v-card-title primary-title>
-            <div>
-              <div class="headline">{{currentNode.name}}</div>
-              <br>
-              <div class="grey--text">Ministero: {{currentNode.top_level}}</div>
-              <div v-if="download_completed" class="grey--text">Missione: {{currentNode.partitions.second_partition}}</div>
-            </div>
-          </v-card-title>
-        <v-card-text >
-              {{currentNode.description}}
-             </v-card-text>
-            <div class="bottom">
-            <div><h2 >Spesa: € {{currentNode.amount}}</h2></div>
-            <div><h2 >Ultima spesa: € {{currentNode.last_amount}}</h2></div>
-            </div>
-      </v-card>
-      <v-card  class="grid-block history">
-        <v-card-title primary-title>
-            <div>
-              <div class="headline">Storico dell'azione</div>
-            </div>
-          </v-card-title>
-        <HistoryChart v-if="download_completed"  :values="history" style=""></HistoryChart>
-      </v-card>
-      <v-card class="grid-block partition">
-        <div>
-              <div class="headline">Suddivisione in capitoli di spesa</div>
-        </div>
-        <CdsChart v-if="download_completed" :values="{lower_partition:currentNode.cds,sum:currentNode.amount}" style=""></CdsChart>
-      </v-card>
-      <v-card class="grid-block comments">
-        <h1>Spazio per social</h1>
-      </v-card>
-    </div>
+  <div class="g0v-container">
+    <v-card class="details">
+      <h2>{{ currentNode.name }}</h2>
+      <p class="top">Ministero: {{ currentNode.top_level }}</p>
+      <p v-if="download_completed" class="second">Missione: {{ currentNode.partitions.second_partition }}</p>
+      <p class="description">Descrizione: {{ currentNode.description }}</p>
+      <a target="_blank" :href="currentNode.account"> <p class="link">Visualizza il linked-data nella Knowledge Base</p></a>
+      <div class="numbers">
+        <p class="amount"><small>Spesa: </small><amount :amount="currentNode.amount" /> </p>
+        <p class="rate"><small>Inc. dall'ultima spesa: </small><rate :rate="(currentNode.amount- currentNode.last_amount )/currentNode.last_amount" /></p>
+      </div>
+    </v-card>
+    <v-card class=" history">
+      <h2>Storico dell'azione</h2>
+      <HistoryChart
+        v-if="download_completed" :values="history"
+        style=""
+      />
+    </v-card>
+    <v-card class="partition">
+      <h2>Suddivisione in capitoli di spesa</h2>
+      <CdsChart
+        v-if="download_completed" :values="{lower_partition:currentNode.cds,sum:currentNode.amount}"
+        style=""
+      />
+    </v-card>
+    <v-card class="comments">
+      <h2>Spazio per social</h2>
+    </v-card>
+  </div>
 
 </template>
 
 <script>
-import HistoryChart from "@/components/HistoryChart.vue"
-import CdsChart from "@/components/CdsChart.vue"
+import HistoryChart from "@/components/HistoryChart.vue";
+import CdsChart from "@/components/CdsChart.vue";
 
 export default {
   components: {
@@ -50,27 +44,29 @@ export default {
   props: {
     code: String
   },
-  data(){
-      return{
-          currentNode:{},
-          download_completed:false
-      }
+  data() {
+    return {
+      currentNode: {},
+      download_completed: false
+    };
   },
   mounted() {
-    this.budgetStore().selectNode(this.code).then(res=>{
-        this.currentNode=res.data;
+    this.budgetStore()
+      .selectNode(this.code)
+      .then(res => {
+        this.currentNode = res.data;
         console.log(this.currentNode);
-        this.download_completed=true;
-    });
+        this.download_completed = true;
+      });
   },
   computed: {
     node: function() {
       return this.$root.$data.budget.state.selectedNode;
     },
-    history: function(){
-      if(this.download_completed){
-        var history=this.currentNode.past_values;
-        history["current"]=this.currentNode.amount
+    history: function() {
+      if (this.download_completed) {
+        var history = this.currentNode.past_values;
+        history["current"] = this.currentNode.amount;
         return history;
       }
     }
@@ -84,51 +80,75 @@ export default {
 </script>
 
 <style scoped>
-
-.modal-layout {
-  margin: 0;
-  padding: 1rem 1rem;
-  min-height: 30rem;
-  width: 100%;
-  /* height: 100vh; */
-  text-align: start;
+.g0v-container {
+  margin: 2em 3em;
+  padding: 0;
   display: grid;
-  /*   grid-gap: 1rem; */
-  grid-row-gap: 2rem;
-  grid-column-gap: 2rem;
-  grid-template-columns: repeat(2, 1fr);
-  pointer-events: all;
+  grid-template:
+    "info bar"
+    "cake social" 100% / 1fr 1fr;
+  grid-gap: 2em;
 }
-.modal-layout .grid-block {
-  padding: 1rem;
-  position: relative;
+
+h2 {
+  font-weight: 500;
+  margin-bottom: 1em;
+}
+
+.details {
+  padding: 1em 2em;
   display: flex;
   flex-direction: column;
-  /*   justify-content: space-between; */
+}
+
+.details .top,
+.details .second {
+  margin: 0;
+  font-size: 1.2em;
+  color: #777777;
+}
+
+.details .description {
+  font-size: 1.2em;
+  margin-top: 2em;
+}
+
+.details .numbers {
+  margin-top: auto;
+  display: grid;
+  grid-template-areas: "amount rate";
+  font-size: 1.6em;
+  font-weight: 600;
+  color: #555555;
+}
+
+.amount {
+  grid-area: amount;
+}
+.rate {
+  grid-area: rate;
 }
 
 .history {
-  padding: 1rem;
+  padding: 1em 2em;
 }
 .partition {
-  padding: 1rem;
+  padding: 1em 2em;
 }
 .comments {
-  padding: 1rem;
+  padding: 1em 2em;
 }
 
-
-@media screen and (max-width: 700px) {
-  .grid {
-    grid-template-columns: repeat(1, 1fr);
+@media screen and (max-width: 900px) {
+  .g0v-container {
+    grid-template:
+      "info"
+      "bar"
+      "cake"
+      "social" 100% / 1fr;
+  }
+  .details .numbers {
+    grid-template-areas: "amount" "rate";
   }
 }
-.bottom {
-  position: absolute;
-  bottom:2rem;
-  left:2rem;
-}
-
-
-
 </style>
