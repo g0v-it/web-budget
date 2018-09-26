@@ -7,12 +7,6 @@ Vue.use(Router)
 export default new Router({
     routes: [
         {
-            path: '/account/:code',
-            name: 'account-details',
-            component: D3BubbleGraph,
-            props: true
-        },
-        {
             path: '/partition/:urlPartitionID',
             name: 'accounts-partition',
             component: D3BubbleGraph,
@@ -22,6 +16,12 @@ export default new Router({
             path: '/',
             name: 'd3-bubble-graph',
             component: D3BubbleGraph
+        },
+        {
+            path: '/account/:code',
+            name: 'account-details',
+            component: () => import('./views/AccountDetails.vue'),
+            props: true
         },
         {
             path: '/credits',
@@ -41,6 +41,12 @@ export default new Router({
             path: '/list',
             name: 'accounts-list',
             component: () => import('./views/AccountsList.vue')
+
+        },
+        {
+            path: '/terms-and-conditions',
+            name: 'terms-and-conditions',
+            component: () => import('./views/TermsAndConditions.vue')
         }
     ]
 })

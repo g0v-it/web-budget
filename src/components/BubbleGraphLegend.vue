@@ -1,9 +1,9 @@
 <template>
   <div class="legend">
     <div class="legend-description">
-      <h2 class="title">Legge dello stato {{ datasetMeta.year }}</h2>
+      <h2 class="title">Legge dello stato {{ datasetMeta.year }} <a target="_blank" :href="datasetMeta.source"><v-icon color="blue">link</v-icon></a> </h2>
       <p class="description">{{ datasetMeta.description }}</p>
-      <p><a target="_blank" :href="datasetMeta.source">Dataset</a> aggiornato al {{ datasetMeta.update }}</p>
+      <p>Aggiornato al {{ datasetMeta.update }}</p>
       <p>Spese totali: <b> <amount :amount="totAmount.amount" /></b></p>
       <p>Spese filtrate: <b> <amount :amount="totAmount.filteredAmount" /></b></p>
     </div>

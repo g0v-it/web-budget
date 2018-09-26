@@ -64,41 +64,10 @@
       <TooltipBubble
         class="tooltip" :style="{ top: hoveredNode.y + 'px' , left: hoveredNode.x + 'px' }"
         :current-node="hoveredNode" :bg-color="hoveredNode.colorBg"
-        v-if="showTooltip && !dialog"
+        v-if="showTooltip"
       />
 
     </div>
-
-    <v-dialog
-      v-model="dialog" fullscreen
-      hide-overlay transition="dialog-bottom-transition"
-    >
-      <v-card>
-        <v-toolbar dark color="primary">
-          <v-btn
-            icon dark
-            @click.native="dialog = false;"
-          >
-            <v-icon>close</v-icon>
-          </v-btn>
-          <v-toolbar-title>Dettagli azione</v-toolbar-title>
-          <v-spacer />
-          <v-toolbar-items>
-            <v-btn dark flat>
-              <v-icon>fab fa-facebook</v-icon>
-            </v-btn>
-            <v-btn dark flat>
-              <v-icon>fab fa-twitter</v-icon>
-            </v-btn>
-            <v-btn dark flat>
-              <v-icon>file_copy</v-icon>
-            </v-btn>
-          </v-toolbar-items>
-        </v-toolbar>
-        <DetailBubble :selected-node="budget.selectedNode" />
-
-      </v-card>
-    </v-dialog>
 
   </div>
 </template>
@@ -107,7 +76,6 @@
 // @ is an alias to /src
 import BudgetBubbles from "@/components/BudgetBubbles.vue";
 import TooltipBubble from "@/components/TooltipBubble.vue";
-import DetailBubble from "@/components/DetailBubble.vue";
 import BubbleGraphLegend from "@/components/BubbleGraphLegend.vue";
 import { debounce } from "lodash";
 
@@ -115,10 +83,6 @@ let readPartitionLabels = null;
 
 export default {
   props: {
-    code: {
-      type: String,
-      default: ""
-    },
     urlPartitionID: {
       type: String,
       default: "default"
@@ -128,22 +92,22 @@ export default {
   components: {
     BudgetBubbles,
     TooltipBubble,
-    DetailBubble,
     BubbleGraphLegend
   },
 
   data: function() {
     return {
       hoveredNode: {},
-      showTooltip: false,
-      dialog: false
+      showTooltip: false
     };
   },
 
   computed: {
+    /*retrive data from root component*/
     budget: function() {
       return this.$root.$data.budget.state;
     },
+    /* parametro corrispondente alla somma degli amount delle bolle*/
     totAmount: function() {
       let amount = 0;
       let filteredAmount = 0;
@@ -155,7 +119,7 @@ export default {
       }
       return { amount, filteredAmount };
     },
-    /* funzione temporanea, bisogna cambiare il json dell'api */
+    /*genera array di stringhe per popolare lista filtri top partition*/
     top_partitions() {
       let ministeri = [];
       if (this.budget.partitionLabels["top_partition"]) {
@@ -172,7 +136,7 @@ export default {
       }
       return ministeri;
     },
-    /* come ministeri prima */
+    /*genera array di stringhe per popolare lista filtri second partition*/
     second_partitions() {
       let missioni = [];
       if (this.budget.partitionLabels["second_partition"]) {
@@ -192,14 +156,6 @@ export default {
   },
 
   created() {
-    /* Init dialog from url params */
-    if (this.code) {
-      this.dialog = true;
-      this.budgetStore().selectNode(this.code);
-    } else {
-      this.dialog = false;
-    }
-
     /* Init filters from url params */
     if (Array.isArray(this.$route.query.top_partition)) {
       this.budget.filters.top_partition = this.$route.query.top_partition;
@@ -216,7 +172,7 @@ export default {
     }
 
     this.budgetStore().initData();
-    /* init partition form url params */
+    /* set partition to sow */
     this.budgetStore().selectPartition(this.urlPartitionID);
   },
 
@@ -231,22 +187,14 @@ export default {
     $route(to) {
       if (to.name === "d3-bubble-graph") {
         this.budgetStore().selectPartition("default");
-        this.dialog = false;
-      }
-      if (to.name === "account-details") {
-        this.budgetStore().selectNode(to.params.code);
-        this.dialog = true;
       }
       if (to.name === "accounts-partition") {
         this.budgetStore().selectPartition(to.params.urlPartitionID);
-        this.dialog = false;
       }
     }
   },
   methods: {
     onClick(node) {
-      this.dialog = true;
-      this.showTooltip = false;
       this.$router.push({ name: "account-details", params: { code: node.id } });
     },
     onMouseOver(node) {

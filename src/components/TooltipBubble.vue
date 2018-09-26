@@ -5,7 +5,7 @@
     </v-card-title>
     <v-card-text class="tooltipText">
       <h3>{{ currentNode.name }}</h3>
-      <p>Percentuale occupato: </p>
+      <p>Percentuale: </p>
       <ul>
         <li>sul totale del bilancio: <b><rate :rate="currentNode.percentageOfTheTotalAmount" /></b></li>
         <li>sul ministero di appartenenza : <b><rate :rate="currentNode.percentageOfTheTopParition" /></b></li>
