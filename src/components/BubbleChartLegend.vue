@@ -32,7 +32,7 @@
       </svg>
     </div>
     <div class="legend-colors">
-      <small>Variazioni rispetto alla legge di bilancio {{ +datasetMeta.year - 1 }}</small>
+      <small>Variazione rispetto alla legge di bilancio {{ +datasetMeta.year - 1 }}</small>
       <ul class="colors">
         <li class="change-dec3" />
         <li class="change-dec2" />

@@ -8,7 +8,7 @@
 
       <v-menu :nudge-width="100">
         <v-toolbar-title slot="activator">
-          <v-icon>arrow_drop_down</v-icon>
+          <v-icon>{{ currentItem.icon }}</v-icon><v-icon>arrow_drop_down</v-icon>
         </v-toolbar-title>
 
         <v-list>
@@ -74,18 +74,18 @@ export default {
       items: [
         {
           icon: "bubble_chart",
-          title: "Bubble Chart",
+          title: "Grafico a Bolle",
           path: "/"
         },
         {
-          icon: "table_chart",
-          title: "Accounts Table",
-          path: "/table"
+          icon: "view_list",
+          title: "Lista Azioni",
+          path: "/list"
         },
         {
-          icon: "view_list",
-          title: "Accounts List",
-          path: "/list"
+          icon: "table_chart",
+          title: "Tabella Azioni",
+          path: "/table"
         },
         {
           icon: "people",
@@ -105,6 +105,15 @@ export default {
   computed: {
     logo_copernicani_orizzontale() {
       return require("@/assets/copernicani_orizzontale.png");
+    },
+    currentItem() {
+      let currentPath = this.$route.path;
+
+      let item = this.items.find(function(el) {
+        return el.path === currentPath;
+      });
+
+      return item;
     }
   }
 };

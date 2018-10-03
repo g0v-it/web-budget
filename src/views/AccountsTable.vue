@@ -6,8 +6,6 @@
       <!--  -->
       <v-card>
         <v-card-title>
-          <h1 class="g0v-title">Accounts Table</h1>
-
           <v-spacer />
           <v-spacer />
           <v-text-field
@@ -17,8 +15,10 @@
           />
         </v-card-title>
         <v-data-table
-          :headers="headers" :items="accounts"
-          :search="search" :pagination.sync="pagination"
+          :headers="headers"
+          :items="accounts"
+          :search="search"
+          :pagination.sync="pagination"
           rows-per-page-text="Righe per pagina"
           :rows-per-page-items="[25,50,100,{text:'Tutti',value:-1}]"
           class="elevation-1"
@@ -41,7 +41,7 @@
 
 
           <template slot="items" slot-scope="props">
-            <td class="account-name" width="35%">
+            <td class="account-name" width="35%" style="font-weight: 500;">
               {{ props.item.name }} <router-link :to="{name:'account-details', params:{code:props.item.code}}"><v-icon small color="blue">link</v-icon></router-link>
             </td>
             <td class="account-amount" width="10%"><amount :amount="props.item.amount" format="$ 0.0 a" /></td>
@@ -60,6 +60,9 @@
 </template>
 
 <script>
+const previousYear = function(meta) {
+  return +meta.year-1;
+}
 export default {
   data() {
     return {
@@ -72,7 +75,7 @@ export default {
       headers: [
         { text: "Nome", value: "name" },
         { text: "Spesa", value: "amount" },
-        { text: "Differenza dall'ultima spesa", value: "rate" },
+        { text: "Var. da legge di bilancio "+previousYear(this.$root.$data.budget.state.meta), value: "rate" },
         { text: "Ministero", value: "partitions.top_partition" },
         { text: "Missione", value: "partitions.second_partition" }
       ]
@@ -123,13 +126,6 @@ export default {
 
 td::first-letter {
   text-transform: uppercase;
-}
-
-.account-name {
-  /*   font-size: 1.1em !important; */
-  font-weight: 500;
-}
-.account-name a {
 }
 
 /* .account-second {
