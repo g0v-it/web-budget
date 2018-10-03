@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-toolbar app :clipped-left="clipped">
-      <img :src="logo_copernicani_orizzontale" class="g0v-header-logo">
+      <a class="g0v-header-link" href="#/"><img :src="logo_copernicani_orizzontale" class="g0v-header-logo"></a>
       <v-flex class="text-xs-left">
         <v-toolbar-title v-text="title" class="g0v-header-title" />
       </v-flex>
@@ -149,7 +149,10 @@ footer {
 .g0v-license {
   margin-left: auto;
 }
-
+.g0v-header-link {
+  display:block;
+  height:64px;
+}
 .g0v-header-logo {
   max-height: 90%;
 }
