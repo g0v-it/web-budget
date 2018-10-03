@@ -32,7 +32,7 @@
       </svg>
     </div>
     <div class="legend-colors">
-      <small>Tagli e gli incrementi dall'ultimo rendiconto spese disponibile</small>
+      <small>Variazioni rispetto alla legge di bilancio {{ +datasetMeta.year - 1 }}</small>
       <ul class="colors">
         <li class="change-dec3" />
         <li class="change-dec2" />
@@ -52,6 +52,14 @@
     </div>
   </div>
 </template>
+<script>
+  export default {
+    props: {
+      datasetMeta: Object
+    }
+  };
+</script>
+
 <style scoped>
 .legend-colors {
   margin-top: auto;

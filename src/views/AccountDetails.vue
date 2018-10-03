@@ -12,7 +12,7 @@
       <p class="description">{{ currentNode.description | capitalize }}</p>
       <div class="numbers">
         <p class="amount"><amount :amount="currentNode.amount" /></p>
-        <div class="rate"><small>Variazione rispetto al bilancio {{ meta.year }}</small>
+        <div class="rate"><small>Variazione rispetto al bilancio {{ +meta.year - 1 }}</small>
           <div class="diff" :style="{backgroundColor:currentNode.bgColor}">
             <h3><rate :rate="currentNode.diff" /></h3>
           </div>

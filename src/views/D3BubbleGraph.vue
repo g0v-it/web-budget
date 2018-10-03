@@ -47,7 +47,7 @@
             deletable-chips chips
             hint="Scegli le missioni a cui sei interessato" persistent-hint
           />
-          <BubbleChartLegend class="g0v-legend" />
+          <BubbleChartLegend :dataset-meta="budget.meta" class="g0v-legend" />
         </div>
       </div>
 
