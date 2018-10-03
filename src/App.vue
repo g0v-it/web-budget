@@ -8,7 +8,7 @@
 
       <v-menu :nudge-width="100">
         <v-toolbar-title slot="activator">
-          <v-icon>{{ currentItem.icon }}</v-icon><v-icon>arrow_drop_down</v-icon>
+          <v-icon>{{ currentItemIcon }}</v-icon><v-icon>arrow_drop_down</v-icon>
         </v-toolbar-title>
 
         <v-list>
@@ -114,6 +114,11 @@ export default {
       });
 
       return item;
+    },
+    currentItemIcon() {
+      if (this.currentItem) {
+        return this.currentItem.icon;
+      }
     }
   }
 };
