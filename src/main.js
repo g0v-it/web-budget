@@ -14,9 +14,18 @@ Vue.config.productionTip = false;
 Vue.component("rate", Rate);
 Vue.component("amount", Amount);
 
+Vue.filter('capitalize', function (value) {
+  if (!value) return ''
+  value = value.toString()
+  return value.charAt(0).toUpperCase() + value.slice(1)
+});
+
+const budgetData = api.BudgetData();
+budgetData.initData();
+
 new Vue({
   data: {
-    budget: api.BudgetData()
+    budget: budgetData
   },
   router,
   render: h => h(App)

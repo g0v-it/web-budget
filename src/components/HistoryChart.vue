@@ -7,6 +7,10 @@
 </template>
 <script>
 import * as d3 from "d3";
+import numeral from "@/utils/numeralCustomizations";
+import Configuration from "@/utils/configuration";
+import { formatAmount, formatRate } from "@/utils/functions";
+
 //---------------------------------------------------------
 //BOUNDARIES
   let margin = 80;
@@ -24,18 +28,20 @@ import * as d3 from "d3";
   //SCALE FUNCTIONS
   let xScale;
   let yScale;
-  const optimize= function(input){
+  const optimize= function(input, meta){
     let output=[]
     Object.keys(input).forEach(element => {
-      output.push({year:element,value:parseFloat(input[element])/1000000.0})
+      let y = element==='current' ? +meta.year : +element;
+      output.push({year:y,value:parseFloat(input[element])/1000000.0})
     });
     return(output);    
    }
+
   //----------------------------------------------------------
   export default {
-    props: { values: Object},
+    props: { values: Object, datasetMeta: Object},
     mounted() {
-      data=optimize(this.values)
+      data=optimize(this.values, this.datasetMeta)
       max = d3.max(data, function(d) { return parseFloat(d.value);} );
       //min = d3.min(data, function(d) { return parseFloat(d.value);} );
       min=0;
@@ -61,25 +67,25 @@ import * as d3 from "d3";
       .attr('y', margin / 2.4)
       .attr('transform', 'rotate(-90)')
       .attr('text-anchor', 'middle')
-      .text('Milions');
+      .text('Milioni €');
     //LABEL X AXIS
-     svg.append('text')
+    svg.append('text')
       .attr('class', 'label')
       .attr('x', width / 2 + margin)
       .attr('y', height + margin * 1.7)
       .attr('text-anchor', 'middle')
-      .text('year');
-        const barGroups = chart.selectAll()
-        .data(data)
-        .enter()
-        .append('g')  
-        barGroups.append('rect')
-          .attr('class', 'bar')
-          .attr('x', (g) => xScale(g.year))
-          .attr('y', (g) => yScale(min))
-          .attr("height", 0)
-          .attr('width', xScale.bandwidth())
-          .on('mouseenter', function (actual, i) {
+      .text('Anno');
+    const barGroups = chart.selectAll()
+      .data(data)
+      .enter()
+      .append('g');
+    barGroups.append('rect')
+      .attr('class', 'bar')
+      .attr('x', (g) => xScale(g.year))
+      .attr('y', (g) => yScale(min))
+      .attr("height", 0)
+      .attr('width', xScale.bandwidth())
+      .on('mouseenter', function (actual, i) {
           d3.selectAll('.valueText')
             .attr('opacity', 0)
           d3.select(this)
@@ -103,10 +109,10 @@ import * as d3 from "d3";
             .attr('fill', 'white')
             .attr('text-anchor', 'middle')
             .text((a, idx) => {
-              const divergence = ((actual.value - a.value)*100/a.value).toFixed(1)
-              let text = ''
-              if (divergence > 0) text += '+'
-              text += `${divergence}%`
+              const divergence = (actual.value - a.value)/a.value;
+              let text = '';
+              if (isFinite(divergence) && divergence.toFixed(0) > 0) text += '+';
+              text += `${formatRate(divergence)}`
               return idx !== i ? text : '';
             })
       })
@@ -127,19 +133,21 @@ import * as d3 from "d3";
       .attr("height", (g) => (height - yScale(parseFloat(g.value))))
       .attr('y',(g)=>yScale(parseFloat(g.value)));
     //LABEL ON BAR
-    barGroups 
+    barGroups
       .append('text').attr('class', 'valueText')
       .attr('x', (a) => xScale(a.year) + xScale.bandwidth() / 2)
       .attr('y', (a) => yScale(min) - 10)
       .attr('text-anchor', 'middle')
-      .text((a) => `${a.value}`)
+      .text((a) => {
+        formatAmount(a.value);
+      })
       .transition(t).tween("text", function(d) {
         const v0 =0;//start
         const v1 = d.value;//target
         const i = d3.interpolateRound(v0, v1);
-        
-        return t => {this.textContent = i(t)};
-      });   
+
+        return t => {this.textContent = formatAmount(i(t))};
+      });
   },
 };
 </script>

@@ -3,13 +3,19 @@
     <div><svg class="chart js-chart pie-chart" /></div>
     <div class="cds-detail">
       <h3>{{ name }}</h3>
-      <h3>€{{ amount }}</h3>
-      <h3>{{ percentage }} %</h3>
+      <div class="cds-detail-data">
+        <h4>{{ formattedAmount }}</h4>
+        <p>{{ formattedPercentage }} sul totale dell'azione</p>
+      </div>
+
+
     </div>
   </div>
 </template>
 <script>
 import * as d3 from "d3";
+import { formatAmount, formatRate } from "@/utils/functions";
+
 //---------------------------------------------------------
 //BUILDER
 let cdsSpeed = 2000;
@@ -99,16 +105,24 @@ export default {
   props: { values: Object },
   data() {
     return {
-      name: "",
-      amount: ""
+      name: undefined,
+      amount: undefined
     };
   },
   computed: {
-    percentage: function() {
+    formattedAmount: function() {
+      return formatAmount(this.amount);
+    },
+    formattedPercentage: function() {
       if (this.amount == undefined) {
-        return 0;
+        return 'N/A';
       } else {
-        return (this.amount * 100) / this.values.sum;
+        let r = this.amount/this.values.sum;
+        if (r<0.001) {
+          return "Meno dello 0,1%"
+        } else {
+          return formatRate(r);
+        }
       }
     }
   },
@@ -175,11 +189,17 @@ export default {
 }
 .cds-detail {
   position: relative;
-  display: flex;
-  flex-direction: column;
   justify-content: space-around;
 }
-
+.cds-detail-data {
+  margin-top:1em;
+}
+.cds-detail-data h4 {
+  font-size:1.3em;
+}
+.cds-detail-data p {
+  color: dimgrey;
+}
 /* @media screen and (max-width: 900px) {
   .g0v-container {
     grid-template:
