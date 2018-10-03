@@ -4,8 +4,8 @@
       <h2>{{ currentNode.name }}</h2>
       <p class="top">Ministero: {{ currentNode.top_level }}</p>
       <p v-if="download_completed" class="second">Missione: {{ currentNode.partitions.second_partition }}</p>
-      <p class="description">Descrizione: {{ currentNode.description }}</p>
-      <a target="_blank" :href="currentNode.account"> <p class="link">Visualizza il linked-data nella Knowledge Base</p></a>
+      <p class="description">{{ currentNode.description }}</p>
+      <a target="_blank" :href="currentNode.account"> <p class="link">Visualizza i linked-data.</p></a>
       <div class="numbers">
         <p class="amount"><small>Spesa: </small><amount :amount="currentNode.amount" /> </p>
         <p class="rate"><small>Inc. dall'ultima spesa: </small><rate :rate="(currentNode.amount- currentNode.last_amount )/currentNode.last_amount" /></p>
@@ -111,6 +111,8 @@ h2 {
 .details .description {
   font-size: 1.2em;
   margin-top: 2em;
+  max-height: 15rem;
+  overflow: auto;
 }
 
 .details .numbers {

@@ -14,20 +14,35 @@
       /></a>
       <small>Elaborazione su dati del Ministero dell'Economia e delle Finanze</small>
     </div>
-    <!--  <svg class="legend-radius">
-            <circle vector-effect="non-scaling-stroke" cx="137.5000000000001" cy="141.49999999999991" r="15" fill="none" stroke-width="1" stroke="rgb(190,190,190)" />
-            <circle vector-effect="non-scaling-stroke" cx="115.00000000000009" cy="160.5" r="4" fill="none" stroke-width="1" stroke="rgb(190,190,190)" />
-            <circle vector-effect="non-scaling-stroke" cx="208" cy="105.49999999999994" r="50" fill="none" stroke-width="1" stroke="rgb(190,190,190)" />
-            <g transform="matrix(1,0,0,1,68,57.5)">
-                <text transform="matrix(1,0,0,1,0,12.574)" style="font-family:&quot;Roboto Mono&quot;;font-weight:100;font-size:12px;font-style:normal;fill:#000000;stroke:none;">20000 milioni</text>
-            </g>
-            <g transform="matrix(1,0,0,1,42.5,112.5)">
-                <text transform="matrix(1,0,0,1,0,12.574)" style="font-family:&quot;Roboto Mono&quot;;font-weight:100;font-size:12px;font-style:normal;fill:#000000;stroke:none;">5000 milioni</text>
-            </g>
-            <g transform="matrix(1,0,0,1,34,141.5)">
-                <text transform="matrix(1,0,0,1,0,12.574)" style="font-family:&quot;Roboto Mono&quot;;font-weight:100;font-size:12px;font-style:normal;fill:#000000;stroke:none;">50 milioni</text>
-            </g>
-        </svg> -->
+    <!--    <svg class="legend-radius" height="200">
+      <circle
+        vector-effect="non-scaling-stroke" cx="137.5000000000001"
+        cy="141.49999999999991" r="15"
+        fill="none" stroke-width="1"
+        stroke="rgb(190,190,190)"
+      />
+      <circle
+        vector-effect="non-scaling-stroke" cx="115.00000000000009"
+        cy="160.5" r="4"
+        fill="none" stroke-width="1"
+        stroke="rgb(190,190,190)"
+      />
+      <circle
+        vector-effect="non-scaling-stroke" cx="208"
+        cy="105.49999999999994" r="50"
+        fill="none" stroke-width="1"
+        stroke="rgb(190,190,190)"
+      />
+      <g transform="matrix(1,0,0,1,68,57.5)">
+        <text transform="matrix(1,0,0,1,0,12.574)" style="font-family:&quot;Roboto Mono&quot;;font-weight:100;font-size:12px;font-style:normal;fill:#000000;stroke:none;">20000 milioni</text>
+      </g>
+      <g transform="matrix(1,0,0,1,42.5,112.5)">
+        <text transform="matrix(1,0,0,1,0,12.574)" style="font-family:&quot;Roboto Mono&quot;;font-weight:100;font-size:12px;font-style:normal;fill:#000000;stroke:none;">5000 milioni</text>
+      </g>
+      <g transform="matrix(1,0,0,1,34,141.5)">
+        <text transform="matrix(1,0,0,1,0,12.574)" style="font-family:&quot;Roboto Mono&quot;;font-weight:100;font-size:12px;font-style:normal;fill:#000000;stroke:none;">50 milioni</text>
+      </g>
+    </svg>
 
     <div class="legend-colors">
       <small>Tagli e gli incrementi dall'ultimo rendiconto spese disponibile</small>
@@ -47,7 +62,7 @@
         <li>+5%</li>
         <li>+25%</li>
       </ul>
-    </div>
+    </div> -->
 
   </div>
 </template>
@@ -66,12 +81,12 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .legend {
-  padding: 3em 0;
+  padding: 2em 0;
   height: 100%;
-  display: flex;
-  flex-direction: column;
+  /*   display: flex;
+  flex-direction: column; */
   /* justify-content: space-between; */
   /*   pointer-events: none; */
 }
@@ -82,8 +97,12 @@ export default {
 }
 .legend-mef {
   margin: 1em 0;
+  position: absolute;
 }
-.legend-colors {
+/* .legend-radius {
+  height: 150px;
+} */
+/* .legend-colors {
   margin-top: auto;
   max-width: 25em;
 }
@@ -140,5 +159,5 @@ export default {
 }
 .change-inc3 {
   background: #7aa25c;
-}
+} */
 </style>

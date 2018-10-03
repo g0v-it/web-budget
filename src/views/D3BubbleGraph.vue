@@ -27,7 +27,7 @@
       <div v-if="budget.selectedPartition=='default'" class="g0v-content-grid">
 
         <div class="left-column">
-          <BubbleGraphLegend :dataset-meta="budget.meta" :tot-amount="totAmount" />
+          <BubbleChartInfo :dataset-meta="budget.meta" :tot-amount="totAmount" />
         </div>
 
         <div class="right-column">
@@ -47,8 +47,8 @@
             deletable-chips chips
             hint="Scegli le missioni a cui sei interessato" persistent-hint
           />
+          <BubbleChartLegend class="g0v-legend" />
         </div>
-
       </div>
 
       <div class="g0v-bubble-chart">
@@ -76,7 +76,8 @@
 // @ is an alias to /src
 import BudgetBubbles from "@/components/BudgetBubbles.vue";
 import TooltipBubble from "@/components/TooltipBubble.vue";
-import BubbleGraphLegend from "@/components/BubbleGraphLegend.vue";
+import BubbleChartInfo from "@/components/BubbleChartInfo.vue";
+import BubbleChartLegend from "@/components/BubbleChartLegend.vue";
 import { debounce } from "lodash";
 
 let readPartitionLabels = null;
@@ -92,7 +93,8 @@ export default {
   components: {
     BudgetBubbles,
     TooltipBubble,
-    BubbleGraphLegend
+    BubbleChartInfo,
+    BubbleChartLegend
   },
 
   data: function() {
@@ -157,6 +159,8 @@ export default {
 
   created() {
     /* Init filters from url params */
+    this.budget.filters.top_partition = [];
+    this.budget.filters.second_partition = [];
     if (Array.isArray(this.$route.query.top_partition)) {
       this.budget.filters.top_partition = this.$route.query.top_partition;
     } else if (this.$route.query.top_partition) {
@@ -170,7 +174,6 @@ export default {
         this.$route.query.second_partition
       );
     }
-
     this.budgetStore().initData();
     /* set partition to sow */
     this.budgetStore().selectPartition(this.urlPartitionID);
@@ -293,9 +296,15 @@ export default {
   grid-area: right;
 }
 
-.right-column .select-ministero,
+.select-ministero,
 .select-missione {
   margin-bottom: 3rem;
+}
+
+.g0v-legend {
+  position: absolute;
+  width: 100%;
+  bottom: 2rem;
 }
 
 /* Global style */
