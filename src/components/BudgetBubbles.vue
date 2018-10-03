@@ -303,7 +303,7 @@ export default {
   /*   grid-gap: 1rem; */
   grid-row-gap: 2rem;
   grid-template-columns: repeat(4, 1fr);
-  grid-auto-rows: 30rem 20rem 20rem 20rem 20rem 20rem 15rem 15rem 15rem;
+  grid-auto-rows: 30rem;
   pointer-events: all;
 }
 .grid .subheading,
