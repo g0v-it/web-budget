@@ -1,3 +1,6 @@
+import Configuration from "@/utils/configuration";
+import numeral from "@/utils/numeralCustomizations";
+
 export function fillColor(val) {
   if (!isFinite(val)) {
     return "#AAAAAA";
@@ -77,4 +80,21 @@ export function computeNewFilteredTotals(partitionLabels, filteredTot) {
     }
   );
   return newPartitionLabels;
+}
+
+//----------------------------------------------------------
+// FORMATTING
+const amountFormat = Configuration().current().amountFormat;
+export function formatAmount(amt){
+  if (isFinite(amt)) {
+    return numeral(amt).format(amountFormat);
+  }
+  return "N/A";
+}
+const rateFormat = Configuration().current().rateFormat;
+export function formatRate(amt){
+  if (isFinite(amt)) {
+    return numeral(amt).format(rateFormat);
+  }
+  return "N/A";
 }

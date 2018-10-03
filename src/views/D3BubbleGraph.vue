@@ -174,7 +174,9 @@ export default {
         this.$route.query.second_partition
       );
     }
-    this.budgetStore().initData();
+    if (!this.budgetStore().initialized) {
+      this.budgetStore().initData();
+    }
     /* set partition to sow */
     this.budgetStore().selectPartition(this.urlPartitionID);
   },
