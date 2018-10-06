@@ -34,47 +34,14 @@ let velocityDecay = 0.2;
 let forceStrength = 0.03;
 let nodes;
 
-function createNodes(rawData) {
-  let maxAmount = d3.max(rawData, function(d) {
-    return +d.amount;
-  });
-  let minAmount = d3.min(rawData, function(d) {
-    return +d.amount;
-  });
-  // Sizes bubbles based on .
-  let radiusScale = d3
-    .scalePow()
-    .exponent(0.5)
-    .range([3, 90])
-    .domain([minAmount, maxAmount]);
-  let myNodes = rawData.map(function(d) {
-    return {
-      id: d.code,
-      name: d.name,
-      top_level: d.top_level,
-      radius: radiusScale(+d.amount),
-      amount: d.amount,
-      diff: (d.amount - d.last_amount) / d.last_amount,
-      partitions: d.partitions,
-      x: Math.random() * 1000,
-      y: Math.random() * 500
-    };
-  });
-
-  /*   myNodes = myNodes.sort((a,b)=>{
-          return b.amount - a.amount;
-      })
-   */
-  return myNodes;
-}
-
 /* Vue component */
 export default {
   props: {
     accounts: Array,
     partitionId: String,
     partitionLabels: Object,
-    filters: Object
+    filters: Object,
+    scaleLinear: Boolean
   },
 
   data: () => {
@@ -95,18 +62,15 @@ export default {
         this.filterBubbles();
       }, 500),
       deep: true
+    },
+    scaleLinear: function() {
+      this.changeScale(this.scaleLinear);
+      simulation.alpha(0.3).restart();
     }
-    /*     accounts: function(val) {
-      console.log("watch acco");
-      this.chart(val);
-      this.toggleGrouping();
-      this.filterBubbles();
-    } */
   },
 
   mounted() {
     if (this.accounts.length > 0) {
-      console.log("mounted");
       this.chart(this.accounts);
       this.toggleGrouping();
       this.filterBubbles();
@@ -114,28 +78,66 @@ export default {
   },
 
   updated() {
-    console.log("updated");
     this.toggleGrouping();
   },
 
   methods: {
     chart(rawData) {
+      let createNodes = rawData => {
+        let maxAmount = d3.max(rawData, function(d) {
+          return +d.amount;
+        });
+        let minAmount = d3.min(rawData, function(d) {
+          return +d.amount;
+        });
+        let maxRate = d3.max(rawData, function(d) {
+          let rate = (d.amount - d.last_amount) / d.last_amount;
+          return isFinite(rate) ? rate : 0;
+        });
+        let minRate = d3.min(rawData, function(d) {
+          let rate = (d.amount - d.last_amount) / d.last_amount;
+          return isFinite(rate) ? rate : 0;
+        });
+        // Sizes bubbles based on .
+        let powRadiusScale = d3
+          .scalePow()
+          .exponent(0.5)
+          .domain([minAmount, maxAmount])
+          .range([3, 90]);
+        let linearRadiusScale = d3
+          .scaleLinear()
+          .domain([minAmount, maxAmount])
+          .range([3, 90]);
+        let heightScale = d3
+          .scalePow()
+          /* .clamp(true) */
+          .exponent(0.1)
+          .domain([minRate, maxRate])
+          .range([this.$refs.vis.offsetHeight, 0]);
+
+        let myNodes = rawData.map(d => {
+          let diff = (d.amount - d.last_amount) / d.last_amount;
+          let diffForHeight = isFinite(diff) ? diff : -0.000001;
+          return {
+            id: d.code,
+            name: d.name,
+            top_level: d.top_level,
+            radiusPow: powRadiusScale(+d.amount),
+            radiusLinear: linearRadiusScale(+d.amount),
+            amount: d.amount,
+            diff: diff,
+            partitions: d.partitions,
+            x: Math.random() * this.$refs.vis.offsetWidth,
+            /* + this.$refs.vis.offsetWidth / 4 */
+            y: heightScale(diffForHeight)
+          };
+        });
+        return myNodes;
+      };
+
       // convert raw data into nodes data
       nodes = createNodes(rawData);
 
-      function ticked() {
-        bubbles
-          .attr("cx", function(d) {
-            return d.x;
-          })
-          .attr("cy", function(d) {
-            return d.y;
-          });
-      }
-
-      function charge(d) {
-        return -Math.pow(d.radius, 2.0) * forceStrength;
-      }
       let temp = this;
 
       let bubbles = d3
@@ -158,7 +160,8 @@ export default {
         .on("mouseover", function(d) {
           this.style["stroke-width"] = 3;
           temp.$emit("over", {
-            d,
+            ...d,
+            radius: this.scaleLinear ? d.radiusLinear : d.radiusPow,
             colorBg: fillColor(d.diff),
             x: d.x,
             y: d.y
@@ -169,22 +172,35 @@ export default {
           temp.$emit("out", d);
         });
 
-      bubbles
+      /* bubbles
         .transition()
         .duration(2000)
         .attr("r", function(d) {
-          return d.radius;
-        });
+          return d.radiusPow;
+        }); */
+
+      function ticked() {
+        bubbles
+          .attr("cx", function(d) {
+            return d.x;
+          })
+          .attr("cy", function(d) {
+            return d.y;
+          });
+      }
+
+      /* function charge(d) {
+        return -Math.pow(d.radiusPow, 2.0) * forceStrength;
+      } */
 
       simulation = d3
         .forceSimulation()
         .velocityDecay(velocityDecay)
         .nodes(nodes)
-        .force("charge", d3.forceManyBody().strength(charge))
+        /* .force("charge", d3.forceManyBody().strength(charge)) */
         .on("tick", ticked)
         .stop();
-
-      /*    this.groupBubbles(); */
+      this.changeScale(this.scaleLinear);
     },
     groupBubbles() {
       simulation.force(
@@ -210,7 +226,6 @@ export default {
       for (let i = 0; i < nodes.length; ++i) {
         let center = group_cat_id.labels.find(function(el) {
           return el.value == nodes[i].partitions[group_cat_id.partition];
-          console.log("nodes", nodes);
         });
         nodes[i].group_center = { x: center.x, y: center.y };
       }
@@ -266,6 +281,23 @@ export default {
             return true;
           }
         });
+    },
+    changeScale(isLinear) {
+      function charge(d) {
+        const radius = isLinear ? d.radiusLinear : d.radiusPow;
+        return -Math.pow(radius, 2.0) * forceStrength;
+      }
+
+      d3.select("#bubbles")
+        .selectAll("circle")
+        .transition()
+        .duration(2000)
+        .attr("r", function(d) {
+          const radius = isLinear ? d.radiusLinear : d.radiusPow;
+          return radius;
+        });
+
+      simulation.force("charge", d3.forceManyBody().strength(charge)).stop();
     }
   }
 };

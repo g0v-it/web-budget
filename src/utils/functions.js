@@ -1,27 +1,16 @@
 import Configuration from "@/utils/configuration";
 import numeral from "@/utils/numeralCustomizations";
+import { scaleThreshold } from "d3";
 
 export function fillColor(val) {
-  if (!isFinite(val)) {
-    return "#AAAAAA";
+  const colorScale = scaleThreshold()
+    .domain([-0.25, -0.05, 0, 0.05, 0.25])
+    .range(["#D84B2A", "#EE9586", "#E4B7B2", "#BECCAE", "#9CAF84", "#7AA25C"]);
+
+  if (isFinite(val)) {
+    return colorScale(val);
   }
-  let color = "#D84B2A";
-  if (val > -0.25) {
-    color = "#EE9586";
-  }
-  if (val > -0.05) {
-    color = "#E4B7B2";
-  }
-  if (val >= 0) {
-    color = "#BECCAE";
-  }
-  if (val > 0.05) {
-    color = "#9CAF84";
-  }
-  if (val > 0.25) {
-    color = "#7AA25C";
-  }
-  return color;
+  return "#AAAAAA";
 }
 
 export function calcCenterOfBlocks(childNodes) {
@@ -93,7 +82,7 @@ export function formatAmount(amount){
   return "N/A";
 }
 const rateFormat = Configuration().current().rateFormat;
-export function formatRate(amt){
+export function formatRate(amt) {
   if (isFinite(amt)) {
     return numeral(amt).format(rateFormat);
   }

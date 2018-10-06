@@ -4,19 +4,22 @@
       <v-btn-toggle v-model="budget.selectedPartition" mandatory>
         <v-btn
           flat color="primary"
-          value="default" @click="$router.push({ name: 'd3-bubble-graph',query: budget.filters})"
+          value="default"
+          @click="onPartitionChange('default')"
         >
           default
         </v-btn>
         <v-btn
           flat color="primary"
-          value="top_partition" @click="$router.push({ name: 'accounts-partition', params: { urlPartitionID: 'top_partition' },query: budget.filters})"
+          value="top_partition"
+          @click="onPartitionChange('top_partition')"
         >
           ministero
         </v-btn>
         <v-btn
           flat color="primary"
-          value="second_partition" @click="$router.push({ name: 'accounts-partition', params: { urlPartitionID: 'second_partition' },query: budget.filters})"
+          value="second_partition"
+          @click="onPartitionChange('second_partition')"
         >
           missione
         </v-btn>
@@ -31,6 +34,10 @@
         </div>
 
         <div class="right-column">
+          <v-switch
+            :label="`Scala lineare`" v-model="isScaleLinear"
+            @change="onScaleChange"
+          />
           <v-select
             class="select-ministero" @change="onFiltersChange"
             :items="top_partitions" v-model="budget.filters.top_partition"
@@ -58,6 +65,7 @@
           @out="onMouseOut"
           :partition-id="budget.selectedPartition" :partition-labels="budget.partitionLabels"
           :accounts="budget.accounts" :filters="budget.filters"
+          :scale-linear="isScaleLinear"
         />
       </div>
 
@@ -100,7 +108,8 @@ export default {
   data: function() {
     return {
       hoveredNode: {},
-      showTooltip: false
+      showTooltip: false,
+      isScaleLinear: false
     };
   },
 
@@ -158,6 +167,9 @@ export default {
   },
 
   created() {
+    /* Init scale */
+    this.isScaleLinear = this.$route.query.scaleLinear === "true";
+
     /* Init filters from url params */
     this.budget.filters.top_partition = [];
     this.budget.filters.second_partition = [];
@@ -190,11 +202,9 @@ export default {
 
   watch: {
     $route(to) {
-      if (to.name === "d3-bubble-graph") {
-        this.budgetStore().selectPartition("default");
-      }
-      if (to.name === "accounts-partition") {
-        this.budgetStore().selectPartition(to.params.urlPartitionID);
+      this.budgetStore().selectPartition(this.urlPartitionID);
+      if (to.query.scaleLinear) {
+        this.isScaleLinear = to.query.scaleLinear.toString() === "true";
       }
     }
   },
@@ -204,21 +214,21 @@ export default {
     },
     onMouseOver(node) {
       let n = {
-        ...node.d,
-        percentageOfTheTotalAmount: node.d.amount / this.totAmount.amount,
+        ...node,
+        percentageOfTheTotalAmount: node.amount / this.totAmount.amount,
         percentageOfTheTopParition:
-          node.d.amount /
+          node.amount /
           this.budget.filteredTot.top_partition_label[
-            node.d.partitions.top_partition
+            node.partitions.top_partition
           ],
         percentageOfTheSecondParition:
-          node.d.amount /
+          node.amount /
           this.budget.filteredTot.second_partition_label[
-            node.d.partitions.second_partition
+            node.partitions.second_partition
           ],
         colorBg: node.colorBg,
-        x: node.x + node.d.radius / 1.4142,
-        y: node.y + node.d.radius / 1.4142
+        x: node.x + node.radius / 1.4142,
+        y: node.y + node.radius / 1.4142
       };
       this.hoveredNode = n;
       this.showTooltip = true;
@@ -226,13 +236,34 @@ export default {
     onMouseOut() {
       this.showTooltip = false;
     },
+    onPartitionChange(partitionId) {
+      if (partitionId === "default") {
+        this.$router.push({
+          name: "d3-bubble-graph",
+          query: { ...this.budget.filters, scaleLinear: this.isScaleLinear }
+        });
+      } else {
+        this.$router.push({
+          name: "accounts-partition",
+          params: { urlPartitionID: partitionId },
+          query: { ...this.budget.filters, scaleLinear: this.isScaleLinear }
+        });
+      }
+    },
     onFiltersChange() {
       this.$router.replace({
         name: "d3-bubble-graph",
-        query: this.budget.filters
+        query: { ...this.budget.filters, scaleLinear: this.isScaleLinear }
       });
       readPartitionLabels();
     },
+    onScaleChange() {
+      this.$router.replace({
+        name: "d3-bubble-graph",
+        query: { ...this.budget.filters, scaleLinear: this.isScaleLinear }
+      });
+    },
+
     budgetStore() {
       return this.$root.$data.budget;
     }
@@ -275,6 +306,7 @@ export default {
   margin: 0;
   pointer-events: none;
   height: 100%;
+  width: 100%;
   position: absolute;
   display: grid;
   grid-template-areas: "left . . right";
