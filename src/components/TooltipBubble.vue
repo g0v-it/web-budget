@@ -1,5 +1,5 @@
 <template>
-  <div class="bubble-tooltip card">
+  <div ref="tooltip" class="bubble-tooltip card">
     <v-card-title class=" tooltipTitle headline grey lighten-2" primary-title>
       <p>{{ currentNode.top_level }}</p>
     </v-card-title>
@@ -29,6 +29,12 @@ export default {
   props: {
     currentNode: Object,
     bgColor: String
+  },
+  mounted() {
+    this.$emit("mounted", {
+      width: this.$refs.tooltip.offsetWidth,
+      height: this.$refs.tooltip.offsetHeight
+    });
   }
 };
 </script>

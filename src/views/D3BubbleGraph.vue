@@ -26,7 +26,7 @@
       </v-btn-toggle>
     </div>
 
-    <div class="g0v-content">
+    <div ref="container" class="g0v-content">
       <div v-if="budget.selectedPartition=='default'" class="g0v-content-grid">
 
         <div class="left-column">
@@ -69,11 +69,15 @@
         />
       </div>
 
+
       <TooltipBubble
-        class="tooltip" :style="{ top: hoveredNode.y + 'px' , left: hoveredNode.x + 'px' }"
+        class="tooltip"
+        :style="{ top: hoveredNode.y + 'px' , left: hoveredNode.x + 'px' }"
         :current-node="hoveredNode" :bg-color="hoveredNode.colorBg"
-        v-if="showTooltip"
+        v-if="showTooltip" @mounted="calcTooltipPos"
       />
+
+
 
     </div>
 
@@ -199,7 +203,6 @@ export default {
       1000
     );
   },
-
   watch: {
     $route(to) {
       this.budgetStore().selectPartition(this.urlPartitionID);
@@ -232,6 +235,19 @@ export default {
       };
       this.hoveredNode = n;
       this.showTooltip = true;
+    },
+    calcTooltipPos({ width, height }) {
+      let container = this.$refs.container;
+      let newX = this.hoveredNode.x;
+      let newY = this.hoveredNode.y;
+      if (newY + height >= container.offsetHeight) {
+        newY = container.offsetHeight - height;
+      }
+      if (newX + width >= container.offsetWidth) {
+        newX = container.offsetWidth - width;
+      }
+      this.hoveredNode.x = newX;
+      this.hoveredNode.y = newY;
     },
     onMouseOut() {
       this.showTooltip = false;
