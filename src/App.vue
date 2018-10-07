@@ -6,6 +6,19 @@
         <v-toolbar-title v-text="title" class="g0v-header-title" />
       </v-flex>
 
+      <social-sharing inline-template
+                      hashtags="g0vit"
+                      class="g0v-social-buttons">
+        <div>
+          <network network="twitter" class="g0v-social-link">
+            <i class="fab fa-twitter"></i>
+          </network>
+          <network network="facebook" class="g0v-social-link">
+            <i class="fab fa-facebook-f"></i>
+          </network>
+        </div>
+      </social-sharing>
+
       <v-menu :nudge-width="100">
         <v-toolbar-title slot="activator">
           <v-icon>{{ currentItemIcon }}</v-icon><v-icon>arrow_drop_down</v-icon>
@@ -118,6 +131,8 @@ export default {
     currentItemIcon() {
       if (this.currentItem) {
         return this.currentItem.icon;
+      } else {
+        return "bubble_chart";
       }
     }
   }
@@ -172,5 +187,16 @@ footer {
 }
 .g0v-header-title {
   margin-left: 1em;
+}
+.g0v-social-buttons {
+  margin-right:1em;
+}
+.g0v-social-link {
+  width: 32px;
+  font-size: 20px;
+  display: inline-block;
+  text-align: center;
+  cursor: pointer;
+  color: rgba(0,0,0,.54);
 }
 </style>

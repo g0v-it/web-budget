@@ -9,10 +9,15 @@ import Amount from "./components/base/Amount.vue";
 
 import * as api from "./api.service.js";
 
+import SocialSharing from "./utils/socialSharing.js";
+import SocialSharingNetwork from "./utils/socialSharingNetwork.js";
+
 Vue.config.productionTip = false;
 
 Vue.component("rate", Rate);
 Vue.component("amount", Amount);
+Vue.component("social-sharing", SocialSharing);
+Vue.component("network", SocialSharingNetwork);
 
 Vue.filter("capitalize", function(value) {
   if (!value) return "";
