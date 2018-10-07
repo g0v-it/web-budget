@@ -26,12 +26,13 @@ Vue.filter("capitalize", function(value) {
 });
 
 const budgetData = api.BudgetData();
-budgetData.initData();
 
-new Vue({
+var vm = new Vue({
   data: {
     budget: budgetData
   },
   router,
   render: h => h(App)
 }).$mount("#app");
+
+vm.budget.initData();

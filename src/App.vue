@@ -7,7 +7,7 @@
       </v-flex>
 
       <social-sharing inline-template
-                      hashtags="g0vit"
+                      :hashtags="appHashtag"
                       class="g0v-social-buttons">
         <div>
           <network network="twitter" class="g0v-social-link">
@@ -78,6 +78,8 @@
 </template>
 
 <script>
+import Configuration from "@/utils/configuration";
+
 export default {
   name: "App",
   data() {
@@ -134,6 +136,9 @@ export default {
       } else {
         return "bubble_chart";
       }
+    },
+    appHashtag(){
+      return Configuration().current().appHashtag;
     }
   }
 };

@@ -10,6 +10,10 @@ export default function() {
 
     rateFormat: "0.0 %",
 
+    tweetsUrl: "",
+
+    appHashtag: "",
+
     // default configuration
     apiEndpoint: "http://data.budget.g0v.it/api/v1"
   };

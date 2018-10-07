@@ -82,6 +82,8 @@ These are the available environment variables and the corresponding configuratio
 - `G0V_AMOUNT_FORMAT` -> `amountFormat` (the format for currency values)
 - `G0V_RATE_FORMAT` -> `rateFormat` (the format for percentages)
 - `G0V_API_ENDPOINT` -> `apiEndpoint` (the API base endpoint)
+- `G0V_TWEETS_URL` -> `tweetsUrl` (the google sheets URL for the tweets archive)
+- `$G0V_APP_HASHTAG` -> `appHashtag` (the application hashtag)
 
 The `docker` directory contains the nginx configuration and the command run by the image.
 

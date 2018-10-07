@@ -34,6 +34,7 @@
       />
     </v-card>
     <v-card class="comments">
+      <TweetsWall />
     </v-card>
   </div>
 
@@ -42,12 +43,14 @@
 <script>
 import HistoryChart from "@/components/HistoryChart.vue";
 import CdsChart from "@/components/CdsChart.vue";
+import TweetsWall from "@/components/TweetsWall.vue";
 import { fillColor } from "@/utils/functions.js";
 
 export default {
   components: {
     HistoryChart,
-    CdsChart
+    CdsChart,
+    TweetsWall
   },
   props: {
     code: String
@@ -65,8 +68,6 @@ export default {
         this.currentNode = res.data;
         this.currentNode.diff = (this.currentNode.amount- this.currentNode.last_amount )/this.currentNode.last_amount;
         this.currentNode.bgColor = fillColor(this.currentNode.diff);
-
-        console.log(this.currentNode);
         this.download_completed = true;
       });
   },
@@ -189,6 +190,7 @@ h2 {
   box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
   0 1px 3px 0 rgba(0, 0, 0, 0.12);
 }
+
 @media screen and (max-width: 900px) {
   .g0v-container {
     grid-template:
@@ -201,4 +203,5 @@ h2 {
     grid-template-areas: "amount" "rate";
   }
 }
+
 </style>
