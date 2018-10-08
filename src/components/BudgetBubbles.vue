@@ -40,8 +40,7 @@ export default {
     accounts: Array,
     partitionId: String,
     partitionLabels: Object,
-    filters: Object,
-    scaleLinear: Boolean
+    filters: Object
   },
 
   data: () => {
@@ -62,10 +61,6 @@ export default {
         this.filterBubbles();
       }, 500),
       deep: true
-    },
-    scaleLinear: function() {
-      this.changeScale(this.scaleLinear);
-      simulation.alpha(0.3).restart();
     }
   },
 
@@ -127,8 +122,7 @@ export default {
             amount: d.amount,
             diff: diff,
             partitions: d.partitions,
-            x: Math.random() * this.$refs.vis.offsetWidth,
-            /* + this.$refs.vis.offsetWidth / 4 */
+            x: (Math.random() / 2 + 0.25) * this.$refs.vis.offsetWidth,
             y: heightScale(diffForHeight)
           };
         });
@@ -172,12 +166,12 @@ export default {
           temp.$emit("out", d);
         });
 
-      /* bubbles
+      bubbles
         .transition()
         .duration(2000)
         .attr("r", function(d) {
           return d.radiusPow;
-        }); */
+        });
 
       function ticked() {
         bubbles
@@ -189,18 +183,17 @@ export default {
           });
       }
 
-      /* function charge(d) {
+      function charge(d) {
         return -Math.pow(d.radiusPow, 2.0) * forceStrength;
-      } */
+      }
 
       simulation = d3
         .forceSimulation()
         .velocityDecay(velocityDecay)
         .nodes(nodes)
-        /* .force("charge", d3.forceManyBody().strength(charge)) */
+        .force("charge", d3.forceManyBody().strength(charge))
         .on("tick", ticked)
         .stop();
-      this.changeScale(this.scaleLinear);
     },
     groupBubbles() {
       simulation.force(
@@ -281,23 +274,6 @@ export default {
             return true;
           }
         });
-    },
-    changeScale(isLinear) {
-      function charge(d) {
-        const radius = isLinear ? d.radiusLinear : d.radiusPow;
-        return -Math.pow(radius, 2.0) * forceStrength;
-      }
-
-      d3.select("#bubbles")
-        .selectAll("circle")
-        .transition()
-        .duration(2000)
-        .attr("r", function(d) {
-          const radius = isLinear ? d.radiusLinear : d.radiusPow;
-          return radius;
-        });
-
-      simulation.force("charge", d3.forceManyBody().strength(charge)).stop();
     }
   }
 };

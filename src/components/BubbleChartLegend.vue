@@ -53,11 +53,11 @@
   </div>
 </template>
 <script>
-  export default {
-    props: {
-      datasetMeta: Object
-    }
-  };
+export default {
+  props: {
+    datasetMeta: Object
+  }
+};
 </script>
 
 <style scoped>
@@ -100,23 +100,23 @@
   height: 1rem;
   width: 16%;
 }
-
+/* ["#762a83", "#af8dc3", "#e7d4e8", "#d9f0d3", "#7fbf7b", "#1b7837"] */
 .change-dec3 {
-  background: #d84b2a;
+  background: #762a83;
 }
 .change-dec2 {
-  background: #ee9586;
+  background: #af8dc3;
 }
 .change-dec1 {
-  background: #e4b7b2;
+  background: #e7d4e8;
 }
 .change-inc1 {
-  background: #beccae;
+  background: #b8e2ae;
 }
 .change-inc2 {
-  background: #9caf84;
+  background: #6cb366;
 }
 .change-inc3 {
-  background: #7aa25c;
+  background: #1b7837;
 }
 </style>

@@ -5,7 +5,13 @@ import { scaleThreshold } from "d3";
 export function fillColor(val) {
   const colorScale = scaleThreshold()
     .domain([-0.25, -0.05, 0, 0.05, 0.25])
-    .range(["#D84B2A", "#EE9586", "#E4B7B2", "#BECCAE", "#9CAF84", "#7AA25C"]);
+    /* 0  .range(["#D84B2A", "#EE9586", "#E4B7B2", "#BECCAE", "#9CAF84", "#7AA25C"]); */
+    /* 1 .range(["#c51b7d", "#e9a3c9", "#fde0ef", "#e6f5d0", "#a1d76a", "#4d9221"]); */
+    /* 2 .range(["#b2182b", "#ef8a62", "#fddbc7", "#d1e5f0", "#67a9cf", "#2166ac"]); */
+    /* 3 .range(["#d73027", "#fc8d59", "#fee08b", "#d9ef8b", "#91cf60", "#1a9850"]); */
+    /* -1 .range(["#f0f9e8", "#ccebc5", "#a8ddb5", "#7bccc4", "#43a2ca", "#0868ac"]); */
+    /*  4.range(["#762a83", "#af8dc3", "#e7d4e8", "#d9f0d3", "#7fbf7b", "#1b7837"]); */
+    .range(["#762a83", "#af8dc3", "#e7d4e8", "#b8e2ae", "#6cb366", "#1b7837"]);
 
   if (isFinite(val)) {
     return colorScale(val);
@@ -74,7 +80,7 @@ export function computeNewFilteredTotals(partitionLabels, filteredTot) {
 //----------------------------------------------------------
 // FORMATTING
 const amountFormat = Configuration().current().amountFormat;
-export function formatAmount(amount){
+export function formatAmount(amount) {
   let amt = Number(amount);
   if (isFinite(amt)) {
     return numeral(amt).format(amountFormat);

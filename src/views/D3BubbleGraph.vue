@@ -34,10 +34,6 @@
         </div>
 
         <div class="right-column">
-          <v-switch
-            :label="`Scala lineare`" v-model="isScaleLinear"
-            @change="onScaleChange"
-          />
           <v-select
             class="select-ministero" @change="onFiltersChange"
             :items="top_partitions" v-model="budget.filters.top_partition"
@@ -65,7 +61,6 @@
           @out="onMouseOut"
           :partition-id="budget.selectedPartition" :partition-labels="budget.partitionLabels"
           :accounts="budget.accounts" :filters="budget.filters"
-          :scale-linear="isScaleLinear"
         />
       </div>
 
@@ -112,8 +107,8 @@ export default {
   data: function() {
     return {
       hoveredNode: {},
-      showTooltip: false,
-      isScaleLinear: false
+      showTooltip: false
+      /* isScaleLinear: false */
     };
   },
 
@@ -256,27 +251,27 @@ export default {
       if (partitionId === "default") {
         this.$router.push({
           name: "d3-bubble-graph",
-          query: { ...this.budget.filters, scaleLinear: this.isScaleLinear }
+          query: { ...this.budget.filters }
         });
       } else {
         this.$router.push({
           name: "accounts-partition",
           params: { urlPartitionID: partitionId },
-          query: { ...this.budget.filters, scaleLinear: this.isScaleLinear }
+          query: { ...this.budget.filters }
         });
       }
     },
     onFiltersChange() {
       this.$router.replace({
         name: "d3-bubble-graph",
-        query: { ...this.budget.filters, scaleLinear: this.isScaleLinear }
+        query: { ...this.budget.filters }
       });
       readPartitionLabels();
     },
     onScaleChange() {
       this.$router.replace({
         name: "d3-bubble-graph",
-        query: { ...this.budget.filters, scaleLinear: this.isScaleLinear }
+        query: { ...this.budget.filters }
       });
     },
 
