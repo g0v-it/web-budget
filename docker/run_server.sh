@@ -27,6 +27,16 @@ then
     G0V_API_ENDPOINT="window.__settings.apiEndpoint = \"$G0V_API_ENDPOINT\";"
 fi
 
+if [ "$G0V_TWEETS_URL" != "" ]
+then
+    G0V_TWEETS_URL="window.__settings.tweetsUrl = \"$G0V_TWEETS_URL\";"
+fi
+
+if [ "$G0V_APP_HASHTAG" != "" ]
+then
+    G0V_APP_HASHTAG="window.__settings.appHashtag = \"$G0V_APP_HASHTAG\";"
+fi
+
 cat > /usr/share/nginx/html/config.js <<CONF
 
 (function (window) {
@@ -38,6 +48,8 @@ cat > /usr/share/nginx/html/config.js <<CONF
     $G0V_AMOUNT_FORMAT
     $G0V_RATE_FORMAT
     $G0V_API_ENDPOINT
+    $G0V_TWEETS_URL
+    $G0V_APP_HASHTAG
 
 }(this));
 
