@@ -149,24 +149,44 @@ a {
   text-decoration: none;
 }
 
-footer {
+
+@media (min-width: 768px) {
+  footer {
   height: 3rem;
   width: 100;
   padding: 0.5rem 2rem;
 }
-
-.g0v-footer {
+.g0v-credits {
+  padding: 0 2rem;
+}
+ .g0v-footer {
   margin: 0;
   padding: 0;
   list-style: none;
   display: flex;
   justify-content: space-between;
   text-decoration: none;
+} 
 }
 
-.g0v-credits {
-  padding: 0 2rem;
+@media (max-width: 768px) {
+  footer {
+  height: 4rem;
+  width: 100;
+  padding: 0.5rem 2rem;
 }
+ .g0v-footer {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  column-count: 2;
+  text-align: start;
+
+} 
+}
+
+
+
 
 .g0v-footer img {
   border-width: 0;

@@ -18,7 +18,7 @@ import { formatAmount, formatRate } from "@/utils/functions";
 
 //---------------------------------------------------------
 //BUILDER
-let cdsSpeed = 2000;
+let cdsSpeed = 4000;
 let width = 400;
 let height = 500;
 let outerRadius = 180;

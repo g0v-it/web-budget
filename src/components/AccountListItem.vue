@@ -16,6 +16,8 @@
     <p class="second-partition">Missione: {{ account.partitions.second_partition }}</p>
     <p class="amount"><amount :amount="account.amount" format="$ 0.0 a" /></p>
     <p class="rate"><rate :rate="rate(account)" format="+0.0 %" /></p>
+    <br v-responsive.sm.xs>
+    <br v-responsive.sm.xs>
   </div>
 </template>
 
@@ -40,8 +42,10 @@ export default {
 
 
 <style scoped>
-.account-item {
-  margin: 1em 0;
+
+@media (min-width: 900px) {
+  .account-item {
+      margin: 1em 0;
   padding: 1em 2em;
   position: relative;
   display: grid;
@@ -52,16 +56,17 @@ export default {
     "svg amount rate";
   grid-auto-columns: 1fr 1fr 1fr;
   grid-auto-rows: 2fr 1fr 1fr;
+  }
 }
-
 @media (max-width: 900px) {
   .account-item {
-    grid-template-areas:
-      "svg name name"
-      "svg top top"
-      "svg second second"
-      "svg amount rate";
-    grid-auto-rows: 1fr 1fr 1fr;
+  margin: 1em 0;
+  padding: 1em 2em;
+  position: relative;
+  }
+  .account-item h2 {
+    text-align: center;
+    margin-top:5rem;
   }
 }
 
