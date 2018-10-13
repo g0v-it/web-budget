@@ -133,19 +133,13 @@ h2 {
 
 .details .numbers {
   margin-top: auto;
-  display: grid;
-  grid-template-areas: "amount rate";
+  
   font-size: 1.6em;
   font-weight: 600;
   color: #555555;
 }
 
-.amount {
-  grid-area: amount;
-}
-.rate {
-  grid-area: rate;
-}
+
 
 .history {
   padding: 1em 2em;
@@ -158,16 +152,12 @@ h2 {
 }
 
 .numbers {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  vertical-align: middle;
+  
   padding-left: 1rem;
   padding-right: 1rem;
 }
 
 .numbers h3 {
-  display: table-cell;
   vertical-align: middle;
   font-size: 0.9em;
 }
@@ -181,8 +171,8 @@ h2 {
   width: 8rem;
   color: #fff;
   padding: 0.5rem;
-  margin-bottom: 0.5rem;
-  margin-left: 0.5em;
+  margin: 0.5rem;
+  
   text-align: center;
   border-radius: 28px;
   -webkit-box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2),
@@ -192,7 +182,11 @@ h2 {
 }
 
 @media screen and (max-width: 900px) {
+  small{
+    font-size:20px
+  }
   .g0v-container {
+    margin: 0.5em 0.5em;
     grid-template:
       "info"
       "bar"
@@ -200,8 +194,17 @@ h2 {
       "social" 100% / 1fr;
   }
   .details .numbers {
-    grid-template-areas: "amount" "rate";
+    text-align: center;
   }
+  .history {
+  padding: 0.5em 0.5em;
+}
+.partition {
+  padding: 0.5em 0.5em;
+}
+.comments {
+  padding: 0.5em 0.5em;
+}
 }
 
 </style>

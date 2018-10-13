@@ -101,7 +101,7 @@ export default {
             minRadius=1
           }
           else if(window.innerWidth< 992){
-            maxRadius=80
+            maxRadius=70
             minRadius=2
           }
           else{
@@ -167,6 +167,9 @@ export default {
           this.$emit("click", d);
         })
         .on("mouseover", function(d) {
+          if(window.innerWidth< 992){
+            temp.$emit("click",d)
+          }else{
           this.style["stroke-width"] = 3;
           temp.$emit("over", {
             ...d,
@@ -175,6 +178,7 @@ export default {
             x: d.x,
             y: d.y
           });
+          }
         })
         .on("mouseout", function(d) {
           this.style["stroke-width"] = 1;
