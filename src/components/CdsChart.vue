@@ -26,7 +26,7 @@ let innerRadius;// = 110;
 let currentElement = 0;
 let slices;
 let intervalID;
-const updateDetail = function(context, overed_index) {
+let updateDetail = function(context, overed_index) {
   for (let index = 0; index < slices.length; index++) {
     slices[index].classList.remove("selected");
   }
@@ -173,7 +173,7 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style>
 .selected {
   stroke-width: 3 !important;
   opacity: 0.5;
