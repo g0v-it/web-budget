@@ -55,7 +55,7 @@
       </div>
 
       <div class="g0v-bubble-chart">
-        <div v-responsive.sm.xs >
+        <div v-responsive.sm.xs>
           <h2 class="title">Legge dello stato {{ budget.meta.year }} <a target="_blank" :href="budget.meta.source"><v-icon color="blue">link</v-icon></a> </h2>
           <p>Spese totali: <b> <amount :amount="totAmount.amount" /></b></p>
         </div>
@@ -66,9 +66,7 @@
           :partition-id="budget.selectedPartition" :partition-labels="budget.partitionLabels"
           :accounts="budget.accounts" :filters="budget.filters"
         />
-         <div v-responsive.sm.xs >
-         
-        </div>
+        <div v-responsive.sm.xs />
       </div>
 
 
@@ -94,7 +92,6 @@ import BubbleChartInfo from "@/components/BubbleChartInfo.vue";
 import BubbleChartLegend from "@/components/BubbleChartLegend.vue";
 import { debounce } from "lodash";
 
-
 let readPartitionLabels = null;
 
 export default {
@@ -114,7 +111,7 @@ export default {
 
   data: function() {
     return {
-      dialog:false,
+      dialog: false,
       hoveredNode: {},
       showTooltip: false
       /* isScaleLinear: false */

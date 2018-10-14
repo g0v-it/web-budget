@@ -5,24 +5,8 @@ import D3BubbleGraph from './views/D3BubbleGraph.vue'
 Vue.use(Router)
 
 export default new Router({
+    mode: 'history',
     routes: [
-        {
-            path: '/partition/:urlPartitionID',
-            name: 'accounts-partition',
-            component: D3BubbleGraph,
-            props: true
-        },
-        {
-            path: '/',
-            name: 'd3-bubble-graph',
-            component: D3BubbleGraph
-        },
-        {
-            path: '/account/:code',
-            name: 'account-details',
-            component: () => import('./views/AccountDetails.vue'),
-            props: true
-        },
         {
             path: '/credits',
             name: 'credits',
@@ -46,6 +30,28 @@ export default new Router({
         {
             path: '/terms-and-conditions',
             name: 'terms-and-conditions',
+            component: () => import('./views/TermsAndConditions.vue')
+        },
+        {
+            path: '/partition/:urlPartitionID',
+            name: 'accounts-partition',
+            component: D3BubbleGraph,
+            props: true
+        },
+        {
+            path: '/account/:code',
+            name: 'account-details',
+            component: () => import('./views/AccountDetails.vue'),
+            props: true
+        },
+        {
+            path: '/',
+            name: 'd3-bubble-graph',
+            component: D3BubbleGraph
+        },
+        {
+            path: '*',
+            redirect: { name: 'd3-bubble-graph' },
             component: () => import('./views/TermsAndConditions.vue')
         }
     ]

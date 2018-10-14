@@ -2,10 +2,12 @@
   <div class="g0v-container">
     <v-card class="details">
       <h2>{{ currentNode.name }}
-           <a target="_blank"
-              :href="currentNode.account"
-              alt="Visualizza il linked-data nella Knowledge Base"
-              title="Visualizza il linked-data nella Knowledge Base"><v-icon color="blue">link</v-icon></a>
+        <a
+          target="_blank"
+          :href="currentNode.account"
+          alt="Visualizza il linked-data nella Knowledge Base"
+          title="Visualizza il linked-data nella Knowledge Base"
+        ><v-icon color="blue">link</v-icon></a>
       </h2>
       <p class="top">Ministero: {{ currentNode.top_level }}</p>
       <p v-if="download_completed" class="second">Missione: {{ currentNode.partitions.second_partition }}</p>
@@ -22,7 +24,8 @@
     <v-card class=" history">
       <h2>Storico dell'azione</h2>
       <HistoryChart
-        v-if="download_completed" :values="history" :dataset-meta="meta"
+        v-if="download_completed" :values="history"
+        :dataset-meta="meta"
         style=""
       />
     </v-card>
@@ -66,7 +69,9 @@ export default {
       .selectNode(this.code)
       .then(res => {
         this.currentNode = res.data;
-        this.currentNode.diff = (this.currentNode.amount- this.currentNode.last_amount )/this.currentNode.last_amount;
+        this.currentNode.diff =
+          (this.currentNode.amount - this.currentNode.last_amount) /
+          this.currentNode.last_amount;
         this.currentNode.bgColor = fillColor(this.currentNode.diff);
         this.download_completed = true;
       });
@@ -83,7 +88,7 @@ export default {
       }
     },
     /*retrive data from root component*/
-    meta: function () {
+    meta: function() {
       return this.$root.$data.budget.state.meta;
     }
   },
@@ -133,13 +138,11 @@ h2 {
 
 .details .numbers {
   margin-top: auto;
-  
+
   font-size: 1.6em;
   font-weight: 600;
   color: #555555;
 }
-
-
 
 .history {
   padding: 1em 2em;
@@ -152,7 +155,6 @@ h2 {
 }
 
 .numbers {
-  
   padding-left: 1rem;
   padding-right: 1rem;
 }
@@ -172,18 +174,18 @@ h2 {
   color: #fff;
   padding: 0.5rem;
   margin: 0.5rem;
-  
+
   text-align: center;
   border-radius: 28px;
   -webkit-box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2),
-  0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
+    0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
   box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
-  0 1px 3px 0 rgba(0, 0, 0, 0.12);
+    0 1px 3px 0 rgba(0, 0, 0, 0.12);
 }
 
 @media screen and (max-width: 900px) {
-  small{
-    font-size:20px
+  small {
+    font-size: 20px;
   }
   .g0v-container {
     margin: 0.5em 0.5em;
@@ -197,14 +199,13 @@ h2 {
     text-align: center;
   }
   .history {
-  padding: 0.5em 0.5em;
+    padding: 0.5em 0.5em;
+  }
+  .partition {
+    padding: 0.5em 0.5em;
+  }
+  .comments {
+    padding: 0.5em 0.5em;
+  }
 }
-.partition {
-  padding: 0.5em 0.5em;
-}
-.comments {
-  padding: 0.5em 0.5em;
-}
-}
-
 </style>
