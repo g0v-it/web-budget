@@ -1,6 +1,6 @@
 <template>
-    <div  class="cardGraph"  >
-        <div class='graphContainer'>
+    <div  class="cardGraph" id="contExt"  >
+        <div class='graphContainer' id="contInt">
           <svg id="svgPlaceholder" class="graphSvg"></svg>
         </div>
       </div>
@@ -13,10 +13,11 @@ import { formatAmount, formatRate } from "@/utils/functions";
 
 //---------------------------------------------------------
 //BOUNDARIES
-  let margin = 80;
-  let width = 500-2*margin;
-  let height = 420 - 2 * margin;
-  let barSeparation=0.4;
+  let margin_top;
+  let margin_left;
+  let width;
+  let height;
+  let barSeparation;
   let animationDuration=1000;
   let min;
   let max;
@@ -37,13 +38,28 @@ import { formatAmount, formatRate } from "@/utils/functions";
     return(output);    
    }
 
+   const computeBoundaries= function(){
+     let containerI = d3.select("#contInt")._groups[0][0]
+     margin_top=20;
+     margin_left=50;
+     width=containerI.offsetWidth;//-2*margin_left;
+     height=containerI.offsetHeight-2*margin_top;
+    if(window.innerWidth< 900){
+      console.log("PICCOLO")
+      barSeparation=0.5      
+    }else{
+      barSeparation=0.5
+    }
+     
+   }
+
   //----------------------------------------------------------
   export default {
     props: { values: Object, datasetMeta: Object},
     mounted() {
       data=optimize(this.values, this.datasetMeta)
+      computeBoundaries()
       max = d3.max(data, function(d) { return parseFloat(d.value);} );
-      //min = d3.min(data, function(d) { return parseFloat(d.value);} );
       min=0;
       max+=max*5/100;
       yScale = d3.scalePow().exponent(2).range([height, 0]).domain([min, max]);
@@ -53,7 +69,7 @@ import { formatAmount, formatRate } from "@/utils/functions";
     
     t = d3.transition().duration(animationDuration);
     svg = d3.select('#svgPlaceholder');
-    chart = svg.append('g').attr('transform', `translate(${margin}, ${margin})`);
+    chart = svg.append('g').attr('transform', `translate(${margin_left}, ${margin_top})`);
     //ASSE X
     chart.append('g').attr('transform', `translate(0, ${height})`).call(d3.axisBottom(xScale));
     //ASSE Y
@@ -63,18 +79,19 @@ import { formatAmount, formatRate } from "@/utils/functions";
     //LABEL Y AXIS
     svg.append('text')
       .attr('class', 'label')
-      .attr('x', -(height / 2) - margin)
-      .attr('y', margin / 2.4)
+      .attr('x', -(height / 2) - margin_top)
+      .attr('y', margin_left*0.9)
       .attr('transform', 'rotate(-90)')
       .attr('text-anchor', 'middle')
       .text('Milioni €');
     //LABEL X AXIS
+    /*
     svg.append('text')
       .attr('class', 'label')
       .attr('x', width / 2 + margin)
       .attr('y', height + margin * 1.7)
       .attr('text-anchor', 'middle')
-      .text('Anno');
+      .text('Anno');*/
     const barGroups = chart.selectAll()
       .data(data)
       .enter()
@@ -186,10 +203,6 @@ div .graphSvg {
   fill: #4682B4;
 }
 
-text.valueText {
-  font-size: 14px;
-}
-
 path {
   stroke: gray;
 }
@@ -218,8 +231,9 @@ text.divergence {
   fill: #000000;
 }
 
-text.value {
+text.valueText {
   font-size: 14px;
+  fill: #ffffff
 }
 
 
@@ -230,5 +244,12 @@ text.label {
 
 text.source {
   font-size: 10px;
+}
+
+@media screen and (max-width: 900px) {
+    text.valueText {
+    font-size: 12px;
+    fill: #ffffff
+  }
 }
 </style>

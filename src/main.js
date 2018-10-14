@@ -11,6 +11,7 @@ import * as api from "./api.service.js";
 
 import SocialSharing from "./utils/socialSharing.js";
 import SocialSharingNetwork from "./utils/socialSharingNetwork.js";
+import responsive from "vue-responsive";
 
 Vue.config.productionTip = false;
 
@@ -18,7 +19,7 @@ Vue.component("rate", Rate);
 Vue.component("amount", Amount);
 Vue.component("social-sharing", SocialSharing);
 Vue.component("network", SocialSharingNetwork);
-
+Vue.use(responsive)
 Vue.filter("capitalize", function(value) {
   if (!value) return "";
   value = value.toString();

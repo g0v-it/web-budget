@@ -29,11 +29,11 @@
     <div ref="container" class="g0v-content">
       <div v-if="budget.selectedPartition=='default'" class="g0v-content-grid">
 
-        <div class="left-column">
+        <div v-responsive.md.lg.xl class="left-column ">
           <BubbleChartInfo :dataset-meta="budget.meta" :tot-amount="totAmount" />
         </div>
 
-        <div class="right-column">
+        <div v-responsive.md.lg.xl class="right-column">
           <v-select
             class="select-ministero" @change="onFiltersChange"
             :items="top_partitions" v-model="budget.filters.top_partition"
@@ -55,6 +55,10 @@
       </div>
 
       <div class="g0v-bubble-chart">
+        <div v-responsive.sm.xs >
+          <h2 class="title">Legge dello stato {{ budget.meta.year }} <a target="_blank" :href="budget.meta.source"><v-icon color="blue">link</v-icon></a> </h2>
+          <p>Spese totali: <b> <amount :amount="totAmount.amount" /></b></p>
+        </div>
         <BudgetBubbles
           v-if="budget.accounts.length"
           @click="onClick" @over="onMouseOver"
@@ -62,6 +66,9 @@
           :partition-id="budget.selectedPartition" :partition-labels="budget.partitionLabels"
           :accounts="budget.accounts" :filters="budget.filters"
         />
+         <div v-responsive.sm.xs >
+         
+        </div>
       </div>
 
 
@@ -87,6 +94,7 @@ import BubbleChartInfo from "@/components/BubbleChartInfo.vue";
 import BubbleChartLegend from "@/components/BubbleChartLegend.vue";
 import { debounce } from "lodash";
 
+
 let readPartitionLabels = null;
 
 export default {
@@ -106,6 +114,7 @@ export default {
 
   data: function() {
     return {
+      dialog:false,
       hoveredNode: {},
       showTooltip: false
       /* isScaleLinear: false */

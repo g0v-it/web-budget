@@ -33,6 +33,8 @@ let simulation;
 let velocityDecay = 0.2;
 let forceStrength = 0.03;
 let nodes;
+let minRadius;
+let maxRadius;
 
 /* Vue component */
 export default {
@@ -94,15 +96,28 @@ export default {
           return isFinite(rate) ? rate : 0;
         });
         // Sizes bubbles based on .
+          if(window.innerWidth<768){
+            maxRadius=70
+            minRadius=1
+          }
+          else if(window.innerWidth< 992){
+            maxRadius=70
+            minRadius=2
+          }
+          else{
+            maxRadius=90
+            minRadius=3
+          }
+        console.log("MIN: "+minRadius+"MAX: "+maxRadius)
         let powRadiusScale = d3
           .scalePow()
           .exponent(0.5)
           .domain([minAmount, maxAmount])
-          .range([3, 90]);
+          .range([minRadius, maxRadius]);
         let linearRadiusScale = d3
           .scaleLinear()
           .domain([minAmount, maxAmount])
-          .range([3, 90]);
+          .range([minRadius, maxRadius]);
         let heightScale = d3
           .scalePow()
           /* .clamp(true) */
@@ -152,6 +167,9 @@ export default {
           this.$emit("click", d);
         })
         .on("mouseover", function(d) {
+          if(window.innerWidth< 992){
+            temp.$emit("click",d)
+          }else{
           this.style["stroke-width"] = 3;
           temp.$emit("over", {
             ...d,
@@ -160,6 +178,7 @@ export default {
             x: d.x,
             y: d.y
           });
+          }
         })
         .on("mouseout", function(d) {
           this.style["stroke-width"] = 1;
