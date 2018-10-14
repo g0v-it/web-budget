@@ -1,6 +1,6 @@
 <template>
-  <div class="cds-container">
-    <div><svg class="chart js-chart pie-chart" /></div>
+  <div id="container" class="cds-container">
+    <div ><svg class="chart js-chart pie-chart" /></div>
     <div class="cds-detail">
       <h3>{{ name }}</h3>
       <div class="cds-detail-data">
@@ -19,14 +19,14 @@ import { formatAmount, formatRate } from "@/utils/functions";
 //---------------------------------------------------------
 //BUILDER
 let cdsSpeed = 4000;
-let width = 400;
-let height = 500;
-let outerRadius = 180;
-let innerRadius = 110;
+let width;// = 400;
+let height;// = 500;
+let outerRadius;// = 180;
+let innerRadius;// = 110;
 let currentElement = 0;
 let slices;
 let intervalID;
-let updateDetail = function(context, overed_index) {
+const updateDetail = function(context, overed_index) {
   for (let index = 0; index < slices.length; index++) {
     slices[index].classList.remove("selected");
   }
@@ -38,6 +38,19 @@ let updateDetail = function(context, overed_index) {
   context.amount = slices[currentElement].__data__.data.amount;
   context.name = slices[currentElement].__data__.data.name;
   currentElement = (currentElement + 1) % slices.length;
+};
+const computeBoundaries= function(){
+  let container = d3.select("#container")._groups[0][0]
+  if(window.innerWidth< 1100){
+    width=container.offsetWidth;
+  }else{
+    width=container.offsetWidth*60/100; 
+    console.log(width) 
+  }
+    outerRadius=(width-width*10/100)/2;
+    innerRadius=outerRadius-70;
+    height=2*outerRadius    
+
 };
 /* global d3, document, window */
 function pieChart(options) {
@@ -127,6 +140,7 @@ export default {
     }
   },
   mounted() {
+    computeBoundaries();
     let chart_obj = pieChart()
       .outerRadius(outerRadius)
       .innerRadius(innerRadius);
@@ -159,7 +173,7 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
 .selected {
   stroke-width: 3 !important;
   opacity: 0.5;
@@ -169,13 +183,12 @@ export default {
 }
 .cds-container {
   margin: 0;
-  padding: 1rem 1rem;
+  padding: 0rem 0rem;
   min-height: 30rem;
   width: 100%;
   /* height: 100vh; */
   text-align: start;
-  display: grid;
-  /*   grid-gap: 1rem; */
+  display: grid; 
   grid-row-gap: 2rem;
   grid-column-gap: 2rem;
   grid-template-columns: repeat(2, 1fr);
@@ -188,6 +201,7 @@ export default {
   align-content: left;
 }
 .cds-detail {
+  margin: 1.5rem;
   position: relative;
   justify-content: space-around;
 }
@@ -200,16 +214,18 @@ export default {
 .cds-detail-data p {
   color: dimgrey;
 }
-/* @media screen and (max-width: 900px) {
-  .g0v-container {
-    grid-template:
-      "info"
-      "bar"
-      "cake"
-      "social" 100% / 1fr;
+ @media screen and (max-width: 1100px) {
+  .cds-container {
+    margin: 0;
+    padding: 0rem 0rem;
+    min-height: 30rem;
+    width: 100%;
+    text-align: start;
+    display: block;
   }
+
   .details .numbers {
     grid-template-areas: "amount" "rate";
   }
-} */
+} 
 </style>
