@@ -7,7 +7,7 @@
           value="default"
           @click="onPartitionChange('default')"
         >
-          default
+          stato
         </v-btn>
         <v-btn
           flat color="primary"
