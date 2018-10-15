@@ -56,8 +56,8 @@
         <li>
           <a
             target="_blank" rel="noopener noreferrer"
-            href="https://git.copernicani.it/g0v/web-budget"
-          >Seguici su Gitlab</a>
+            href="https://github.com/g0v-it"
+          >Seguici su GitHub</a>
         </li>
         <li class="g0v-credits">
           <router-link :to="{ name: 'credits' }">crediti</router-link>
