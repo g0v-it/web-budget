@@ -1,20 +1,22 @@
 <template>
   <v-app>
     <v-toolbar app :clipped-left="clipped">
-      <a class="g0v-header-link" href="#/"><img :src="logo_copernicani_orizzontale" class="g0v-header-logo"></a>
+      <router-link :to="{ name: 'd3-bubble-graph' }" class="g0v-header-link"><img :src="logo_copernicani_orizzontale" class="g0v-header-logo"></router-link>
       <v-flex class="text-xs-left">
         <v-toolbar-title v-text="title" class="g0v-header-title" />
       </v-flex>
 
-      <social-sharing inline-template
-                      :hashtags="appHashtag"
-                      class="g0v-social-buttons">
+      <social-sharing
+        inline-template
+        :hashtags="appHashtag"
+        class="g0v-social-buttons"
+      >
         <div>
           <network network="twitter" class="g0v-social-link">
-            <i class="fab fa-twitter"></i>
+            <i class="fab fa-twitter" />
           </network>
           <network network="facebook" class="g0v-social-link">
-            <i class="fab fa-facebook-f"></i>
+            <i class="fab fa-facebook-f" />
           </network>
         </div>
       </social-sharing>
@@ -137,7 +139,7 @@ export default {
         return "bubble_chart";
       }
     },
-    appHashtag(){
+    appHashtag() {
       return Configuration().current().appHashtag;
     }
   }
@@ -149,44 +151,39 @@ a {
   text-decoration: none;
 }
 
-
 @media (min-width: 768px) {
   footer {
-  height: 3rem;
-  width: 100;
-  padding: 0.5rem 2rem;
-}
-.g0v-credits {
-  padding: 0 2rem;
-}
- .g0v-footer {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  justify-content: space-between;
-  text-decoration: none;
-} 
+    height: 3rem;
+    width: 100;
+    padding: 0.5rem 2rem;
+  }
+  .g0v-credits {
+    padding: 0 2rem;
+  }
+  .g0v-footer {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    text-decoration: none;
+  }
 }
 
 @media (max-width: 768px) {
   footer {
-  height: 4rem;
-  width: 100;
-  padding: 0.5rem 2rem;
+    height: 4rem;
+    width: 100;
+    padding: 0.5rem 2rem;
+  }
+  .g0v-footer {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    column-count: 2;
+    text-align: start;
+  }
 }
- .g0v-footer {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  column-count: 2;
-  text-align: start;
-
-} 
-}
-
-
-
 
 .g0v-footer img {
   border-width: 0;
@@ -204,8 +201,8 @@ a {
   margin-left: auto;
 }
 .g0v-header-link {
-  display:block;
-  height:64px;
+  display: block;
+  height: 64px;
 }
 .g0v-header-logo {
   max-height: 90%;
@@ -214,7 +211,7 @@ a {
   margin-left: 1em;
 }
 .g0v-social-buttons {
-  margin-right:1em;
+  margin-right: 1em;
 }
 .g0v-social-link {
   width: 32px;
@@ -222,6 +219,6 @@ a {
   display: inline-block;
   text-align: center;
   cursor: pointer;
-  color: rgba(0,0,0,.54);
+  color: rgba(0, 0, 0, 0.54);
 }
 </style>
