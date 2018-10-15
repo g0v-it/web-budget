@@ -1,6 +1,6 @@
 <template>
   <div class="legend">
-    <div class="legend-radius">
+    <div v-if="show_legend_radius" class="legend-radius">
       <svg height="200">
         <circle
           vector-effect="non-scaling-stroke" cx="137.5000000000001"
@@ -31,7 +31,7 @@
         </g>
       </svg>
     </div>
-    <div class="legend-colors">
+    <div v-if="show_legend_colors" class="legend-colors">
       <small>Variazione rispetto alla legge di bilancio {{ +datasetMeta.year - 1 }}</small>
       <ul class="colors">
         <li class="change-dec3" />
@@ -56,6 +56,14 @@
 export default {
   props: {
     datasetMeta: Object
+  },
+  computed:{
+    show_legend_radius : function(){
+      return (window.innerHeight>700)
+    },
+    show_legend_colors : function(){
+      return (window.innerHeight>540)
+    }
   }
 };
 </script>

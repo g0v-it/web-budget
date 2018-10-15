@@ -96,11 +96,11 @@ export default {
           return isFinite(rate) ? rate : 0;
         });
         // Sizes bubbles based on .
-          if(window.innerWidth<768){
+          if(window.innerWidth<768 || window.innerHeight<500){
             maxRadius=70
             minRadius=1
           }
-          else if(window.innerWidth< 992){
+          else if(window.innerWidth< 992 || window.innerHeight<700){
             maxRadius=70
             minRadius=2
           }
@@ -146,7 +146,7 @@ export default {
 
       // convert raw data into nodes data
       nodes = createNodes(rawData);
-
+      let touched_node;
       let temp = this;
 
       let bubbles = d3
@@ -166,10 +166,19 @@ export default {
         .on("click", d => {
           this.$emit("click", d);
         })
+        .on("touchstart",function(d){ 
+          touched_node=d;          
+        })
+        .on("touchmove",function(d){
+          if(touched_node!=d)
+            touched_node=null; 
+        })
+        .on("touchend",function(d){
+          if(touched_node!=null)
+           temp.$emit("click", d);
+          
+        })
         .on("mouseover", function(d) {
-          if(window.innerWidth< 992){
-            temp.$emit("click",d)
-          }else{
           this.style["stroke-width"] = 3;
           temp.$emit("over", {
             ...d,
@@ -178,7 +187,7 @@ export default {
             x: d.x,
             y: d.y
           });
-          }
+          //}
         })
         .on("mouseout", function(d) {
           this.style["stroke-width"] = 1;
