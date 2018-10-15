@@ -62,7 +62,7 @@ let apiEndpoint = settings.current().apiEndpoint;
 
 The configuration object is also exposed as the vue prototype attribute `$settings`
 
-### Data
+## Data
 
 All visualized data are extracted from [bdap portal](https://bdap-opendata.mef.gov.it/tema/bilancio-finanziario-dello-stato-0) and processed by a dedicated *smart data management platform* (DMP) compliant with the W3C Semantic Web standards. The platform is available in the [data-budget repository](https://github.com/g0v-it/data-budget)
 
