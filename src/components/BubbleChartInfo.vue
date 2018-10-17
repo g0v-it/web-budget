@@ -8,11 +8,8 @@
       <p>Spese filtrate: <b> <amount :amount="totAmount.filteredAmount" /></b></p>
     </div>
     <div class="legend-mef">
-      <a href="http://www.mef.gov.it/"><v-img
-        :src="logo_mef" class="g0v-mef-logo"
-        max-width="100px"
-      /></a>
       <small>Elaborazione su dati del Ministero dell'Economia e delle Finanze</small>
+      <a href="https://bdap-opendata.mef.gov.it/catalog"><v-img :src="logo_mef" class="g0v-mef-logo" /></a>
     </div>
     <!--    <svg class="legend-radius" height="200">
       <circle
@@ -101,6 +98,9 @@ export default {
 .legend-mef {
   margin: 1em 0;
   position: absolute;
+}
+.g0v-mef-logo {
+  max-width:50px;
 }
 /* .legend-radius {
   height: 150px;
