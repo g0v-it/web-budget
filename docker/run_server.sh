@@ -37,6 +37,16 @@ then
     G0V_APP_HASHTAG="window.__settings.appHashtag = \"$G0V_APP_HASHTAG\";"
 fi
 
+if [ "$G0V_SHOW_MEF_LOGO" != "" ]
+then
+    G0V_SHOW_MEF_LOGO="window.__settings.showMefLogo = $G0V_SHOW_MEF_LOGO;"
+fi
+
+if [ "$G0V_MEF_LOGO_URL" != "" ]
+then
+    G0V_MEF_LOGO_URL="window.__settings.mefLogoUrl = \"$G0V_MEF_LOGO_URL\";"
+fi
+
 cat > /usr/share/nginx/html/config.js <<CONF
 
 (function (window) {
@@ -50,6 +60,8 @@ cat > /usr/share/nginx/html/config.js <<CONF
     $G0V_API_ENDPOINT
     $G0V_TWEETS_URL
     $G0V_APP_HASHTAG
+    $G0V_SHOW_MEF_LOGO
+    $G0V_MEF_LOGO_URL
 
 }(this));
 

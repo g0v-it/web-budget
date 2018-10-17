@@ -83,7 +83,10 @@ These are the available environment variables and the corresponding configuratio
 - `G0V_RATE_FORMAT` -> `rateFormat` (the format for percentages)
 - `G0V_API_ENDPOINT` -> `apiEndpoint` (the API base endpoint)
 - `G0V_TWEETS_URL` -> `tweetsUrl` (the google sheets URL for the tweets archive)
-- `$G0V_APP_HASHTAG` -> `appHashtag` (the application hashtag)
+- `G0V_APP_HASHTAG` -> `appHashtag` (the application hashtag)
+- `G0V_APP_HASHTAG` -> `appHashtag` (the application hashtag)
+- `G0V_SHOW_MEF_LOGO` -> `showMefLogo` (whether to show the MEF logo)
+- `G0V_MEF_LOGO_URL` -> `mefLogoUrl` (where to link the MEF logo)
 
 The `docker` directory contains the nginx configuration and the command run by the image.
 
