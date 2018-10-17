@@ -2,6 +2,7 @@
   <v-app>
     <v-toolbar app :clipped-left="clipped">
       <router-link :to="{ name: 'd3-bubble-graph' }" class="g0v-header-link"><img :src="logo_copernicani_orizzontale" class="g0v-header-logo"></router-link>
+      <a :href="url_g0v" target="_blank"  class="g0v-header-link"><img :src="logo_g0v" class="g0v-header-logo-g0v"/></a>
       <v-flex class="text-xs-left">
         <v-toolbar-title v-text="title" class="g0v-header-title" />
       </v-flex>
@@ -123,6 +124,12 @@ export default {
     logo_copernicani_orizzontale() {
       return require("@/assets/copernicani_orizzontale.png");
     },
+    logo_g0v() {
+      return require("@/assets/g0v.svg");
+    },
+    url_g0v() {
+      return Configuration().current().g0vLogoUrl;
+    },
     currentItem() {
       let currentPath = this.$route.path;
 
@@ -220,5 +227,10 @@ a {
   text-align: center;
   cursor: pointer;
   color: rgba(0, 0, 0, 0.54);
+}
+.g0v-header-logo-g0v {
+  height: 36px;
+  vertical-align: bottom;
+  margin: 12px 1em;
 }
 </style>

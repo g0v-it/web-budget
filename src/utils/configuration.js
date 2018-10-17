@@ -23,6 +23,8 @@ export default function() {
     // MEF logo URL
     mefLogoUrl: "https://bdap-opendata.mef.gov.it/catalog",
 
+    // G0V logo URL
+    g0vLogoUrl: "https://copernicani.it/g0v",
   };
 
   let __proxy = {

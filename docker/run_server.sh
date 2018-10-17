@@ -47,6 +47,11 @@ then
     G0V_MEF_LOGO_URL="window.__settings.mefLogoUrl = \"$G0V_MEF_LOGO_URL\";"
 fi
 
+if [ "$G0V_G0V_LOGO_URL" != "" ]
+then
+    G0V_G0V_LOGO_URL="window.__settings.g0vLogoUrl = \"$G0V_G0V_LOGO_URL\";"
+fi
+
 cat > /usr/share/nginx/html/config.js <<CONF
 
 (function (window) {
@@ -62,6 +67,7 @@ cat > /usr/share/nginx/html/config.js <<CONF
     $G0V_APP_HASHTAG
     $G0V_SHOW_MEF_LOGO
     $G0V_MEF_LOGO_URL
+    $G0V_G0V_LOGO_URL
 
 }(this));
 

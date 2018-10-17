@@ -87,6 +87,7 @@ These are the available environment variables and the corresponding configuratio
 - `G0V_APP_HASHTAG` -> `appHashtag` (the application hashtag)
 - `G0V_SHOW_MEF_LOGO` -> `showMefLogo` (whether to show the MEF logo)
 - `G0V_MEF_LOGO_URL` -> `mefLogoUrl` (where to link the MEF logo)
+- `G0V_G0V_LOGO_URL` -> `g0vLogoUrl` (where to link the g0v logo)
 
 The `docker` directory contains the nginx configuration and the command run by the image.
 
