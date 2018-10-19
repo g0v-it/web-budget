@@ -14,16 +14,17 @@ for citizens to participate in public affairs from the bottom up. The g0v commun
 
 ### run docker image
 
-Docker images are published to dockerhub (https://hub.docker.com/r/copernicani/web-budget/). To run the image with docker:
+Docker images are published to dockerhub (https://hub.docker.com/r/copernicani/web-budget/). 
+In the following example the container will be configured with the  api endpoint https://data.budget.g0v.it/api/v1 and listening on port 9999:
+
 
 ```$bash
 docker run -i -t --rm \
     -p 9990:8080 \
     -e G0V_API_ENDPOINT=https://data.budget.g0v.it/api/v1 \
-    copernicani/web-budget-g0v:0.0.1
+    copernicani/web-budget:0.1.0
 ```
 
-In this example the container will be configured to expose the web server on port 9999 and to call the api endpoint published on the following address: https://data.budget.g0v.it/api/v1
 
 You can use the following environment variables with the container image:
 
@@ -58,8 +59,7 @@ The `NAME` and `VERSION` variables in the `Makefile` set the docker image name a
 
 The image exposes the web server on port `8080`.
 
-For example to run the built image, specifying an API endpoint and listening on port 9999:
-
+F
 ```$bash
 docker run -i -t --rm \
        -e G0V_API_ENDPOINT=http://data.budget.g0v.it/api/v1 \
