@@ -59,14 +59,6 @@ The `NAME` and `VERSION` variables in the `Makefile` set the docker image name a
 
 The image exposes the web server on port `8080`.
 
-F
-```$bash
-docker run -i -t --rm \
-       -e G0V_API_ENDPOINT=http://data.budget.g0v.it/api/v1 \
-       -p 9990:8080 \
-       web-budget-g0v:0.0.1
-```
-
 
 ## Project setup
 ```
