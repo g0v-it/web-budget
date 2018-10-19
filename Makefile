@@ -1,8 +1,8 @@
 VERSION=0.0.1
-NAME=copernicani/web-budget-g0v
+NAME=copernicani/web-budget
 
 TAG=$(NAME):$(VERSION)
 
 build:
-	docker build -t $(TAG) .
+	docker build  --no-cache  -t $(TAG) .
 
