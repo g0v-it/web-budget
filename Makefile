@@ -1,5 +1,5 @@
 VERSION=0.0.1
-NAME=web-budget-g0v
+NAME=copernicani/web-budget-g0v
 
 TAG=$(NAME):$(VERSION)
 
