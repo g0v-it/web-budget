@@ -10,6 +10,56 @@ g0v is a decentralized civic tech community to advocate transparency of informat
 for citizens to participate in public affairs from the bottom up. The g0v community was born in Taiwan thanks to [Audrey Tang](https://de.wikipedia.org/wiki/Audrey_Tang), [Chia-liang Kao](https://github.com/clkao) and many others.
 
 
+## Docker
+
+### run docker image
+
+Docker images are published to dockerhub (https://hub.docker.com/r/copernicani/web-budget/). 
+In the following example the container will be configured with the  api endpoint https://data.budget.g0v.it/api/v1 and listening on port 9999:
+
+
+```$bash
+docker run -i -t --rm \
+    -p 9990:8080 \
+    -e G0V_API_ENDPOINT=https://data.budget.g0v.it/api/v1 \
+    copernicani/web-budget:0.1.0
+```
+
+
+You can use the following environment variables with the container image:
+
+- `G0V_LOCALE` -> `locale` (the application Locale)
+- `G0V_AMOUNT_FORMAT` -> `amountFormat` (the format for currency values)
+- `G0V_RATE_FORMAT` -> `rateFormat` (the format for percentages)
+- `G0V_API_ENDPOINT` -> `apiEndpoint` (the API base endpoint)
+- `G0V_TWEETS_URL` -> `tweetsUrl` (the google sheets URL for the tweets archive)
+- `G0V_APP_HASHTAG` -> `appHashtag` (the application hashtag)
+- `G0V_APP_HASHTAG` -> `appHashtag` (the application hashtag)
+- `G0V_SHOW_MEF_LOGO` -> `showMefLogo` (whether to show the MEF logo)
+- `G0V_MEF_LOGO_URL` -> `mefLogoUrl` (where to link the MEF logo)
+- `G0V_G0V_LOGO_URL` -> `g0vLogoUrl` (where to link the g0v logo)
+
+
+### build docker image 
+
+the project contains a `Dockerfile` which uses a two-stages build process: it first creates an image with the full node.js environment where the `npm build` step is run and then it creates an image containing only the compiled application files and the nginx server to serv them.
+
+The final docker image runs a script that at startup generates the `config.js` file from environment variables, this allows
+whoever runs the image to customize the application configuration simply by passing the right environment.
+
+The `docker` directory contains the nginx configuration and the command run by the image.
+
+To build the image a `Makefile` is provided that builds and tags the image:
+ 
+```$bash
+make build
+``` 
+
+The `NAME` and `VERSION` variables in the `Makefile` set the docker image name and tag (look at the file to see the details).  
+
+The image exposes the web server on port `8080`.
+
+
 ## Project setup
 ```
 npm install
@@ -64,47 +114,11 @@ The configuration object is also exposed as the vue prototype attribute `$settin
 
 ## Data
 
-All visualized data are extracted from [bdap portal](https://bdap-opendata.mef.gov.it/tema/bilancio-finanziario-dello-stato-0) and processed by a dedicated *smart data management platform* (DMP) compliant with the W3C Semantic Web standards. The platform is available in the [data-budget repository](https://github.com/g0v-it/data-budget)
+All visualized data are extracted and processed by a dedicated *smart data management platform* (DMP) compliant with the W3C Semantic Web standards. The platform is available in the [data-budget repository](https://github.com/g0v-it/data-budget).
 
-The web application connects to data management platform through a REST endpoint that is available at the address http://data.budget.g0v.it/api/v1. You can also run your private instance of the platform (see [data-budget repo](https://github.com/g0v-it/data-budget) for more info )
+The web application connects to data management platform through a REST endpoint that is available at the address http://data.budget.g0v.it/api/v1. Beside json APIs the platform provides a SPARQL 1.1. interface at the address http://data.budget.g0v.it/sdaas/sparql
 
-## Docker
-
-the project contains a `Dockerfile` which uses a two-stages build process: it first creates an image with the full node.js environment where the `npm build` 
-step is run and then it creates an image containing only the compiled application files and the nginx server to serv them.
-
-The final docker image runs a script that at startup generates the `config.js` file from environment variables, this allows
-whoever runs the image to customize the application configuration simply by passing the right environment.
-
-These are the available environment variables and the corresponding configuration parameter:
-
-- `G0V_LOCALE` -> `locale` (the application Locale)
-- `G0V_AMOUNT_FORMAT` -> `amountFormat` (the format for currency values)
-- `G0V_RATE_FORMAT` -> `rateFormat` (the format for percentages)
-- `G0V_API_ENDPOINT` -> `apiEndpoint` (the API base endpoint)
-- `G0V_TWEETS_URL` -> `tweetsUrl` (the google sheets URL for the tweets archive)
-- `$G0V_APP_HASHTAG` -> `appHashtag` (the application hashtag)
-
-The `docker` directory contains the nginx configuration and the command run by the image.
-
-To build the image a `Makefile` is provided that builds and tags the image:
- 
-```$bash
-make build
-``` 
-
-The `NAME` and `VERSION` variables in the `Makefile` set the docker image name and tag (look at the file to see the details).  
-
-The image exposes the web server on port `8080`.
-
-For example to run the built image, specifying an API endpoint and listening on port 9999:
-
-```$bash
-docker run -i -t --rm \
-       -e G0V_API_ENDPOINT=http://data.budget.g0v.it/api/v1 \
-       -p 9990:8080 \
-       web-budget-g0v:0.0.1
-```
+You can also run a local instance of the platform (see [data-budget repo](https://github.com/g0v-it/data-budget) for more info ).
 
 ## Support
 

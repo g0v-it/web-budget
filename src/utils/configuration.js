@@ -15,7 +15,16 @@ export default function() {
     appHashtag: "",
 
     // default configuration
-    apiEndpoint: "http://data.budget.g0v.it/api/v1"
+    apiEndpoint: "http://data.budget.g0v.it/api/v1",
+
+    // showing MEF logo?
+    showMefLogo: true,
+
+    // MEF logo URL
+    mefLogoUrl: "https://bdap-opendata.mef.gov.it/catalog",
+
+    // G0V logo URL
+    g0vLogoUrl: "https://copernicani.it/g0v",
   };
 
   let __proxy = {
