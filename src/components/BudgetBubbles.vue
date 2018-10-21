@@ -111,7 +111,7 @@ export default {
         }else if(window.innerWidth<1050 ){
           maxRadius_x=80
             minRadius_x=2
-           this.center_x=this.$refs.vis.offsetWidth / 3;
+           this.center_x=this.$refs.vis.offsetWidth / 2;
         }else{
           maxRadius_x=90
             minRadius_x=3
@@ -124,14 +124,14 @@ export default {
             minRadius_y=1
           this.center_y=this.$refs.vis.offsetHeight*7/16;
         }
-        else if(window.innerHeight<500){
+        else if(window.innerHeight<600){
             maxRadius_y=50
             minRadius_y=1
             this.center_y=this.$refs.vis.offsetHeight*7/16;
         }else{ 
           maxRadius_y=90
-            minRadius_y=3
-            this.center_y=this.$refs.vis.offsetHeight*7/16;
+            minRadius_y=2
+            this.center_y=this.$refs.vis.offsetHeight/2;
         }
         maxRadius=Math.min(maxRadius_x,maxRadius_y)
         minRadius=Math.min(minRadius_x,minRadius_y)
