@@ -59,13 +59,13 @@
             href="https://github.com/g0v-it"
           >Seguici su GitHub</a>
         </li>
-        <li class="g0v-credits">
+        <li class="g0v-credits hide">
           <router-link :to="{ name: 'credits' }">crediti</router-link>
         </li>
-        <li>
+        <li class="hide">
           <router-link :to="{ name: 'terms-and-conditions' }">termini d'uso</router-link>
         </li>
-        <li class="g0v-license">
+        <li class="g0v-license hide">
           <a
             target="_blank" rel="license"
             href="http://creativecommons.org/licenses/by/4.0/"
@@ -81,7 +81,8 @@
 
 <script>
 import Configuration from "@/utils/configuration";
-
+   window.addEventListener('resize', function(){window.location.reload()});
+  
 export default {
   name: "App",
   data() {
@@ -118,7 +119,9 @@ export default {
       title: ""
     };
   },
-  methods: {},
+  methods: {
+   
+  },
   computed: {
     logo_copernicani_orizzontale() {
       return require("@/assets/copernicani_orizzontale.png");
@@ -142,6 +145,9 @@ export default {
     appHashtag() {
       return Configuration().current().appHashtag;
     }
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.refresh());
   }
 };
 </script>
@@ -174,7 +180,7 @@ a {
   footer {
     height: 4rem;
     width: 100;
-    padding: 0.5rem 2rem;
+    padding: 0.5rem 1rem;
   }
   .g0v-footer {
     margin: 0;
@@ -182,6 +188,11 @@ a {
     list-style: none;
     column-count: 2;
     text-align: start;
+  }
+}
+@media (max-height: 415px){
+  .hide{
+    display: none;
   }
 }
 

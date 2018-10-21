@@ -46,7 +46,10 @@ export default {
   },
 
   data: () => {
-    return {};
+    return {
+      center_x:0,
+      center_y:0
+    };
   },
 
   computed: {
@@ -95,20 +98,46 @@ export default {
           let rate = (d.amount - d.last_amount) / d.last_amount;
           return isFinite(rate) ? rate : 0;
         });
-        // Sizes bubbles based on .
-          if(window.innerWidth<768 || window.innerHeight<500){
-            maxRadius=70
-            minRadius=1
-          }
-          else if(window.innerWidth< 992 || window.innerHeight<700){
-            maxRadius=70
-            minRadius=2
-          }
-          else{
-            maxRadius=90
-            minRadius=3
-          }
-        console.log("MIN: "+minRadius+"MAX: "+maxRadius)
+        let maxRadius_x, minRadius_x,maxRadius_y,minRadius_y
+        if(window.innerWidth<713){         
+            maxRadius_x=70
+            minRadius_x=1
+            this.center_x=this.$refs.vis.offsetWidth / 2;
+        }
+        else if(window.innerWidth<992 ){
+          maxRadius_x=70
+            minRadius_x=2
+           this.center_x=this.$refs.vis.offsetWidth / 3;
+        }else if(window.innerWidth<1050 ){
+          maxRadius_x=80
+            minRadius_x=2
+           this.center_x=this.$refs.vis.offsetWidth / 3;
+        }else{
+          maxRadius_x=90
+            minRadius_x=3
+            this.center_x=this.$refs.vis.offsetWidth / 2;
+        }
+        console.log(window.innerHeight);
+        console.log(window.innerWidth);
+        if(window.innerHeight<400){
+          maxRadius_y=40
+            minRadius_y=1
+          this.center_y=this.$refs.vis.offsetHeight*7/16;
+        }
+        else if(window.innerHeight<500){
+            maxRadius_y=50
+            minRadius_y=1
+            this.center_y=this.$refs.vis.offsetHeight*7/16;
+        }else{ 
+          maxRadius_y=90
+            minRadius_y=3
+            this.center_y=this.$refs.vis.offsetHeight*7/16;
+        }
+        maxRadius=Math.min(maxRadius_x,maxRadius_y)
+        minRadius=Math.min(minRadius_x,minRadius_y)
+        console.log("MINIMOX,",maxRadius);
+        console.log("MASSIMOX",minRadius);
+        
         let powRadiusScale = d3
           .scalePow()
           .exponent(0.5)
@@ -229,14 +258,13 @@ export default {
         d3
           .forceX()
           .strength(forceStrength)
-          .x(this.$refs.vis.offsetWidth / 2)
-      );
+          .x(this.center_x));
       simulation.force(
         "y",
         d3
           .forceY()
           .strength(forceStrength)
-          .y(this.$refs.vis.offsetHeight / 2)
+          .y(this.center_y)
       );
 
       simulation.alpha(1).restart();
