@@ -1,6 +1,8 @@
 ### build stage ###
 FROM node:10.11-alpine as build-stage
 WORKDIR /app
+RUN apk update && apk upgrade && \
+    apk add --no-cache bash git openssh
 # split the package install from the build step
 # to cache the installed packages layer
 COPY package*.json ./
