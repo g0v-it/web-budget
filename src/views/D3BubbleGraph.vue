@@ -29,7 +29,7 @@
     <div ref="container" class="g0v-content">
       <div v-if="budget.selectedPartition=='default'" class="g0v-content-grid">
 
-        <div v-responsive.md.lg.xl class="left-column ">
+        <div v-responsive.lg.xl class="left-column ">
           <BubbleChartInfo :dataset-meta="budget.meta" :tot-amount="totAmount" />
         </div>
 
@@ -55,7 +55,7 @@
       </div>
 
       <div class="g0v-bubble-chart">
-        <div v-responsive.sm.xs>
+        <div v-responsive.md.sm.xs>
           <h2 class="title">Legge dello stato {{ budget.meta.year }} <a target="_blank" :href="budget.meta.source"><v-icon color="blue">link</v-icon></a> </h2>
           <p>Spese totali: <b> <amount :amount="totAmount.amount" /></b></p>
         </div>
@@ -332,8 +332,19 @@ export default {
 }
 @media (max-width: 1000px) {
   .g0v-content-grid {
-    grid-template-areas: "left . right";
+    grid-template-areas: ". . right";
   }
+}
+
+@media (max-width: 400px){
+  .g0v-container {
+  padding: 12px 12px 0 12px;
+  height: 100%;
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
 }
 
 .left-column {
