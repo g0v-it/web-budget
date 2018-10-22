@@ -66,6 +66,7 @@
         <li class="hide">
           <router-link :to="{ name: 'terms-and-conditions' }">termini d'uso</router-link>
         </li>
+        <li class="g0v-version">{{version}}</li>
         <li class="g0v-license hide">
           <a
             target="_blank" rel="license"
@@ -81,6 +82,7 @@
 </template>
 
 <script>
+import { get, post } from "axios";
 import Configuration from "@/utils/configuration";
    window.addEventListener('resize', function(){window.location.reload()});
   
@@ -117,11 +119,19 @@ export default {
           path: "/terms-and-conditions"
         }
       ],
-      title: ""
+      title: "",
+      version: ""
     };
   },
   methods: {
    
+  },
+  created() {
+    get('/version.json').then(res => {
+      this.$data.version = res.data.version;
+    }).catch(error => {
+      this.$data.version = "-";
+    });
   },
   computed: {
     logo_copernicani_orizzontale() {
@@ -215,8 +225,13 @@ a {
   text-decoration: none;
 }
 
-.g0v-license {
+.g0v-version {
   margin-left: auto;
+  margin-right: 10px;
+  font-size:.7rem;
+  color: rgba(100, 100, 100, 1);
+}
+.g0v-license {
 }
 .g0v-header-link {
   display: block;

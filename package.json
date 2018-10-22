@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "node .createversion.js && vue-cli-service build"
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "build-version": "^1.0.0",
     "d3": "^5.7.0",
     "express": "^4.16.3",
     "moment": "^2.22.2",
