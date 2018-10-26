@@ -5,8 +5,8 @@
         <a
           target="_blank"
           :href="currentNode.account"
-          alt="Visualizza il linked-data nella Knowledge Base"
-          title="Visualizza il linked-data nella Knowledge Base"
+          alt="Visualizza i linked data"
+          title="Visualizza i linked-data"
         >
           <img :src="logo_rdf" class="g0v-rdf-logo" />
         </a>
