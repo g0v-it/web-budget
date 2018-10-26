@@ -1,7 +1,11 @@
 <template>
   <div class="legend">
     <div class="legend-description">
-      <h2 class="title">Legge dello stato {{ datasetMeta.year }} <a target="_blank" :href="datasetMeta.source"><v-icon color="blue">link</v-icon></a> </h2>
+      <h2 class="title">Legge di Bilancio {{ datasetMeta.year }}
+        <a target="_blank" :href="datasetMeta.source">
+          <img :src="logo_rdf" class="g0v-rdf-logo" />
+        </a>
+      </h2>
       <p v-if="show_description" class="description">{{ datasetMeta.description }}</p>
       <p>Aggiornato al {{ datasetMeta.update }}</p>
       <p>Spese totali: <b> <amount :amount="totAmount.amount" /></b></p>
@@ -75,6 +79,9 @@ export default {
     totAmount: Object
   },
   computed: {
+    logo_rdf() {
+      return require("@/assets/rdf_flyer.svg");
+    },
     logo_mef() {
       return require("@/assets/logo_mef.svg");
     },
@@ -111,6 +118,10 @@ export default {
 }
 .g0v-mef-logo {
   max-width:50px;
+}
+.g0v-rdf-logo {
+  height: 20px;
+  vertical-align: middle;
 }
 /* .legend-radius {
   height: 150px;

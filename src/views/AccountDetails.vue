@@ -7,7 +7,9 @@
           :href="currentNode.account"
           alt="Visualizza il linked-data nella Knowledge Base"
           title="Visualizza il linked-data nella Knowledge Base"
-        ><v-icon color="blue">link</v-icon></a>
+        >
+          <img :src="logo_rdf" class="g0v-rdf-logo" />
+        </a>
       </h2>
       <p class="top">Ministero: {{ currentNode.top_level }}</p>
       <p v-if="download_completed" class="second">Missione: {{ currentNode.partitions.second_partition }}</p>
@@ -77,6 +79,9 @@ export default {
       });
   },
   computed: {
+    logo_rdf() {
+      return require("@/assets/rdf_flyer.svg");
+    },
     node: function() {
       return this.$root.$data.budget.state.selectedNode;
     },
@@ -109,6 +114,10 @@ export default {
     "info bar"
     "cake social" 100% / 1fr 1fr;
   grid-gap: 2em;
+}
+.g0v-rdf-logo {
+  height: 20px;
+  vertical-align: middle;
 }
 
 h2 {
