@@ -56,7 +56,11 @@
 
       <div class="g0v-bubble-chart">
         <div v-responsive.md.sm.xs>
-          <h2 class="title">Legge dello stato {{ budget.meta.year }} <a target="_blank" :href="budget.meta.source"><v-icon color="blue">link</v-icon></a> </h2>
+          <h2 class="title">Legge di Bilancio {{ budget.meta.year }}
+            <a target="_blank" :href="budget.meta.source">
+              <img :src="logo_rdf" class="g0v-rdf-logo" />
+            </a>
+          </h2>
           <p>Spese totali: <b> <amount :amount="totAmount.amount" /></b></p>
         </div>
         <BudgetBubbles
@@ -119,6 +123,9 @@ export default {
   },
 
   computed: {
+    logo_rdf() {
+      return require("@/assets/rdf_flyer.svg");
+    },
     /*retrive data from root component*/
     budget: function() {
       return this.$root.$data.budget.state;
@@ -309,6 +316,11 @@ export default {
   height: 100%;
   width: 100%;
   pointer-events: none;
+}
+
+.g0v-rdf-logo {
+  height: 20px;
+  vertical-align: middle;
 }
 
 .tooltip {
