@@ -48,7 +48,7 @@
 
     </v-toolbar>
 
-    <v-content>
+    <v-content >
       <router-view />
     </v-content>
 
@@ -84,8 +84,10 @@
 <script>
 import { get, post } from "axios";
 import Configuration from "@/utils/configuration";
-   window.addEventListener('resize', function(){window.location.reload()});
-  
+
+var resizeTimer;
+var currentWidth;
+
 export default {
   name: "App",
   data() {
@@ -124,13 +126,29 @@ export default {
     };
   },
   methods: {
-   
+    resizeHandler() {
+      // debouncing
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function() {
+        let widthChanged = currentWidth != document.documentElement.clientWidth;
+        if (widthChanged) {
+          currentWidth = document.documentElement.clientWidth;
+          window.location.reload();
+        }
+      }, 250);
+    }
   },
   created() {
     get('/version.json').then(res => {
       this.$data.version = res.data.version;
     }).catch(error => {
       this.$data.version = "-";
+    });
+  },
+  mounted() {
+    currentWidth = document.documentElement.clientWidth;
+    this.$nextTick(function() {
+      window.addEventListener('resize', this.resizeHandler);
     });
   },
   computed: {
@@ -164,7 +182,7 @@ export default {
     }
   },
   beforeDestroy() {
-    window.removeEventListener('resize', this.refresh());
+    window.removeEventListener('resize', this.resizeHandler());
   }
 };
 </script>
