@@ -8,7 +8,7 @@
           alt="Visualizza i linked data"
           title="Visualizza i linked-data"
         >
-          <img :src="logo_rdf" class="g0v-rdf-logo" />
+          <img :src="logo_rdf" class="g0v-rdf-logo">
         </a>
       </h2>
       <p class="top">Ministero: {{ currentNode.top_level }}</p>
@@ -111,8 +111,8 @@ export default {
   padding: 0;
   display: grid;
   grid-template:
-    "info bar"
-    "cake social" 100% / 1fr 1fr;
+    "info bar" 50%
+    "cake social" 50%/1fr 1fr;
   grid-gap: 2em;
 }
 .g0v-rdf-logo {
