@@ -10,7 +10,6 @@ export const BudgetData = () => {
     if (__debug) console.log(what);
   };
 
-  let __initialized = false;
   let __data = {
     meta: {},
     accounts: [],
@@ -155,12 +154,12 @@ export const BudgetData = () => {
       __data.accounts = response[0].data.accounts;
       __data.meta = response[0].data.meta;
       __data.filteredTot = filteredTot;
-      __initialized = true;
+      __budget.initialized = true;
     });
   };
 
-  return {
-    initialized: __initialized,
+  let __budget = {
+    initialized: false,
     state: __data,
     readPartitionLabels,
     readAccounts,
@@ -168,4 +167,6 @@ export const BudgetData = () => {
     selectPartition,
     initData
   };
+
+  return __budget;
 };

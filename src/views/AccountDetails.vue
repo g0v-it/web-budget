@@ -29,7 +29,7 @@
     <v-card class=" history">
       <h2>Storico dell'azione</h2>
       <HistoryChart
-        v-if="download_completed" :values="history"
+        v-if="download_completed && meta_initialized" :values="history"
         :dataset-meta="meta"
         style=""
       />
@@ -66,7 +66,8 @@ export default {
   data() {
     return {
       currentNode: {},
-      download_completed: false
+      download_completed: false,
+      meta_initialized: false,
     };
   },
   mounted() {
@@ -80,6 +81,10 @@ export default {
         this.currentNode.bgColor = fillColor(this.currentNode.diff);
         this.download_completed = true;
       });
+    this.meta_initialized = this.budgetStore().initialized;
+  },
+  beforeUpdate() {
+    this.meta_initialized = this.budgetStore().initialized;
   },
   computed: {
     logo_rdf() {
