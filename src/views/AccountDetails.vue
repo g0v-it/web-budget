@@ -16,8 +16,11 @@
       <p class="description">{{ currentNode.description | capitalize }}</p>
       <div class="numbers">
         <p class="amount"><amount :amount="currentNode.amount" /></p>
-        <div class="rate"><small>Variazione rispetto alla legge di bilancio {{ +meta.year - 1 }}</small>
-          <div class="diff" :style="{backgroundColor:currentNode.bgColor}">
+        <div class="rate">
+          <small>Variazione rispetto alla legge di bilancio {{ +meta.year - 1 }}
+            <span v-if="!variation_available">non disponibile.</span>
+          </small>
+          <div v-if="variation_available" class="diff" :style="{backgroundColor:currentNode.bgColor}">
             <h3><rate :rate="currentNode.diff" /></h3>
           </div>
         </div>
@@ -81,6 +84,9 @@ export default {
   computed: {
     logo_rdf() {
       return require("@/assets/rdf_flyer.svg");
+    },
+    variation_available() {
+      return isFinite(this.currentNode.diff);
     },
     node: function() {
       return this.$root.$data.budget.state.selectedNode;
