@@ -15,7 +15,7 @@
     <p class="top-partition">Ministero: {{ account.partitions.top_partition }}  </p>
     <p class="second-partition">Missione: {{ account.partitions.second_partition }}</p>
     <p class="amount"><amount :amount="account.amount" format="$ 0.0 a" /></p>
-    <p class="rate"><rate :rate="rate(account)" format="+0.0 %" /></p>
+    <p class="rate"><rate v-if="account.last_amount!=undefined" :rate="rate(account)" format="+0.0 %" /></p>
     <br v-responsive.sm.xs>
     <br v-responsive.sm.xs>
   </div>

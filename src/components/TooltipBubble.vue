@@ -17,7 +17,7 @@
       <div class="amount">
         <h3><amount :amount="currentNode.amount" /></h3>
       </div>
-      <div class="diff" :style="{backgroundColor:bgColor}">
+      <div v-if="variation_available" class="diff" :style="{backgroundColor:bgColor}">
         <h3><rate :rate="currentNode.diff" /></h3>
       </div>
 
@@ -29,6 +29,11 @@ export default {
   props: {
     currentNode: Object,
     bgColor: String
+  },
+  computed: {
+    variation_available() {
+      return isFinite(this.currentNode.diff);
+    }
   },
   mounted() {
     this.$emit("mounted", {
