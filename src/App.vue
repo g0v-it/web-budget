@@ -1,8 +1,8 @@
 <template>
   <v-app>
     <v-toolbar app :clipped-left="clipped">
-      <a href="https://copernicani.it" target="_blank"  class="g0v-header-link"><img :src="logo_copernicani_orizzontale" class="g0v-header-logo"></a>
-      <a :href="url_g0v" target="_blank"  class="g0v-header-link"><img :src="logo_g0v" class="g0v-header-logo-g0v"/></a>
+      <a :href="url_g0v" target="_blank"  class="g0v-header-link"><img :src="logo_copernicani_orizzontale" class="g0v-header-logo"></a>
+      <router-link :to="{ name: 'd3-bubble-graph' }" class="g0v-header-link"><img :src="logo_g0v" class="g0v-header-logo-g0v"/></router-link>
       <v-flex class="text-xs-left">
         <v-toolbar-title v-text="title" class="g0v-header-title" />
       </v-flex>
