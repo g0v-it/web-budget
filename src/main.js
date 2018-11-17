@@ -33,7 +33,7 @@ const configuration = Configuration;
 var vm = new Vue({
   data() {
     return {
-      configurationLoaded: false,
+      configurationLoaded: process.env.NODE_ENV === "development" || false,
       budget: budgetData
     };
   },
@@ -47,7 +47,3 @@ var vm = new Vue({
 }).$mount("#app");
 
 configuration.load(vm);
-
-if (process.env.NODE_ENV === "development") {
-  vm.configurationLoaded = true;
-}
