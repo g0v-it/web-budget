@@ -20,7 +20,7 @@ Vue.component("rate", Rate);
 Vue.component("amount", Amount);
 Vue.component("social-sharing", SocialSharing);
 Vue.component("network", SocialSharingNetwork);
-Vue.use(responsive)
+Vue.use(responsive);
 Vue.filter("capitalize", function(value) {
   if (!value) return "";
   value = value.toString();
@@ -35,7 +35,7 @@ var vm = new Vue({
     return {
       configurationLoaded: false,
       budget: budgetData
-    }
+    };
   },
   router,
   render: h => h(App),
@@ -44,7 +44,10 @@ var vm = new Vue({
       vm.budget.initData();
     }
   }
-
 }).$mount("#app");
 
 configuration.load(vm);
+
+if (process.env.NODE_ENV === "development") {
+  vm.configurationLoaded = true;
+}
