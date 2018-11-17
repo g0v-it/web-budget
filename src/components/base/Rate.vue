@@ -17,7 +17,7 @@ export default {
     },
     format: {
       type: String,
-      default: Configuration().current().rateFormat
+      default: Configuration.current().rateFormat
     }
   },
   computed: {

@@ -3,8 +3,8 @@ import { computeNewFilteredTotals } from "./utils/functions";
 import Configuration from "./utils/configuration";
 
 export const BudgetData = () => {
-  const __apiEndpoint = Configuration().current().apiEndpoint;
-  const __debug = Configuration().current().debug;
+  const __apiEndpoint = Configuration.current().apiEndpoint;
+  const __debug = Configuration.current().debug;
 
   const log = what => {
     if (__debug) console.log(what);

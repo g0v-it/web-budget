@@ -79,7 +79,7 @@ export function computeNewFilteredTotals(partitionLabels, filteredTot) {
 
 //----------------------------------------------------------
 // FORMATTING
-const amountFormat = Configuration().current().amountFormat;
+const amountFormat = Configuration.current().amountFormat;
 export function formatAmount(amount) {
   let amt = Number(amount);
   if (isFinite(amt)) {
@@ -87,7 +87,7 @@ export function formatAmount(amount) {
   }
   return "N/A";
 }
-const rateFormat = Configuration().current().rateFormat;
+const rateFormat = Configuration.current().rateFormat;
 export function formatRate(amt) {
   if (isFinite(amt)) {
     return numeral(amt).format(rateFormat);

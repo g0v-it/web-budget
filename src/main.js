@@ -3,6 +3,7 @@ import Vue from "vue";
 import "./plugins/vuetify";
 import App from "./App.vue";
 import router from "./router";
+import Configuration from "@/utils/configuration";
 
 import Rate from "./components/base/Rate.vue";
 import Amount from "./components/base/Amount.vue";
@@ -27,13 +28,23 @@ Vue.filter("capitalize", function(value) {
 });
 
 const budgetData = api.BudgetData();
+const configuration = Configuration;
 
 var vm = new Vue({
-  data: {
-    budget: budgetData
+  data() {
+    return {
+      configurationLoaded: false,
+      budget: budgetData
+    }
   },
   router,
-  render: h => h(App)
+  render: h => h(App),
+  watch: {
+    configurationLoaded() {
+      vm.budget.initData();
+    }
+  }
+
 }).$mount("#app");
 
-vm.budget.initData();
+configuration.load(vm);
