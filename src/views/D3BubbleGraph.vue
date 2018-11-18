@@ -58,13 +58,12 @@
         <div v-responsive.md.sm.xs>
           <h2 class="title">Legge di Bilancio {{ budget.meta.year }}
             <a target="_blank" :href="budget.meta.source">
-              <img :src="logo_rdf" class="g0v-rdf-logo" />
+              <img :src="logo_rdf" class="g0v-rdf-logo">
             </a>
           </h2>
           <p>Spese totali: <b> <amount :amount="totAmount.amount" /></b></p>
         </div>
         <BudgetBubbles
-          v-if="budget.accounts.length"
           @click="onClick" @over="onMouseOver"
           @out="onMouseOut"
           :partition-id="budget.selectedPartition" :partition-labels="budget.partitionLabels"
@@ -94,11 +93,14 @@ import BudgetBubbles from "@/components/BudgetBubbles.vue";
 import TooltipBubble from "@/components/TooltipBubble.vue";
 import BubbleChartInfo from "@/components/BubbleChartInfo.vue";
 import BubbleChartLegend from "@/components/BubbleChartLegend.vue";
+import * as BudgetStore from "@/budgetStore.js";
+
 import { debounce } from "lodash";
 
 let readPartitionLabels = null;
 
 export default {
+  name: "BubbleView",
   props: {
     urlPartitionID: {
       type: String,
@@ -118,7 +120,6 @@ export default {
       dialog: false,
       hoveredNode: {},
       showTooltip: false
-      /* isScaleLinear: false */
     };
   },
 
@@ -128,7 +129,7 @@ export default {
     },
     /*retrive data from root component*/
     budget: function() {
-      return this.$root.$data.budget.state;
+      return this.$root.$data.budgetState;
     },
     /* parametro corrispondente alla somma degli amount delle bolle*/
     totAmount: function() {
@@ -178,10 +179,20 @@ export default {
     }
   },
 
-  created() {
-    /* Init scale */
-    this.isScaleLinear = this.$route.query.scaleLinear === "true";
+  async beforeRouteEnter(to, from, next) {
+    if (
+      BudgetStore.state.accounts.length === 0 ||
+      Object.keys(BudgetStore.state.partitionLabels).length === 0
+    ) {
+      await Promise.all([
+        BudgetStore.actions.readAccounts(),
+        BudgetStore.actions.readPartitionLabels()
+      ]);
+    }
+    next();
+  },
 
+  created() {
     /* Init filters from url params */
     this.budget.filters.top_partition = [];
     this.budget.filters.second_partition = [];
@@ -198,27 +209,15 @@ export default {
         this.$route.query.second_partition
       );
     }
-    if (!this.budgetStore().initialized) {
-      this.budgetStore().initData();
-    }
-    /* set partition to sow */
-    this.budgetStore().selectPartition(this.urlPartitionID);
+
+    BudgetStore.actions.readFilteredTots();
+
+    /* set partition to show */
+    BudgetStore.actions.selectPartition(this.urlPartitionID);
+
+    readPartitionLabels = debounce(BudgetStore.actions.readFilteredTots, 1000);
   },
 
-  mounted() {
-    readPartitionLabels = debounce(
-      this.budgetStore().readPartitionLabels,
-      1000
-    );
-  },
-  watch: {
-    $route(to) {
-      this.budgetStore().selectPartition(this.urlPartitionID);
-      if (to.query.scaleLinear) {
-        this.isScaleLinear = to.query.scaleLinear.toString() === "true";
-      }
-    }
-  },
   methods: {
     onClick(node) {
       this.$router.push({ name: "account-details", params: { code: node.id } });
@@ -280,16 +279,6 @@ export default {
         query: { ...this.budget.filters }
       });
       readPartitionLabels();
-    },
-    onScaleChange() {
-      this.$router.replace({
-        name: "d3-bubble-graph",
-        query: { ...this.budget.filters }
-      });
-    },
-
-    budgetStore() {
-      return this.$root.$data.budget;
     }
   }
 };
@@ -348,15 +337,15 @@ export default {
   }
 }
 
-@media (max-width: 400px){
+@media (max-width: 400px) {
   .g0v-container {
-  padding: 12px 12px 0 12px;
-  height: 100%;
-  width: 100%;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-}
+    padding: 12px 12px 0 12px;
+    height: 100%;
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 .left-column {

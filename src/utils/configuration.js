@@ -1,4 +1,4 @@
-import { get, post } from "axios";
+import { get } from "axios";
 
 const ConfigurationFactory = function() {
   let __loading = false;
@@ -37,22 +37,28 @@ const ConfigurationFactory = function() {
   };
 
   __proxy.load = function(vm) {
-    if (window.__configurationUrl !== undefined && !__loading && !__proxy.loaded) {
+    if (
+      window.__configurationUrl !== undefined &&
+      !__loading &&
+      !__proxy.loaded
+    ) {
       __loading = true;
-      get(window.__configurationUrl).then(res => {
+      get(window.__configurationUrl)
+        .then(res => {
           __current = { ...__current, ...res.data };
-        __proxy.loaded = true;
-        if (vm) {
-          vm.$data.configurationLoaded = true;
-        }
-      }).catch(error => {
+          __proxy.loaded = true;
+          if (vm) {
+            vm.$data.configurationLoaded = true;
+          }
+        })
+        .catch(error => {
           __loading = false;
-      });
+        });
     }
-  }
+  };
 
   return __proxy;
-}
+};
 
 const Configuration = ConfigurationFactory();
 

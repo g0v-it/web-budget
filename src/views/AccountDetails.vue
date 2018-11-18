@@ -12,15 +12,18 @@
         </a>
       </h2>
       <p class="top">Ministero: {{ currentNode.top_level }}</p>
-      <p v-if="download_completed" class="second">Missione: {{ currentNode.partitions.second_partition }}</p>
+      <p class="second">Missione: {{ currentNode.partitions.second_partition }}</p>
       <p class="description">{{ currentNode.description | capitalize }}</p>
       <div class="numbers">
         <p class="amount"><amount :amount="currentNode.amount" /></p>
         <div class="rate">
-          <small>Variazione rispetto alla legge di bilancio {{ +meta.year - 1 }}
+          <small>Variazione rispetto alla legge di bilancio {{ +budget.meta.year - 1 }}
             <span v-if="!variation_available">non disponibile.</span>
           </small>
-          <div v-if="variation_available" class="diff" :style="{backgroundColor:currentNode.bgColor}">
+          <div
+            v-if="variation_available" class="diff"
+            :style="{backgroundColor:currentNode.bgColor}"
+          >
             <h3><rate :rate="currentNode.diff" /></h3>
           </div>
         </div>
@@ -29,15 +32,15 @@
     <v-card class=" history">
       <h2>Storico dell'azione</h2>
       <HistoryChart
-        v-if="download_completed && meta_initialized" :values="history"
-        :dataset-meta="meta"
+        :values="history"
+        :dataset-meta="budget.meta"
         style=""
       />
     </v-card>
     <v-card class="partition">
       <h2>Dettaglio capitoli di spesa</h2>
       <CdsChart
-        v-if="download_completed" :values="{lower_partition:currentNode.cds,sum:currentNode.amount}"
+        :values="{lower_partition:currentNode.cds,sum:currentNode.amount}"
         style=""
       />
     </v-card>
@@ -53,6 +56,7 @@ import HistoryChart from "@/components/HistoryChart.vue";
 import CdsChart from "@/components/CdsChart.vue";
 import TweetsWall from "@/components/TweetsWall.vue";
 import { fillColor } from "@/utils/functions.js";
+import * as BudgetStore from "@/budgetStore.js";
 
 export default {
   components: {
@@ -60,31 +64,34 @@ export default {
     CdsChart,
     TweetsWall
   },
+
   props: {
     code: String
   },
+
   data() {
     return {
-      currentNode: {},
-      download_completed: false,
-      meta_initialized: false,
+      currentNode: {}
     };
   },
-  mounted() {
-    this.budgetStore()
-      .selectNode(this.code)
-      .then(res => {
-        this.currentNode = res.data;
-        this.currentNode.diff =
-          (this.currentNode.amount - this.currentNode.last_amount) /
-          this.currentNode.last_amount;
-        this.currentNode.bgColor = fillColor(this.currentNode.diff);
-        this.download_completed = true;
-      });
-    this.meta_initialized = this.budgetStore().initialized;
+
+  async beforeRouteEnter(to, from, next) {
+    if (Object.keys(BudgetStore.state.meta).length === 0) {
+      await Promise.all([
+        BudgetStore.actions.readAccounts(),
+        BudgetStore.actions.selectNode(to.params.code)
+      ]);
+    } else {
+      await BudgetStore.actions.selectNode(to.params.code);
+    }
+    next();
   },
-  beforeUpdate() {
-    this.meta_initialized = this.budgetStore().initialized;
+  created() {
+    this.currentNode = this.budget.selectedNode;
+    this.currentNode.diff =
+      (this.currentNode.amount - this.currentNode.last_amount) /
+      this.currentNode.last_amount;
+    this.currentNode.bgColor = fillColor(this.currentNode.diff);
   },
   computed: {
     logo_rdf() {
@@ -93,24 +100,13 @@ export default {
     variation_available() {
       return isFinite(this.currentNode.diff);
     },
-    node: function() {
-      return this.$root.$data.budget.state.selectedNode;
-    },
     history: function() {
-      if (this.download_completed) {
-        var history = this.currentNode.past_values;
-        history["current"] = this.currentNode.amount;
-        return history;
-      }
+      var history = this.currentNode.past_values;
+      history["current"] = this.currentNode.amount;
+      return history;
     },
-    /*retrive data from root component*/
-    meta: function() {
-      return this.$root.$data.budget.state.meta;
-    }
-  },
-  methods: {
-    budgetStore() {
-      return this.$root.$data.budget;
+    budget: function() {
+      return this.$root.$data.budgetState;
     }
   }
 };
@@ -122,8 +118,8 @@ export default {
   padding: 0;
   display: grid;
   grid-template:
-    "info bar" 50%
-    "cake social" 50%/1fr 1fr;
+    "info bar" minmax(50%, auto)
+    "cake social" minmax(50%, auto) / 1fr 1fr;
   grid-gap: 2em;
 }
 .g0v-rdf-logo {
