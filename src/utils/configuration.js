@@ -1,7 +1,9 @@
-export default function() {
-  let __current = {
-    loaded: false,
+import { get, post } from "axios";
 
+const ConfigurationFactory = function() {
+  let __loading = false;
+
+  let __current = {
     debug: true,
 
     locale: "it",
@@ -29,12 +31,29 @@ export default function() {
 
   let __proxy = {
     current: function() {
-      if (window.__settings !== undefined && !__current.loaded) {
-        __current = { ...__current, ...window.__settings, loaded: true };
-      }
       return __current;
-    }
+    },
+    loaded: false
   };
+
+  __proxy.load = function(vm) {
+    if (window.__configurationUrl !== undefined && !__loading && !__proxy.loaded) {
+      __loading = true;
+      get(window.__configurationUrl).then(res => {
+          __current = { ...__current, ...res.data };
+        __proxy.loaded = true;
+        if (vm) {
+          vm.$data.configurationLoaded = true;
+        }
+      }).catch(error => {
+          __loading = false;
+      });
+    }
+  }
 
   return __proxy;
 }
+
+const Configuration = ConfigurationFactory();
+
+export default Configuration;

@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app v-if="configurationLoaded">
     <v-toolbar app :clipped-left="clipped">
       <a :href="url_g0v" target="_blank"  class="g0v-header-link"><img :src="logo_copernicani_orizzontale" class="g0v-header-logo"></a>
       <router-link :to="{ name: 'd3-bubble-graph' }" class="g0v-header-link"><img :src="logo_g0v" class="g0v-header-logo-g0v"/></router-link>
@@ -77,8 +77,10 @@
         </li>
       </ul>
     </footer>
-
   </v-app>
+  <div v-else-if="!configurationLoaded" class="progress">
+    <div class="indeterminate"></div>
+  </div>
 </template>
 
 <script>
@@ -151,6 +153,9 @@ export default {
       window.addEventListener('resize', this.resizeHandler);
     });
   },
+  beforeUpdate() {
+    console.log(this.$root.$data.configurationLoaded);
+  },
   computed: {
     logo_copernicani_orizzontale() {
       return require("@/assets/copernicani_orizzontale.png");
@@ -159,7 +164,7 @@ export default {
       return require("@/assets/g0v.svg");
     },
     url_g0v() {
-      return Configuration().current().g0vLogoUrl;
+      return Configuration.current().g0vLogoUrl;
     },
     currentItem() {
       let currentPath = this.$route.path;
@@ -178,7 +183,10 @@ export default {
       }
     },
     appHashtag() {
-      return Configuration().current().appHashtag;
+      return Configuration.current().appHashtag;
+    },
+    configurationLoaded() {
+      return this.$root.$data.configurationLoaded;
     }
   },
   beforeDestroy() {
@@ -277,4 +285,82 @@ a {
   vertical-align: bottom;
   margin: 12px 1em;
 }
+.progress {
+  width:50%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 50%;
+  transform: translateX(-50%);
+  height: 4px;
+  display: block;
+  background-color: #fcff66;
+  border-radius: 2px;
+  background-clip: padding-box;
+  overflow: hidden; }
+.progress .indeterminate {
+  background-color: #e5e31c; }
+.progress .indeterminate:before {
+  content: '';
+  position: absolute;
+  background-color: inherit;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  will-change: left, right;
+  -webkit-animation: indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
+  animation: indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite; }
+.progress .indeterminate:after {
+  content: '';
+  position: absolute;
+  background-color: inherit;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  will-change: left, right;
+  -webkit-animation: indeterminate-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
+  animation: indeterminate-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
+  -webkit-animation-delay: 1.15s;
+  animation-delay: 1.15s; }
+
+@-webkit-keyframes indeterminate {
+  0% {
+    left: -35%;
+    right: 100%; }
+  60% {
+    left: 100%;
+    right: -90%; }
+  100% {
+    left: 100%;
+    right: -90%; } }
+@keyframes indeterminate {
+  0% {
+    left: -35%;
+    right: 100%; }
+  60% {
+    left: 100%;
+    right: -90%; }
+  100% {
+    left: 100%;
+    right: -90%; } }
+@-webkit-keyframes indeterminate-short {
+  0% {
+    left: -200%;
+    right: 100%; }
+  60% {
+    left: 107%;
+    right: -8%; }
+  100% {
+    left: 107%;
+    right: -8%; } }
+@keyframes indeterminate-short {
+  0% {
+    left: -200%;
+    right: 100%; }
+  60% {
+    left: 107%;
+    right: -8%; }
+  100% {
+    left: 107%;
+    right: -8%; } }
 </style>

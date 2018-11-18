@@ -22,6 +22,7 @@ yarn-error.log*
 
 # Configuration
 public/config.js
+public/config.json
 public/version.json
 .project
 .settings/

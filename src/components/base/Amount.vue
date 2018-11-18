@@ -17,7 +17,7 @@ export default {
     },
     format: {
       type: String,
-      default: Configuration().current().amountFormat
+      default: Configuration.current().amountFormat
     }
   },
   computed: {

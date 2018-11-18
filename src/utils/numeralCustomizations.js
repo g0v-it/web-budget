@@ -22,6 +22,6 @@ numeral.register("locale", "it", {
   }
 });
 
-numeral.locale(Configuration().current().locale);
+numeral.locale(Configuration.current().locale);
 
 export default numeral;

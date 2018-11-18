@@ -28,6 +28,7 @@ docker run -i -t --rm \
 
 You can use the following environment variables with the container image:
 
+- `G0V_CONFIG_URL` -> is the URL to the application JSON configuration (if not passed in a json file is generated from the other environment variables and put in `/config.json`)
 - `G0V_LOCALE` -> `locale` (the application Locale)
 - `G0V_AMOUNT_FORMAT` -> `amountFormat` (the format for currency values)
 - `G0V_RATE_FORMAT` -> `rateFormat` (the format for percentages)
@@ -77,28 +78,28 @@ npm run build
 
 ### Configuration
 
-To customize the settings add a `config.js` file in the `public` directory 
-with this content and customize the parameters:
+To customize the settings add a `config.js` file in the `public` directory with this content:
 
 ```
 (function (window) {
-
-    window.__settings = window.__settings || {};
-
-    // Application Locale
-    window.__settings.locale = 'it',
-
-    // Format for currency values
-    window.__settings.amountFormat = '$ 0,0. ',
-
-    // Format for percentages
-    window.__settings.rateFormat = '0.0 %',
-
-    // API base endpoint
-    window.__settings.apiEndpoint = 'http://data.budget.g0v.it/api/v1';
-
-
+    window.__configurationUrl = '/config.json';
 }(this));
+```
+
+Anr a `config.json` file to the `public` directory with this content and customize the parameters:
+
+```
+{
+  "locale": "it",
+  "amountFormat": "$ 0,0. ",
+  "rateFormat": "0.0 %",
+  "tweetsUrl": "",
+  "appHashtag": "",
+  "apiEndpoint": "https://data.budget.g0v.it/api/v1",
+  "showMefLogo": true,
+  "mefLogoUrl": "https://bdap-opendata.mef.gov.it/catalog",
+  "g0vLogoUrl": "https://copernicani.it/g0v"
+}
 ```
 
 The configuration is read on page load and exposed in the object exported from `utils/configuration.js`
@@ -106,7 +107,7 @@ The configuration is read on page load and exposed in the object exported from `
 ```
 import Configuration from './utils/configuration'
 
-let settings = Configuration();
+let settings = Configuration;
 let apiEndpoint = settings.current().apiEndpoint;
 ```
 

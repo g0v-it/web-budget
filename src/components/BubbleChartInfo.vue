@@ -86,10 +86,10 @@ export default {
       return require("@/assets/logo_mef.svg");
     },
     logo_mef_show() {
-      return Configuration().current().showMefLogo;
+      return Configuration.current().showMefLogo;
     },
     url_mef() {
-      return Configuration().current().mefLogoUrl;
+      return Configuration.current().mefLogoUrl;
     },
     show_description : function(){
       return (window.innerHeight>570)
