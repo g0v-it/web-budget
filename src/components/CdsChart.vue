@@ -60,7 +60,7 @@ function pieChart(options) {
     pie = d3
       .pie()
       .sort(null)
-      //.padAngle(0.02)
+      .padAngle(0.02)
       .value(function(d) {
         return d.amount;
       });
