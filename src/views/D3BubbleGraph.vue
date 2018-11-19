@@ -181,13 +181,15 @@ export default {
 
   async beforeRouteEnter(to, from, next) {
     if (
-      BudgetStore.state.accounts.length === 0 ||
+      BudgetStore.state.accounts.length === 0 &&
       Object.keys(BudgetStore.state.partitionLabels).length === 0
     ) {
       await Promise.all([
         BudgetStore.actions.readAccounts(),
         BudgetStore.actions.readPartitionLabels()
       ]);
+    } else if (Object.keys(BudgetStore.state.partitionLabels).length === 0) {
+      await BudgetStore.actions.readPartitionLabels();
     }
     next();
   },
