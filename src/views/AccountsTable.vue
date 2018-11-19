@@ -41,7 +41,10 @@
 
 
           <template slot="items" slot-scope="props">
-            <td class="account-name" width="35%" style="font-weight: 500;">
+            <td
+              class="account-name" width="35%"
+              style="font-weight: 500;"
+            >
               {{ props.item.name }} <router-link :to="{name:'account-details', params:{code:props.item.code}}"><v-icon small color="blue">link</v-icon></router-link>
             </td>
             <td class="account-amount" width="10%"><amount :amount="props.item.amount" format="$ 0.0 a" /></td>
@@ -60,10 +63,13 @@
 </template>
 
 <script>
+import * as BudgetStore from "@/budgetStore.js";
+
 const previousYear = function(meta) {
-  return +meta.year-1;
-}
+  return +meta.year - 1;
+};
 export default {
+  name: "TableView",
   data() {
     return {
       accounts: [],
@@ -75,7 +81,12 @@ export default {
       headers: [
         { text: "Nome", value: "name" },
         { text: "Spesa", value: "amount" },
-        { text: "Var. da legge di bilancio "+previousYear(this.$root.$data.budget.state.meta), value: "rate" },
+        {
+          text:
+            "Var. da legge di bilancio " +
+            previousYear(this.$root.$data.budgetState.meta),
+          value: "rate"
+        },
         { text: "Ministero", value: "partitions.top_partition" },
         { text: "Missione", value: "partitions.second_partition" }
       ]
@@ -83,7 +94,7 @@ export default {
   },
   computed: {
     budget: function() {
-      return this.$root.$data.budget.state;
+      return this.$root.$data.budgetState;
     }
   },
   methods: {
@@ -96,16 +107,13 @@ export default {
       }
     }
   },
-  mounted() {
-    if (!this.budget.accounts.length) {
-      this.$root.$data.budget.readAccounts().then(res => {
-        this.accounts = res.data.accounts.map(item => {
-          item.rate = (item.amount - item.last_amount) / item.last_amount;
-          item.rate = isFinite(item.rate) ? item.rate : NaN;
-          return item;
-        });
-      });
+  async beforeRouteEnter(to, from, next) {
+    if (BudgetStore.state.accounts.length === 0) {
+      await BudgetStore.actions.readAccounts();
     }
+    next();
+  },
+  mounted() {
     this.accounts = this.budget.accounts.map(item => {
       item.rate = (item.amount - item.last_amount) / item.last_amount;
       item.rate = isFinite(item.rate) ? item.rate : NaN;

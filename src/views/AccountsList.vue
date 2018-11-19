@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div v-for="account in accounts.slice(0, visibleAccounts)" :key="account.code">
+    <div v-for="account in budget.accounts.slice(0, visibleAccounts)" :key="account.code">
       <AccountItem :account="account" :r="radiusScale(account.amount)" />
     </div>
     <v-btn
@@ -14,7 +14,7 @@
 
 <script>
 import { min, max, scalePow } from "d3";
-
+import * as BudgetStore from "@/budgetStore.js";
 import AccountItem from "@/components/AccountListItem.vue";
 
 export default {
@@ -23,7 +23,6 @@ export default {
   },
   data() {
     return {
-      accounts: [],
       visibleAccounts: 5,
       minAmount: 0,
       maxAmount: 0
@@ -31,15 +30,18 @@ export default {
   },
   computed: {
     budget: function() {
-      return this.$root.$data.budget.state;
+      return this.$root.$data.budgetState;
     }
+  },
+  created() {
+    this.initD3();
   },
   methods: {
     initD3: function() {
-      this.minAmount = min(this.accounts, d => {
+      this.minAmount = min(this.budget.accounts, d => {
         return +d.amount;
       });
-      this.maxAmount = max(this.accounts, d => {
+      this.maxAmount = max(this.budget.accounts, d => {
         return +d.amount;
       });
       this.radiusScale = scalePow()
@@ -49,16 +51,11 @@ export default {
     },
     radiusScale: Function
   },
-  mounted() {
-    if (!this.budget.accounts.length) {
-      this.$root.$data.budget.readAccounts().then(res => {
-        this.accounts = res.data.accounts;
-        this.initD3();
-      });
-    } else {
-      this.accounts = this.budget.accounts;
-      this.initD3();
+  async beforeRouteEnter(to, from, next) {
+    if (BudgetStore.state.accounts.length === 0) {
+      await BudgetStore.actions.readAccounts();
     }
+    next();
   }
 };
 </script>

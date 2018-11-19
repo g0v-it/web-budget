@@ -33,15 +33,15 @@ export default new Router({
             component: () => import('./views/TermsAndConditions.vue')
         },
         {
-            path: '/partition/:urlPartitionID',
-            name: 'accounts-partition',
-            component: D3BubbleGraph,
-            props: true
-        },
-        {
             path: '/account/:code',
             name: 'account-details',
             component: () => import('./views/AccountDetails.vue'),
+            props: true
+        },
+        {
+            path: '/partition/:urlPartitionID',
+            name: 'accounts-partition',
+            component: D3BubbleGraph,
             props: true
         },
         {

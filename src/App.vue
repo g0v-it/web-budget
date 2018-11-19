@@ -1,8 +1,14 @@
 <template>
   <v-app v-if="configurationLoaded">
     <v-toolbar app :clipped-left="clipped">
-      <a :href="url_g0v" target="_blank"  class="g0v-header-link"><img :src="logo_copernicani_orizzontale" class="g0v-header-logo"></a>
-      <router-link :to="{ name: 'd3-bubble-graph' }" class="g0v-header-link"><img :src="logo_g0v" class="g0v-header-logo-g0v"/></router-link>
+      <a
+        :href="url_g0v" target="_blank"
+        class="g0v-header-link"
+      ><img :src="logo_copernicani_orizzontale" class="g0v-header-logo"></a>
+      <router-link
+        :to="{ name: 'accounts-partition',params:{urlPartitionID:$root.$data.budgetState.selectedPartition} }"
+        class="g0v-header-link"
+      ><img :src="logo_g0v" class="g0v-header-logo-g0v"></router-link>
       <v-flex class="text-xs-left">
         <v-toolbar-title v-text="title" class="g0v-header-title" />
       </v-flex>
@@ -48,8 +54,10 @@
 
     </v-toolbar>
 
-    <v-content >
-      <router-view />
+    <v-content>
+      <keep-alive :include="['BubbleView', 'TableView']">
+        <router-view />
+      </keep-alive>
     </v-content>
 
     <footer>
@@ -66,7 +74,7 @@
         <li class="hide">
           <router-link :to="{ name: 'terms-and-conditions' }">termini d'uso</router-link>
         </li>
-        <li class="g0v-version">{{version}}</li>
+        <li class="g0v-version">{{ version }}</li>
         <li class="g0v-license hide">
           <a
             target="_blank" rel="license"
@@ -79,7 +87,7 @@
     </footer>
   </v-app>
   <div v-else-if="!configurationLoaded" class="progress">
-    <div class="indeterminate"></div>
+    <div class="indeterminate" />
   </div>
 </template>
 
@@ -141,21 +149,21 @@ export default {
     }
   },
   created() {
-    get('/version.json').then(res => {
-      this.$data.version = res.data.version;
-    }).catch(error => {
-      this.$data.version = "-";
-    });
+    get("/version.json")
+      .then(res => {
+        this.$data.version = res.data.version;
+      })
+      .catch(error => {
+        this.$data.version = "-";
+      });
   },
   mounted() {
     currentWidth = document.documentElement.clientWidth;
     this.$nextTick(function() {
-      window.addEventListener('resize', this.resizeHandler);
+      window.addEventListener("resize", this.resizeHandler);
     });
   },
-  beforeUpdate() {
-    console.log(this.$root.$data.configurationLoaded);
-  },
+  beforeUpdate() {},
   computed: {
     logo_copernicani_orizzontale() {
       return require("@/assets/copernicani_orizzontale.png");
@@ -190,7 +198,7 @@ export default {
     }
   },
   beforeDestroy() {
-    window.removeEventListener('resize', this.resizeHandler());
+    window.removeEventListener("resize", this.resizeHandler());
   }
 };
 </script>
@@ -233,8 +241,8 @@ a {
     text-align: start;
   }
 }
-@media (max-height: 415px){
-  .hide{
+@media (max-height: 415px) {
+  .hide {
     display: none;
   }
 }
@@ -254,7 +262,7 @@ a {
 .g0v-version {
   margin-left: auto;
   margin-right: 10px;
-  font-size:.7rem;
+  font-size: 0.7rem;
   color: rgba(100, 100, 100, 1);
 }
 .g0v-license {
@@ -286,7 +294,7 @@ a {
   margin: 12px 1em;
 }
 .progress {
-  width:50%;
+  width: 50%;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -297,70 +305,93 @@ a {
   background-color: #fcff66;
   border-radius: 2px;
   background-clip: padding-box;
-  overflow: hidden; }
+  overflow: hidden;
+}
 .progress .indeterminate {
-  background-color: #e5e31c; }
+  background-color: #e5e31c;
+}
 .progress .indeterminate:before {
-  content: '';
+  content: "";
   position: absolute;
   background-color: inherit;
   top: 0;
   left: 0;
   bottom: 0;
   will-change: left, right;
-  -webkit-animation: indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
-  animation: indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite; }
+  -webkit-animation: indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395)
+    infinite;
+  animation: indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
+}
 .progress .indeterminate:after {
-  content: '';
+  content: "";
   position: absolute;
   background-color: inherit;
   top: 0;
   left: 0;
   bottom: 0;
   will-change: left, right;
-  -webkit-animation: indeterminate-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
-  animation: indeterminate-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
+  -webkit-animation: indeterminate-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1)
+    infinite;
+  animation: indeterminate-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1)
+    infinite;
   -webkit-animation-delay: 1.15s;
-  animation-delay: 1.15s; }
+  animation-delay: 1.15s;
+}
 
 @-webkit-keyframes indeterminate {
   0% {
     left: -35%;
-    right: 100%; }
+    right: 100%;
+  }
   60% {
     left: 100%;
-    right: -90%; }
+    right: -90%;
+  }
   100% {
     left: 100%;
-    right: -90%; } }
+    right: -90%;
+  }
+}
 @keyframes indeterminate {
   0% {
     left: -35%;
-    right: 100%; }
+    right: 100%;
+  }
   60% {
     left: 100%;
-    right: -90%; }
+    right: -90%;
+  }
   100% {
     left: 100%;
-    right: -90%; } }
+    right: -90%;
+  }
+}
 @-webkit-keyframes indeterminate-short {
   0% {
     left: -200%;
-    right: 100%; }
+    right: 100%;
+  }
   60% {
     left: 107%;
-    right: -8%; }
+    right: -8%;
+  }
   100% {
     left: 107%;
-    right: -8%; } }
+    right: -8%;
+  }
+}
 @keyframes indeterminate-short {
   0% {
     left: -200%;
-    right: 100%; }
+    right: 100%;
+  }
   60% {
     left: 107%;
-    right: -8%; }
+    right: -8%;
+  }
   100% {
     left: 107%;
-    right: -8%; } }
+    right: -8%;
+  }
+}
 </style>
