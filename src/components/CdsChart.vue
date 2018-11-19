@@ -27,6 +27,7 @@ let currentElement = 0;
 let slices;
 let intervalID;
 let updateDetail = function(context, overed_index) {
+  
   for (let index = 0; index < slices.length; index++) {
     slices[index].classList.remove("selected");
   }
@@ -47,7 +48,7 @@ const computeBoundaries= function(){
     width=container.offsetWidth*60/100; 
     console.log(width) 
   }
-    outerRadius=(width-width*10/100)/2;
+    outerRadius=(width-width*20/100)/2;
     innerRadius=outerRadius-70;
     height=2*outerRadius    
 
@@ -64,11 +65,15 @@ function pieChart(options) {
       .pie()
       .sort(null)
       .value(function(d) {
+        console.log(d);
         return d.amount;
       });
 
   function updateTween(d) {
+    //console.log(this._current);
+    //console.log(d);
     var i = d3.interpolate(this._current, d);
+    //console.log(i);
     this._current = i(0);
     return function(t) {
       return arc(i(t));
@@ -170,6 +175,9 @@ export default {
     intervalID = window.setInterval(() => {
       updateDetail(this, -1);
     }, cdsSpeed);
+  },
+  beforeDestroy(){
+    window.clearInterval(intervalID);
   }
 };
 </script>
