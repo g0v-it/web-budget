@@ -47,8 +47,8 @@ export default {
 
   data: () => {
     return {
-      center_x:0,
-      center_y:0
+      center_x: 0,
+      center_y: 0
     };
   },
 
@@ -98,46 +98,44 @@ export default {
           let rate = (d.amount - d.last_amount) / d.last_amount;
           return isFinite(rate) ? rate : 0;
         });
-        let maxRadius_x, minRadius_x,maxRadius_y,minRadius_y
-        if(window.innerWidth<713){         
-            maxRadius_x=70
-            minRadius_x=1
-            this.center_x=this.$refs.vis.offsetWidth / 2;
-        }
-        else if(window.innerWidth<992 ){
-          maxRadius_x=70
-            minRadius_x=2
-           this.center_x=this.$refs.vis.offsetWidth / 3;
-        }else if(window.innerWidth<1050 ){
-          maxRadius_x=80
-            minRadius_x=2
-           this.center_x=this.$refs.vis.offsetWidth / 2;
-        }else{
-          maxRadius_x=90
-            minRadius_x=3
-            this.center_x=this.$refs.vis.offsetWidth / 2;
+        let maxRadius_x, minRadius_x, maxRadius_y, minRadius_y;
+        if (window.innerWidth < 713) {
+          maxRadius_x = 70;
+          minRadius_x = 1;
+          this.center_x = this.$refs.vis.offsetWidth / 2;
+        } else if (window.innerWidth < 992) {
+          maxRadius_x = 70;
+          minRadius_x = 2;
+          this.center_x = this.$refs.vis.offsetWidth / 3;
+        } else if (window.innerWidth < 1050) {
+          maxRadius_x = 80;
+          minRadius_x = 2;
+          this.center_x = this.$refs.vis.offsetWidth / 2;
+        } else {
+          maxRadius_x = 90;
+          minRadius_x = 3;
+          this.center_x = this.$refs.vis.offsetWidth / 2;
         }
         console.log(window.innerHeight);
         console.log(window.innerWidth);
-        if(window.innerHeight<400){
-          maxRadius_y=40
-            minRadius_y=1
-          this.center_y=this.$refs.vis.offsetHeight*7/16;
+        if (window.innerHeight < 400) {
+          maxRadius_y = 40;
+          minRadius_y = 1;
+          this.center_y = (this.$refs.vis.offsetHeight * 7) / 16;
+        } else if (window.innerHeight < 600) {
+          maxRadius_y = 50;
+          minRadius_y = 1;
+          this.center_y = (this.$refs.vis.offsetHeight * 7) / 16;
+        } else {
+          maxRadius_y = 90;
+          minRadius_y = 2;
+          this.center_y = this.$refs.vis.offsetHeight / 2;
         }
-        else if(window.innerHeight<600){
-            maxRadius_y=50
-            minRadius_y=1
-            this.center_y=this.$refs.vis.offsetHeight*7/16;
-        }else{ 
-          maxRadius_y=90
-            minRadius_y=2
-            this.center_y=this.$refs.vis.offsetHeight/2;
-        }
-        maxRadius=Math.min(maxRadius_x,maxRadius_y)
-        minRadius=Math.min(minRadius_x,minRadius_y)
-        console.log("MINIMOX,",maxRadius);
-        console.log("MASSIMOX",minRadius);
-        
+        maxRadius = Math.min(maxRadius_x, maxRadius_y);
+        minRadius = Math.min(minRadius_x, minRadius_y);
+        console.log("MINIMOX,", maxRadius);
+        console.log("MASSIMOX", minRadius);
+
         let powRadiusScale = d3
           .scalePow()
           .exponent(0.5)
@@ -195,17 +193,14 @@ export default {
         .on("click", d => {
           this.$emit("click", d);
         })
-        .on("touchstart",function(d){ 
-          touched_node=d;          
+        .on("touchstart", function(d) {
+          touched_node = d;
         })
-        .on("touchmove",function(d){
-          if(touched_node!=d)
-            touched_node=null; 
+        .on("touchmove", function(d) {
+          if (touched_node != d) touched_node = null;
         })
-        .on("touchend",function(d){
-          if(touched_node!=null)
-           temp.$emit("click", d);
-          
+        .on("touchend", function(d) {
+          if (touched_node != null) temp.$emit("click", d);
         })
         .on("mouseover", function(d) {
           this.style["stroke-width"] = 3;
@@ -258,13 +253,14 @@ export default {
         d3
           .forceX()
           .strength(forceStrength)
-          .x(this.center_x));
+          .x(this.$refs.vis.offsetWidth / 2)
+      );
       simulation.force(
         "y",
         d3
           .forceY()
           .strength(forceStrength)
-          .y(this.center_y)
+          .y(this.$refs.vis.offsetHeight / 2)
       );
 
       simulation.alpha(1).restart();
