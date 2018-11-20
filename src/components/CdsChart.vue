@@ -5,7 +5,7 @@
       <p class="cds-desc">{{ name }}</p>
       <div class="cds-detail-data">
         <h4>{{ formattedAmount }}</h4>
-        <p>{{ formattedPercentage }} sul totale dell'azione</p>
+        <p>{{ formattedPercentage }} $LOWER_PARTITION_PERCENTAGE_MEANING</p>
       </div>
 
 

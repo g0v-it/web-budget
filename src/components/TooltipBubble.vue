@@ -5,11 +5,11 @@
     </v-card-title>
     <v-card-text class="tooltipText">
       <h3>{{ currentNode.name }}</h3>
-      <p>Percentuale: </p>
+      <p>$TOOLTIP_PERCENTAGE</p>
       <ul>
-        <li>sul totale del bilancio: <b><rate :rate="currentNode.percentageOfTheTotalAmount" /></b></li>
-        <li>sul ministero di appartenenza : <b><rate :rate="currentNode.percentageOfTheTopParition" /></b></li>
-        <li>sulla missione di appartenenza: <b><rate :rate="currentNode.percentageOfTheSecondParition" /></b></li>
+        <li>$TOOLTIP_PERCENTAGE_MEANING_1<b><rate :rate="currentNode.percentageOfTheTotalAmount" /></b></li>
+        <li>$TOOLTIP_PERCENTAGE_MEANING_2<b><rate :rate="currentNode.percentageOfTheTopParition" /></b></li>
+        <li>$TOOLTIP_PERCENTAGE_MEANING_3<b><rate :rate="currentNode.percentageOfTheSecondParition" /></b></li>
       </ul>
     </v-card-text>
     <div class="numberContainer">

@@ -11,14 +11,14 @@
           <img :src="logo_rdf" class="g0v-rdf-logo">
         </a>
       </h2>
-      <p class="top">Ministero: {{ currentNode.top_level }}</p>
-      <p class="second">Missione: {{ currentNode.partitions.second_partition }}</p>
+      <p class="top">$TOP_PARTITION: {{ currentNode.top_level }}</p>
+      <p class="second">$SECOND_PARTITION: {{ currentNode.partitions.second_partition }}</p>
       <p class="description">{{ currentNode.description | capitalize }}</p>
       <div class="numbers">
         <p class="amount"><amount :amount="currentNode.amount" /></p>
         <div class="rate">
-          <small>Variazione rispetto alla legge di bilancio {{ +budget.meta.year - 1 }}
-            <span v-if="!variation_available">non disponibile.</span>
+          <small>$PERCENTAGE_EXPLANATION_TEXT {{ +budget.meta.year - 1 }}
+            <span v-if="!variation_available">$VARIATION_NOT_AVAIlABLE</span>
           </small>
           <div
             v-if="variation_available" class="diff"
@@ -30,7 +30,7 @@
       </div>
     </v-card>
     <v-card class=" history">
-      <h2>Storico dell'azione</h2>
+      <h2>$HISTORY_CARD_TITLE</h2>
       <HistoryChart
         :values="history"
         :dataset-meta="budget.meta"
@@ -38,7 +38,7 @@
       />
     </v-card>
     <v-card class="partition">
-      <h2>Dettaglio capitoli di spesa</h2>
+      <h2>$LOWER_PARTITION_CARD_TITLE</h2>
       <CdsChart
         :values="{lower_partition:currentNode.cds,sum:currentNode.amount}"
         style=""

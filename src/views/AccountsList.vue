@@ -7,7 +7,7 @@
       block @click="visibleAccounts += 10"
       style="width:25em; margin: 5em auto 0 auto;"
     >
-      Visualizza altri
+      $$$
     </v-btn>
   </div>
 </template>

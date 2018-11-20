@@ -32,7 +32,7 @@
       </svg>
     </div>
     <div v-if="show_legend_colors" class="legend-colors">
-      <small>Variazione rispetto alla legge di bilancio {{ +datasetMeta.year - 1 }}</small>
+      <small>$PERCENTAGE_EXPLANATION_TEXT {{ +datasetMeta.year - 1 }}</small>
       <ul class="colors">
         <li class="change-dec3" />
         <li class="change-dec2" />

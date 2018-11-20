@@ -65,14 +65,14 @@
         <li>
           <a
             target="_blank" rel="noopener noreferrer"
-            href="https://github.com/g0v-it"
-          >Seguici su GitHub</a>
+            href="$$$"
+          >$$$</a>
         </li>
         <li class="g0v-credits hide">
-          <router-link :to="{ name: 'credits' }">crediti</router-link>
+          <router-link :to="{ name: 'credits' }">$$$</router-link>
         </li>
         <li class="hide">
-          <router-link :to="{ name: 'terms-and-conditions' }">termini d'uso</router-link>
+          <router-link :to="{ name: 'terms-and-conditions' }">$$$</router-link>
         </li>
         <li class="g0v-version">{{ version }}</li>
         <li class="g0v-license hide">
@@ -107,27 +107,27 @@ export default {
       items: [
         {
           icon: "bubble_chart",
-          title: "Grafico a Bolle",
+          title: "$$$",
           path: "/"
         },
         {
           icon: "view_list",
-          title: "Lista Azioni",
+          title: "$$$",
           path: "/list"
         },
         {
           icon: "table_chart",
-          title: "Tabella Azioni",
+          title: "$$$",
           path: "/table"
         },
         {
           icon: "people",
-          title: "Crediti",
+          title: "$$$",
           path: "/credits"
         },
         {
           icon: "account_balance",
-          title: "Termini d'uso",
+          title: "$$$",
           path: "/terms-and-conditions"
         }
       ],

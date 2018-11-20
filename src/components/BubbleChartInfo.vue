@@ -1,19 +1,19 @@
 <template>
   <div class="legend">
     <div class="legend-description">
-      <h2 class="title">Legge di Bilancio {{ datasetMeta.year }}
+      <h2 class="title">$MAIN_TITLE {{ datasetMeta.year }}
         <a target="_blank" :href="datasetMeta.source">
           <img :src="logo_rdf" class="g0v-rdf-logo">
         </a>
       </h2>
       <p v-if="show_description" class="description">{{ datasetMeta.description }}</p>
-      <p>Aggiornato al {{ datasetMeta.update }}</p>
-      <p>Spese totali: <b> <amount :amount="totAmount.amount" /></b></p>
-      <p v-if="totAmount.amount !== totAmount.filteredAmount">Spese filtrate: <b> <amount :amount="totAmount.filteredAmount" /></b></p>
+      <p>$INFO_LAST_UPDATE {{ datasetMeta.update }}</p>
+      <p>$INFO_TOTAL_LABEL<b> <amount :amount="totAmount.amount" /></b></p>
+      <p v-if="totAmount.amount !== totAmount.filteredAmount">$INFO_TOTAL_FILTERED_LABEL<b> <amount :amount="totAmount.filteredAmount" /></b></p>
     </div>
     <div class="legend-mef">
       <a :href="url_mef" target="_blank">
-        <small>Elaborazione su dati del Ministero dell'Economia e delle Finanze</small>
+        <small>$DATA_SOURCE_TEXT</small>
         <v-img
           v-if="logo_mef_show" :src="logo_mef"
           class="g0v-mef-logo"

@@ -10,7 +10,7 @@
           <v-spacer />
           <v-text-field
             v-model="search" append-icon="search"
-            label="Cerca" single-line
+            label="" single-line
             hide-details
           />
         </v-card-title>
@@ -19,7 +19,7 @@
           :items="accounts"
           :search="search"
           :pagination.sync="pagination"
-          rows-per-page-text="Righe per pagina"
+          rows-per-page-text="$PAGINATOR_TABLE_TEXT"
           :rows-per-page-items="[25,50,100,{text:'Tutti',value:-1}]"
           class="elevation-1"
         >
@@ -79,16 +79,16 @@ export default {
       },
       search: "",
       headers: [
-        { text: "Nome", value: "name" },
-        { text: "Spesa", value: "amount" },
+        { text: "$HEADER_COLUMN_1", value: "name" },
+        { text: "$HEADER_COLUMN_2", value: "amount" },
         {
           text:
-            "Var. da legge di bilancio " +
+            "$HEADER_COLUMN_3" +
             previousYear(this.$root.$data.budgetState.meta),
           value: "rate"
         },
-        { text: "Ministero", value: "partitions.top_partition" },
-        { text: "Missione", value: "partitions.second_partition" }
+        { text: "$TOP_PARTITION", value: "partitions.top_partition" },
+        { text: "$SECOND_PARTITION", value: "partitions.second_partition" }
       ]
     };
   },

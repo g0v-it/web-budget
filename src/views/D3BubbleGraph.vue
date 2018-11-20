@@ -7,21 +7,21 @@
           value="default"
           @click="onPartitionChange('default')"
         >
-          stato
+          $GLOBAL_NAME
         </v-btn>
         <v-btn
           flat color="primary"
           value="top_partition"
           @click="onPartitionChange('top_partition')"
         >
-          ministero
+          $TOP_PARTITION
         </v-btn>
         <v-btn
           flat color="primary"
           value="second_partition"
           @click="onPartitionChange('second_partition')"
         >
-          missione
+          $SECOND_PARTITION
         </v-btn>
       </v-btn-toggle>
     </div>
@@ -37,18 +37,18 @@
           <v-select
             class="select-ministero" @change="onFiltersChange"
             :items="top_partitions" v-model="budget.filters.top_partition"
-            label="Filtra per Ministero" multiple
+            label="$TOP_PARTITION_FILTER_TEXT" multiple
             clearable deletable-chips
-            chips hint="Scegli i ministeri a cui sei interessato"
+            chips hint="$TOP_PARTITION_FILTER_HINT"
             persistent-hint
           />
           <v-select
             class="select-missione" @change="onFiltersChange"
             :items="second_partitions" v-model="budget.filters.second_partition"
-            label="Filtra per Missione" block
+            label="$SECOND_PARTITION_FILTER_TEXT" block
             multiple clearable
             deletable-chips chips
-            hint="Scegli le missioni a cui sei interessato" persistent-hint
+            hint="$SECOND_PARTITION_FILTER_HINT" persistent-hint
           />
           <BubbleChartLegend :dataset-meta="budget.meta" class="g0v-legend" />
         </div>
@@ -56,12 +56,12 @@
 
       <div class="g0v-bubble-chart">
         <div v-responsive.md.sm.xs>
-          <h2 class="title">Legge di Bilancio {{ budget.meta.year }}
+          <h2 class="title">$MAIN_TITLE {{ budget.meta.year }}
             <a target="_blank" :href="budget.meta.source">
               <img :src="logo_rdf" class="g0v-rdf-logo">
             </a>
           </h2>
-          <p>Spese totali: <b> <amount :amount="totAmount.amount" /></b></p>
+          <p>$INFO_TOTAL_LABEL<b> <amount :amount="totAmount.amount" /></b></p>
         </div>
         <BudgetBubbles
           @click="onClick" @over="onMouseOver"
