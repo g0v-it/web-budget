@@ -1,4 +1,4 @@
-{
+export default{
     "$FIRST_VIEW":"Grafico a Bolle",
     "$SECOND_VIEW":"Lista Azioni",
     "$THIRD_VIEW":"Tabella Azioni",

@@ -65,14 +65,14 @@
         <li>
           <a
             target="_blank" rel="noopener noreferrer"
-            href="$$$"
-          >$$$</a>
+            :href="string['$FOLLOW_US_LINK']"
+          >{{string['$FOLLOW_US_TEXT']}}</a>
         </li>
         <li class="g0v-credits hide">
-          <router-link :to="{ name: 'credits' }">$$$</router-link>
+          <router-link :to="{ name: 'credits' }">{{string['$CREDIT_PAGE']}}</router-link>
         </li>
         <li class="hide">
-          <router-link :to="{ name: 'terms-and-conditions' }">$$$</router-link>
+          <router-link :to="{ name: 'terms-and-conditions' }">{{string['$TERMS_PAGE']}}</router-link>
         </li>
         <li class="g0v-version">{{ version }}</li>
         <li class="g0v-license hide">
@@ -94,7 +94,7 @@
 <script>
 import { get, post } from "axios";
 import Configuration from "@/utils/configuration";
-
+import fileString from '@/assets/string.js'
 var resizeTimer;
 var currentWidth;
 
@@ -104,33 +104,7 @@ export default {
     return {
       drawer: false,
       clipped: false,
-      items: [
-        {
-          icon: "bubble_chart",
-          title: "$$$",
-          path: "/"
-        },
-        {
-          icon: "view_list",
-          title: "$$$",
-          path: "/list"
-        },
-        {
-          icon: "table_chart",
-          title: "$$$",
-          path: "/table"
-        },
-        {
-          icon: "people",
-          title: "$$$",
-          path: "/credits"
-        },
-        {
-          icon: "account_balance",
-          title: "$$$",
-          path: "/terms-and-conditions"
-        }
-      ],
+      string:fileString,
       title: "",
       version: ""
     };
@@ -165,6 +139,35 @@ export default {
   },
   beforeUpdate() {},
   computed: {
+    items(){
+      return [
+        {
+          icon: "bubble_chart",
+          title: this.string['$FIRST_VIEW'],
+          path: "/"
+        },
+        {
+          icon: "view_list",
+          title: this.string['$SECOND_VIEW'],
+          path: "/list"
+        },
+        {
+          icon: "table_chart",
+          title: this.string['$THIRD_VIEW'],
+          path: "/table"
+        },
+        {
+          icon: "people",
+          title: this.string['$CREDIT_PAGE'],
+          path: "/credits"
+        },
+        {
+          icon: "account_balance",
+          title: this.string['$TERMS_PAGE'],
+          path: "/terms-and-conditions"
+        }
+      ]
+    },
     logo_copernicani_orizzontale() {
       return require("@/assets/copernicani_orizzontale.png");
     },

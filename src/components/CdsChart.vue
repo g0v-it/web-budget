@@ -5,7 +5,7 @@
       <p class="cds-desc">{{ name }}</p>
       <div class="cds-detail-data">
         <h4>{{ formattedAmount }}</h4>
-        <p>{{ formattedPercentage }} $LOWER_PARTITION_PERCENTAGE_MEANING</p>
+        <p>{{ formattedPercentage }} {{string['$LOWER_PARTITION_PERCENTAGE_MEANING']}}</p>
       </div>
 
 
@@ -15,7 +15,7 @@
 <script>
 import * as d3 from "d3";
 import { formatAmount, formatRate } from "@/utils/functions";
-
+import fileString from '@/assets/string.js'
 //---------------------------------------------------------
 //BUILDER
 let cdsSpeed = 4000;
@@ -117,6 +117,7 @@ export default {
   props: { values: Object },
   data() {
     return {
+      string:fileString,
       name: undefined,
       amount: undefined
     };

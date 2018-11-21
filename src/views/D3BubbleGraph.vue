@@ -7,21 +7,21 @@
           value="default"
           @click="onPartitionChange('default')"
         >
-          $GLOBAL_NAME
+          {{string['$GLOBAL_NAME']}}
         </v-btn>
         <v-btn
           flat color="primary"
           value="top_partition"
           @click="onPartitionChange('top_partition')"
         >
-          $TOP_PARTITION
+          {{string['$TOP_PARTITION']}}
         </v-btn>
         <v-btn
           flat color="primary"
           value="second_partition"
           @click="onPartitionChange('second_partition')"
         >
-          $SECOND_PARTITION
+          {{string['$SECOND_PARTITION']}}
         </v-btn>
       </v-btn-toggle>
     </div>
@@ -37,18 +37,18 @@
           <v-select
             class="select-ministero" @change="onFiltersChange"
             :items="top_partitions" v-model="budget.filters.top_partition"
-            label="$TOP_PARTITION_FILTER_TEXT" multiple
+            :label="string['$TOP_PARTITION_FILTER_TEXT']" multiple
             clearable deletable-chips
-            chips hint="$TOP_PARTITION_FILTER_HINT"
+            chips :hint="string['$TOP_PARTITION_FILTER_HINT']"
             persistent-hint
           />
           <v-select
             class="select-missione" @change="onFiltersChange"
             :items="second_partitions" v-model="budget.filters.second_partition"
-            label="$SECOND_PARTITION_FILTER_TEXT" block
+            :label="string['$SECOND_PARTITION_FILTER_TEXT']" block
             multiple clearable
             deletable-chips chips
-            hint="$SECOND_PARTITION_FILTER_HINT" persistent-hint
+            :hint="string['$SECOND_PARTITION_FILTER_HINT']" persistent-hint
           />
           <BubbleChartLegend :dataset-meta="budget.meta" class="g0v-legend" />
         </div>
@@ -56,12 +56,12 @@
 
       <div class="g0v-bubble-chart">
         <div v-responsive.md.sm.xs>
-          <h2 class="title">$MAIN_TITLE {{ budget.meta.year }}
+          <h2 class="title">{{string['$MAIN_TITLE']}} {{ budget.meta.year }}
             <a target="_blank" :href="budget.meta.source">
               <img :src="logo_rdf" class="g0v-rdf-logo">
             </a>
           </h2>
-          <p>$INFO_TOTAL_LABEL<b> <amount :amount="totAmount.amount" /></b></p>
+          <p>{{string['$INFO_TOTAL_LABEL']}}<b> <amount :amount="totAmount.amount" /></b></p>
         </div>
         <BudgetBubbles
           @click="onClick" @over="onMouseOver"
@@ -94,6 +94,7 @@ import TooltipBubble from "@/components/TooltipBubble.vue";
 import BubbleChartInfo from "@/components/BubbleChartInfo.vue";
 import BubbleChartLegend from "@/components/BubbleChartLegend.vue";
 import * as BudgetStore from "@/budgetStore.js";
+import fileString from '@/assets/string.js'
 
 import { debounce } from "lodash";
 
@@ -117,6 +118,7 @@ export default {
 
   data: function() {
     return {
+      string:fileString,
       dialog: false,
       hoveredNode: {},
       showTooltip: false

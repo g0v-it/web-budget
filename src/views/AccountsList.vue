@@ -7,7 +7,7 @@
       block @click="visibleAccounts += 10"
       style="width:25em; margin: 5em auto 0 auto;"
     >
-      $$$
+      {{string['$SHOW_MORE_LIST_BUTTON']}}
     </v-btn>
   </div>
 </template>
@@ -16,13 +16,14 @@
 import { min, max, scalePow } from "d3";
 import * as BudgetStore from "@/budgetStore.js";
 import AccountItem from "@/components/AccountListItem.vue";
-
+import stringFile from '@/assets/string.js'
 export default {
   components: {
     AccountItem
   },
   data() {
     return {
+      string:stringFile,
       visibleAccounts: 5,
       minAmount: 0,
       maxAmount: 0

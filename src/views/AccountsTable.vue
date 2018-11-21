@@ -9,7 +9,7 @@
           <v-spacer />
           <v-spacer />
           <v-text-field
-            v-model="search" append-icon="search"
+            v-model="string['$SEARCH_LABEL']" append-icon="search"
             label="" single-line
             hide-details
           />
@@ -19,7 +19,7 @@
           :items="accounts"
           :search="search"
           :pagination.sync="pagination"
-          rows-per-page-text="$PAGINATOR_TABLE_TEXT"
+          :rows-per-page-text="string['$PAGINATOR_TABLE_TEXT']"
           :rows-per-page-items="[25,50,100,{text:'Tutti',value:-1}]"
           class="elevation-1"
         >
@@ -64,6 +64,7 @@
 
 <script>
 import * as BudgetStore from "@/budgetStore.js";
+import fileString from '@/assets/string.js'
 
 const previousYear = function(meta) {
   return +meta.year - 1;
@@ -72,28 +73,30 @@ export default {
   name: "TableView",
   data() {
     return {
+      string:fileString,
       accounts: [],
       pagination: {
         sortBy: "amount",
         descending: true
       },
       search: "",
-      headers: [
-        { text: "$HEADER_COLUMN_1", value: "name" },
-        { text: "$HEADER_COLUMN_2", value: "amount" },
-        {
-          text:
-            "$HEADER_COLUMN_3" +
-            previousYear(this.$root.$data.budgetState.meta),
-          value: "rate"
-        },
-        { text: "$TOP_PARTITION", value: "partitions.top_partition" },
-        { text: "$SECOND_PARTITION", value: "partitions.second_partition" }
-      ]
+     
     };
   },
   computed: {
-    budget: function() {
+     headers(){return [
+        { text: this.string["$HEADER_COLUMN_1"], value: "name" },
+        { text: this.string["$HEADER_COLUMN_2"], value: "amount" },
+        {
+          text:
+            this.string["$HEADER_COLUMN_3"] +
+            previousYear(this.$root.$data.budgetState.meta),
+          value: "rate"
+        },
+        { text: this.string["$TOP_PARTITION"], value: "partitions.top_partition" },
+        { text: this.string["$SECOND_PARTITION"], value: "partitions.second_partition" }
+      ]},
+    budget() {
       return this.$root.$data.budgetState;
     }
   },

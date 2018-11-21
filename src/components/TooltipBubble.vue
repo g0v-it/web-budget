@@ -5,11 +5,11 @@
     </v-card-title>
     <v-card-text class="tooltipText">
       <h3>{{ currentNode.name }}</h3>
-      <p>$TOOLTIP_PERCENTAGE</p>
+      <p>{{string['$TOOLTIP_PERCENTAGE']}}</p>
       <ul>
-        <li>$TOOLTIP_PERCENTAGE_MEANING_1<b><rate :rate="currentNode.percentageOfTheTotalAmount" /></b></li>
-        <li>$TOOLTIP_PERCENTAGE_MEANING_2<b><rate :rate="currentNode.percentageOfTheTopParition" /></b></li>
-        <li>$TOOLTIP_PERCENTAGE_MEANING_3<b><rate :rate="currentNode.percentageOfTheSecondParition" /></b></li>
+        <li>{{string['$TOOLTIP_PERCENTAGE_MEANING_1']}}<b><rate :rate="currentNode.percentageOfTheTotalAmount" /></b></li>
+        <li>{{string['$TOOLTIP_PERCENTAGE_MEANING_2']}}<b><rate :rate="currentNode.percentageOfTheTopParition" /></b></li>
+        <li>{{string['$TOOLTIP_PERCENTAGE_MEANING_3']}}<b><rate :rate="currentNode.percentageOfTheSecondParition" /></b></li>
       </ul>
     </v-card-text>
     <div class="numberContainer">
@@ -25,7 +25,14 @@
   </div>
 </template>
 <script>
+
+import fileString from '@/assets/string.js'
 export default {
+  data(){
+    return{
+      string:fileString
+    }
+  },
   props: {
     currentNode: Object,
     bgColor: String

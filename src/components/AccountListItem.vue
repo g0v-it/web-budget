@@ -12,8 +12,8 @@
     <h2 class="name">
       {{ account.name }} <router-link :to="{name:'account-details', params:{code:account.code}}"><v-icon color="blue">link</v-icon></router-link>
     </h2>
-    <p class="top-partition">$$$: {{ account.partitions.top_partition }}  </p>
-    <p class="second-partition">$$$: {{ account.partitions.second_partition }}</p>
+    <p class="top-partition">{{string['$TOP_PARTITION']}}: {{ account.partitions.top_partition }}  </p>
+    <p class="second-partition">{{string['$SECOND_PARTITION']}}: {{ account.partitions.second_partition }}</p>
     <p class="amount"><amount :amount="account.amount" format="$ 0.0 a" /></p>
     <p class="rate"><rate v-if="account.last_amount!=undefined" :rate="rate(account)" format="+0.0 %" /></p>
     <br v-responsive.sm.xs>
@@ -24,7 +24,13 @@
 <script>
 import { rgb } from "d3";
 import { fillColor } from "@/utils/functions.js";
+import fileString from '@/assets/string.js'
 export default {
+  data(){
+    return{
+    string:fileString
+    }
+  },
   props: {
     account: Object,
     r: Number
