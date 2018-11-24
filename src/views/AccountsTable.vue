@@ -1,20 +1,18 @@
 <template>
   <div class="container">
-
-
     <div class="g0v-table-container">
       <!--  -->
-      <v-card>
-        <v-card-title>
-          <v-spacer />
-          <v-spacer />
-          <v-text-field
-            v-model="string['$SEARCH_LABEL']" append-icon="search"
-            label="" single-line
+      <VCard>
+        <VCardTitle>
+          <VSpacer />
+          <VSpacer />
+          <VTextField
+            v-model="search" append-icon="search"
+            :label="string['$SEARCH_LABEL']" single-line
             hide-details
           />
-        </v-card-title>
-        <v-data-table
+        </VCardTitle>
+        <VDataTable
           :headers="headers"
           :items="accounts"
           :search="search"
@@ -23,7 +21,6 @@
           :rows-per-page-items="[25,50,100,{text:'Tutti',value:-1}]"
           class="elevation-1"
         >
-
           <template slot="headers" slot-scope="props">
             <tr>
               <th
@@ -34,7 +31,9 @@
                 @click="changeSort(header.value)"
               >
                 {{ header.text }}
-                <v-icon small>arrow_upward</v-icon>
+                <VIcon small>
+                  arrow_upward
+                </VIcon>
               </th>
             </tr>
           </template>
@@ -45,26 +44,38 @@
               class="account-name" width="35%"
               style="font-weight: 500;"
             >
-              {{ props.item.name }} <router-link :to="{name:'account-details', params:{code:props.item.code}}"><v-icon small color="blue">link</v-icon></router-link>
+              {{ props.item.name }} <RouterLink :to="{name:'account-details', params:{code:props.item.code}}">
+                <VIcon small color="blue">
+                  link
+                </VIcon>
+              </RouterLink>
             </td>
-            <td class="account-amount" width="10%"><amount :amount="props.item.amount" format="$ 0.0 a" /></td>
-            <td class="account-amount" width="10%"><rate :rate="props.item.rate" format="+0.0 %" /></td>
-            <td class="account-top" width="15%">{{ props.item.partitions.top_partition }}</td>
-            <td class="account-second" width="">{{ props.item.partitions.second_partition }}</td>
+            <td class="account-amount" width="10%">
+              <Amount :amount="props.item.amount" format="$ 0.0 a" />
+            </td>
+            <td class="account-amount" width="10%">
+              <Rate :rate="props.item.rate" format="+0.0 %" />
+            </td>
+            <td class="account-top" width="15%">
+              {{ props.item.partitions.top_partition }}
+            </td>
+            <td class="account-second" width="">
+              {{ props.item.partitions.second_partition }}
+            </td>
           </template>
 
           <template slot="pageText" slot-scope="props">
             {{ props.pageStart }} - {{ props.pageStop }} di {{ props.itemsLength }}
           </template>
-        </v-data-table>
-      </v-card>
+        </VDataTable>
+      </VCard>
     </div>
   </div>
 </template>
 
 <script>
 import * as BudgetStore from "@/budgetStore.js";
-import fileString from '@/assets/string.js'
+import fileString from "@/assets/string.js";
 
 const previousYear = function(meta) {
   return +meta.year - 1;
@@ -73,18 +84,18 @@ export default {
   name: "TableView",
   data() {
     return {
-      string:fileString,
+      string: fileString,
       accounts: [],
       pagination: {
         sortBy: "amount",
         descending: true
       },
-      search: "",
-     
+      search: ""
     };
   },
   computed: {
-     headers(){return [
+    headers() {
+      return [
         { text: this.string["$HEADER_COLUMN_1"], value: "name" },
         { text: this.string["$HEADER_COLUMN_2"], value: "amount" },
         {
@@ -93,9 +104,16 @@ export default {
             previousYear(this.$root.$data.budgetState.meta),
           value: "rate"
         },
-        { text: this.string["$TOP_PARTITION"], value: "partitions.top_partition" },
-        { text: this.string["$SECOND_PARTITION"], value: "partitions.second_partition" }
-      ]},
+        {
+          text: this.string["$TOP_PARTITION"],
+          value: "partitions.top_partition"
+        },
+        {
+          text: this.string["$SECOND_PARTITION"],
+          value: "partitions.second_partition"
+        }
+      ];
+    },
     budget() {
       return this.$root.$data.budgetState;
     }

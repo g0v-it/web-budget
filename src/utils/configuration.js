@@ -8,7 +8,7 @@ const ConfigurationFactory = function() {
 
     locale: "it",
 
-    amountFormat: "$ 0,0. ",
+    amountFormat: "$ 0,0 ",
 
     rateFormat: "0.0 %",
 

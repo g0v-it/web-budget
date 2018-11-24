@@ -1,23 +1,24 @@
 <template>
   <div ref="vis" class="vis">
-
     <div
       ref="grid" v-if="partitionId !== 'default'"
-      class="grid"
+      :class="{ 'grid': true, 'grid-one-line': partitionBlocks.length === 2 }"
     >
       <div
         v-for="block in partitionBlocks" :key="block[partitionId]"
         class="grid-block"
       >
-        <h3 class="subheading">{{ block[partitionId] }}</h3>
+        <h3 class="subheading">
+          {{ block[partitionId] }}
+        </h3>
         <!-- amount da calcolare in base al filtro -->
-        <h3 class="title"><amount :amount="block.filteredAmount" /></h3>
-
+        <h3 class="title">
+          <Amount :amount="block.filteredAmount" />
+        </h3>
       </div>
     </div>
 
     <svg id="bubbles" />
-
   </div>
 </template>
 
@@ -45,7 +46,7 @@ export default {
     filters: Object
   },
 
-  data: () => {
+  data() {
     return {
       center_x: 0,
       center_y: 0
@@ -75,10 +76,20 @@ export default {
       this.toggleGrouping();
       this.filterBubbles();
     }
+    window.addEventListener(
+      "resize",
+      debounce(() => {
+        this.toggleGrouping();
+      }, 500)
+    );
   },
 
   updated() {
     this.toggleGrouping();
+  },
+
+  beforeDestroy() {
+    window.removeEventListener("resize");
   },
 
   methods: {
@@ -316,8 +327,7 @@ export default {
       }
     },
     filterBubbles() {
-      let bubbles = d3
-        .select("#bubbles")
+      d3.select("#bubbles")
         .selectAll("circle")
         .classed("disabled", d => {
           if (filterPassed(d, this.filters)) {
@@ -360,12 +370,18 @@ export default {
 .grid {
   text-align: center;
   display: grid;
-  /*   grid-gap: 1rem; */
-  grid-row-gap: 2rem;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(25em, 1fr));
   grid-auto-rows: 30rem;
   pointer-events: all;
 }
+
+@media screen and (min-width: 900px) {
+  .grid-one-line {
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: 100%;
+  }
+}
+
 .grid .subheading,
 .grid .title {
   z-index: 1;
@@ -376,18 +392,5 @@ export default {
   position: relative;
   display: flex;
   flex-direction: column;
-  /*   justify-content: space-between; */
-}
-
-@media screen and (max-width: 900px) {
-  .grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media screen and (max-width: 600px) {
-  .grid {
-    grid-template-columns: repeat(1, 1fr);
-  }
 }
 </style>
