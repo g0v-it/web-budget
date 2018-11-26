@@ -32,7 +32,7 @@
       </svg>
     </div>
     <div v-if="show_legend_colors" class="legend-colors">
-      <small>{{string['$PERCENTAGE_EXPLANATION_TEXT']}} {{ +datasetMeta.year - 1 }}</small>
+      <small>{{string['$PERCENTAGE_EXPLANATION_TEXT']}}</small>
       <ul class="colors">
         <li class="change-dec3" />
         <li class="change-dec2" />

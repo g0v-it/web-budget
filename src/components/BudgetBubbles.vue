@@ -5,11 +5,11 @@
       :class="{ 'grid': true, 'grid-one-line': partitionBlocks.length === 2 }"
     >
       <div
-        v-for="block in partitionBlocks" :key="block[partitionId]"
+        v-for="block in partitionBlocks" :key="block.label"
         class="grid-block"
       >
         <h3 class="subheading">
-          {{ block[partitionId] }}
+          {{ block.label }}
         </h3>
         <!-- amount da calcolare in base al filtro -->
         <h3 class="title">
@@ -56,7 +56,7 @@ export default {
   computed: {
     partitionBlocks: function() {
       return this.partitionId !== "default"
-        ? this.partitionLabels[this.partitionId]
+        ? this.partitionLabels[this.partitionId].partitions
         : [];
     }
   },
@@ -102,11 +102,11 @@ export default {
           return +d.amount;
         });
         let maxRate = d3.max(rawData, function(d) {
-          let rate = (d.amount - d.last_amount) / d.last_amount;
+          let rate = (d.amount - d.previousValue) / d.previousValue;
           return isFinite(rate) ? rate : 0;
         });
         let minRate = d3.min(rawData, function(d) {
-          let rate = (d.amount - d.last_amount) / d.last_amount;
+          let rate = (d.amount - d.previousValue) / d.previousValue;
           return isFinite(rate) ? rate : 0;
         });
         let maxRadius_x, minRadius_x, maxRadius_y, minRadius_y;
@@ -164,17 +164,17 @@ export default {
           .range([this.$refs.vis.offsetHeight, 0]);
 
         let myNodes = rawData.map(d => {
-          let diff = (d.amount - d.last_amount) / d.last_amount;
+          let diff = (d.amount - d.previousValue) / d.previousValue;
           let diffForHeight = isFinite(diff) ? diff : -0.000001;
           return {
             id: d.code,
-            name: d.name,
-            top_level: d.top_level,
+            title: d.title,
+            subject: d.subject,
             radiusPow: powRadiusScale(+d.amount),
             radiusLinear: linearRadiusScale(+d.amount),
             amount: d.amount,
             diff: diff,
-            partitions: d.partitions,
+            partitionLabel: d.partitionLabel,
             x: (Math.random() / 2 + 0.25) * this.$refs.vis.offsetWidth,
             y: heightScale(diffForHeight)
           };
@@ -278,10 +278,11 @@ export default {
     },
     splitBubbles(group_cat_id) {
       //assign center to bubble
-
+      console.log(group_cat_id);
+      
       for (let i = 0; i < nodes.length; ++i) {
         let center = group_cat_id.labels.find(function(el) {
-          return el.value == nodes[i].partitions[group_cat_id.partition];
+          return  nodes[i].partitionLabel.includes(el.value);
         });
         nodes[i].group_center = { x: center.x, y: center.y };
       }
@@ -315,14 +316,14 @@ export default {
         let centers = calcCenterOfBlocks(this.$refs.grid.childNodes);
 
         for (let i = 0; i < this.partitionBlocks.length; i++) {
-          centers[i].value = this.partitionBlocks[i][this.partitionId];
+          centers[i].value = this.partitionBlocks[i].label;
         }
 
         let groupCatId = {
           partition: this.partitionId,
           labels: centers
         };
-
+        console.log(groupCatId)
         this.splitBubbles(groupCatId);
       }
     },

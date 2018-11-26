@@ -2,26 +2,11 @@
   <div class="g0v-container">
     <div class="g0v-partitions-header">
       <v-btn-toggle v-model="budget.selectedPartition" mandatory>
-        <v-btn
+        <v-btn v-for="(b,index) in budget.partitionButtons" :key="index"
           flat color="primary"
-          value="default"
-          @click="onPartitionChange('default')"
-        >
-          {{string['$GLOBAL_NAME']}}
-        </v-btn>
-        <v-btn
-          flat color="primary"
-          value="top_partition"
-          @click="onPartitionChange('top_partition')"
-        >
-          {{string['$TOP_PARTITION']}}
-        </v-btn>
-        <v-btn
-          flat color="primary"
-          value="second_partition"
-          @click="onPartitionChange('second_partition')"
-        >
-          {{string['$SECOND_PARTITION']}}
+          :value="b.value"
+          @click="onPartitionChange(b.value)">
+          {{b.title}}
         </v-btn>
       </v-btn-toggle>
     </div>
@@ -34,21 +19,13 @@
         </div>
 
         <div v-responsive.md.lg.xl class="right-column">
-          <v-select
-            class="select-ministero" @change="onFiltersChange"
-            :items="top_partitions" v-model="budget.filters.top_partition"
-            :label="string['$TOP_PARTITION_FILTER_TEXT']" multiple
+          <v-select v-for="(s,index) in budget.filterSelect" :key="index"
+            :items="s.labels" v-model="s.model"
+            @change="onFiltersChange"
+            :label="string['$PARTITION_FILTER_TEXT']+' '+s.title" multiple
             clearable deletable-chips
-            chips :hint="string['$TOP_PARTITION_FILTER_HINT']"
+            chips
             persistent-hint
-          />
-          <v-select
-            class="select-missione" @change="onFiltersChange"
-            :items="second_partitions" v-model="budget.filters.second_partition"
-            :label="string['$SECOND_PARTITION_FILTER_TEXT']" block
-            multiple clearable
-            deletable-chips chips
-            :hint="string['$SECOND_PARTITION_FILTER_HINT']" persistent-hint
           />
           <BubbleChartLegend :dataset-meta="budget.meta" class="g0v-legend" />
         </div>
@@ -67,18 +44,18 @@
           @click="onClick" @over="onMouseOver"
           @out="onMouseOut"
           :partition-id="budget.selectedPartition" :partition-labels="budget.partitionLabels"
-          :accounts="budget.accounts" :filters="budget.filters"
+          :accounts="budget.accounts" :filters="filters"
         />
         <div v-responsive.sm.xs />
       </div>
 
 
-      <TooltipBubble
+      <!--TooltipBubble
         class="tooltip"
         :style="{ top: hoveredNode.y + 'px' , left: hoveredNode.x + 'px' }"
         :current-node="hoveredNode" :bg-color="hoveredNode.colorBg"
         v-if="showTooltip" @mounted="calcTooltipPos"
-      />
+      /-->
 
 
 
@@ -94,7 +71,7 @@ import TooltipBubble from "@/components/TooltipBubble.vue";
 import BubbleChartInfo from "@/components/BubbleChartInfo.vue";
 import BubbleChartLegend from "@/components/BubbleChartLegend.vue";
 import * as BudgetStore from "@/budgetStore.js";
-import fileString from '@/assets/string.js'
+import fileString from "@/assets/string.js";
 
 import { debounce } from "lodash";
 
@@ -118,10 +95,11 @@ export default {
 
   data: function() {
     return {
-      string:fileString,
+      string: fileString,
       dialog: false,
       hoveredNode: {},
-      showTooltip: false
+      showTooltip: false,
+      budget: BudgetStore.state
     };
   },
 
@@ -129,96 +107,91 @@ export default {
     logo_rdf() {
       return require("@/assets/rdf_flyer.svg");
     },
-    /*retrive data from root component*/
-    budget: function() {
-      return this.$root.$data.budgetState;
-    },
     /* parametro corrispondente alla somma degli amount delle bolle*/
     totAmount: function() {
       let amount = 0;
       let filteredAmount = 0;
-      if (this.budget.partitionLabels.top_partition) {
-        this.budget.partitionLabels.top_partition.map(i => {
-          filteredAmount += parseFloat(i.filteredAmount);
-          amount += parseFloat(i.amount);
-        });
+      let partition_keys = Object.keys(this.budget.partitionLabels);
+      if (partition_keys.length > 1) {
+        if (this.budget.partitionLabels[partition_keys[1]].partitions) {
+          this.budget.partitionLabels[partition_keys[1]].partitions.map(i => {
+            filteredAmount += parseFloat(i.filteredAmount);
+            amount += parseFloat(i.partitionAmount);
+          });
+        }
       }
+      console.log(amount);
+      
       return { amount, filteredAmount };
     },
-    /*genera array di stringhe per popolare lista filtri top partition*/
-    top_partitions() {
-      let ministeri = [];
-      if (this.budget.partitionLabels["top_partition"]) {
-        for (
-          let i = 0;
-          i < this.budget.partitionLabels["top_partition"].length;
-          i++
-        ) {
-          const element = this.budget.partitionLabels["top_partition"][i][
-            "top_partition"
-          ];
-          ministeri.push(element);
+    /*genera array di stringhe per popolare lista filtri */
+    partitionsLabels() {
+      let partitions_labels = [];
+      let partitions_keys = this.budget.partitionLabels.keys;
+      for (let i = 0; i < partitions.length; ++i) {
+        if (this.budget.partitionLabels[partitions_keys[i]].partitions != 0) {
+          let partition_labels = [];
+          for (
+            let i = 0;
+            i <
+            this.budget.partitionLabels[partitions_keys[i]].partitions.length;
+            i++
+          ) {
+            const element = this.budget.partitionLabels[partitions_keys[i]]
+              .partitions[i]["title"];
+            partition_labels.push(element);
+          }
+          partitions_labels.push({
+            partitionSchemaName: partitions_keys[i],
+            partitionSchemaLabels: partition_labels
+          });
         }
       }
-      return ministeri;
+      console.log(partitions_labels);
+      return partitions_labels;
     },
-    /*genera array di stringhe per popolare lista filtri second partition*/
-    second_partitions() {
-      let missioni = [];
-      if (this.budget.partitionLabels["second_partition"]) {
-        for (
-          let i = 0;
-          i < this.budget.partitionLabels["second_partition"].length;
-          i++
-        ) {
-          const element = this.budget.partitionLabels["second_partition"][i][
-            "second_partition"
-          ];
-          missioni.push(element);
-        }
+
+    filters() {
+      let filterObj = {};
+      for (let i = 0; i < this.budget.filterSelect.length; i++) {
+        filterObj[this.budget.filterSelect[i].value] = this.budget.filterSelect[
+          i
+        ].model;
       }
-      return missioni;
+      console.log(filterObj);
+
+      return filterObj;
     }
   },
 
   async beforeRouteEnter(to, from, next) {
     if (
-      BudgetStore.state.accounts.length === 0 &&
-      Object.keys(BudgetStore.state.partitionLabels).length === 0
+      BudgetStore.state.accounts.length === 0 //&&
+      //Object.keys(BudgetStore.state.partitionLabels).length === 0
     ) {
       await Promise.all([
-        BudgetStore.actions.readAccounts(),
-        BudgetStore.actions.readPartitionLabels()
+        BudgetStore.actions.readAccounts()
+        //BudgetStore.actions.readPartitionLabels()
       ]);
-    } else if (Object.keys(BudgetStore.state.partitionLabels).length === 0) {
-      await BudgetStore.actions.readPartitionLabels();
+      //} else if (Object.keys(BudgetStore.state.partitionLabels).length === 0) {
+      // await BudgetStore.actions.readPartitionLabels();
     }
     next();
   },
 
   created() {
     /* Init filters from url params */
-    this.budget.filters.top_partition = [];
-    this.budget.filters.second_partition = [];
-    if (Array.isArray(this.$route.query.top_partition)) {
-      this.budget.filters.top_partition = this.$route.query.top_partition;
-    } else if (this.$route.query.top_partition) {
-      this.budget.filters.top_partition.push(this.$route.query.top_partition);
-    }
-
-    if (Array.isArray(this.$route.query.second_partition)) {
-      this.budget.filters.second_partition = this.$route.query.second_partition;
-    } else if (this.$route.query.second_partition) {
-      this.budget.filters.second_partition.push(
-        this.$route.query.second_partition
-      );
-    }
-
-    BudgetStore.actions.readFilteredTots();
-
+      this.budget.filterSelect.map(s => {
+      s.model = [];
+      if (Array.isArray(this.$route.query[s.value])) {
+        s.model = this.$route.query[s.value];
+      } else if (this.$route.query[s.value]) {
+        s.model.push(this.$route.query[s.value]);
+      }
+    });
+    BudgetStore.actions.readFilteredTots(this.filters);
     /* set partition to show */
     BudgetStore.actions.selectPartition(this.urlPartitionID);
-
     readPartitionLabels = debounce(BudgetStore.actions.readFilteredTots, 1000);
   },
 
@@ -229,21 +202,34 @@ export default {
     onMouseOver(node) {
       let n = {
         ...node,
-        percentageOfTheTotalAmount: node.amount / this.totAmount.amount,
-        percentageOfTheTopParition:
-          node.amount /
-          this.budget.filteredTot.top_partition_label[
-            node.partitions.top_partition
-          ],
-        percentageOfTheSecondParition:
-          node.amount /
-          this.budget.filteredTot.second_partition_label[
-            node.partitions.second_partition
-          ],
         colorBg: node.colorBg,
         x: node.x + node.radius / 1.4142,
         y: node.y + node.radius / 1.4142
       };
+        let percentage=[];
+        let keys =Object.keys(this.budget.partitionLabels)
+        keys.map((k)=>{
+          let obj={};
+          if(this.budget.partitionLabels[k].partitions==0){
+            obj["part"]=false
+            obj["value"]=node.amount/this.totAmount.amount
+          }else{
+            obj["part"]=true
+            obj["string"]=this.budget.partitionLabels[k].title
+            node.partitionLabel.map((tag)=>{
+              console.log(tag)
+              let element=this.budget.partitionLabels[k].partitions.find((el)=>{
+                console.log(el);
+                
+                return el.label==tag
+              })                   
+                obj["value"]=node.amount/element.partitionAmount
+            });
+          }
+          percentage.push(obj)
+          //console.log(obj);
+        })
+      n["percentages"]=percentage;
       this.hoveredNode = n;
       this.showTooltip = true;
     },
@@ -267,22 +253,22 @@ export default {
       if (partitionId === "default") {
         this.$router.push({
           name: "d3-bubble-graph",
-          query: { ...this.budget.filters }
+         query: { ...this.filters }
         });
       } else {
         this.$router.push({
           name: "accounts-partition",
           params: { urlPartitionID: partitionId },
-          query: { ...this.budget.filters }
+          query: { ...this.filters }
         });
       }
     },
     onFiltersChange() {
       this.$router.replace({
         name: "d3-bubble-graph",
-        query: { ...this.budget.filters }
+        query: { ...this.filters }
       });
-      readPartitionLabels();
+      readPartitionLabels(this.filters);
     }
   }
 };

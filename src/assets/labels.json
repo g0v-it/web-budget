@@ -1,0 +1,77 @@
+{
+
+    "title": "2019 - Disegno Legge di Bilancio Presentato Elaborabile Spese Capitolo",
+    "description": "Dati di Spesa relativi al Disegno Legge di Bilancio Presentato per l'esercizio finanziario di riferimento - Atto dovuto in formato elaborabile - [DLB_SPE_ELB_CAP_001]\n",
+    "source": "http://data.budget.g0v.it/resource/spd_dlb_spe_elb_cap_01_2019",
+    "um": "EUR",
+    "partitionSchemes":  { 
+        "default": {
+            "title": "STATO",
+            "partitions" : []
+        },
+        "top_partition": {
+            "title": "MINISTERO",
+            "partitions" : [
+                {
+                    "title": "Lavoro e Politiche Sociali",
+                    "amount": "139492783471.0"
+                },
+                ...
+            ]
+        },
+        "second_partition":{
+            "title": "MISSIONE",
+            "partitions" : [
+                {
+                    "title": "debito pubblico",
+                    "amount": "1492783471.0"
+                },
+                ...
+            ]
+        }
+    },
+    "partitionOrderedList": [
+        "default","top_partition","second_partition"
+    ],
+    "accounts": [
+        {
+            "code": "9573e01d3ad28201b6de9b73370b5ff8",
+            "title": "rimborso titoli del debito statale",
+            "amount": 228304370200,
+            "previousValue": 225354370200,
+            "partitions": ["Economia e Finanze","debito pubblico"],
+            "subject": "Economia e Finanze"
+        },
+        {
+            "code": "7921291ce7a4073b400adae308da375e",
+            "title": "tutela dei livelli essenziali di assistenza",
+            "amount": 73216024000,
+            "previousValue": 73211179333,
+            "partitions": ["Economia e Finanze","Lavoro e Politiche Sociali"],
+            "subject": "Economia e Finanze"
+        }
+    ]
+}
+
+{
+    "code": "7921291ce7a4073b400adae308da375e",
+    "source": "http://data.budget.g0v.it/resource/spd_dlb_spe_elb_cap_01_2019_azione_2661761444_component",
+    "title": "tutela dei livelli essenziali di assistenza",
+    "amount": 73216024000.00 ,
+    "previousValue": 73211179333.00 ,
+    "partitions": ["Economia e Finanze", "Lavoro e Politiche Sociali"]
+    "subject": "Economia e Finanze",
+    "description": "azione parte del programma rimborsi del debito statale. [Pagamento delle quote capitale sui titoli del debito statale. Rimborso del capitale relativo a buoni postali fruttiferi. Rimborso alla Banca d'Italia del controvalore delle lire presentate al cambio per il ritiro dalla circolazione. Rimborso passività a carico dello Stato]",
+    "verision": "2017";
+    "isVersionOf": [
+        {  "version": "2016", "amount": 73211179333.00 },
+        {  "version": "2015", "amount": 1232323.00 }
+    ],    
+    "hasPart":[
+        [ "title": "amount detail 1 of a1"; bgo:amount 400 ],
+        [ "title": "amount detail 2 of a1"; bgo:amount 600 ]
+    ]
+    "bubbleGraph" : {
+        "um": "EUR",
+    }
+}*/

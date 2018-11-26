@@ -1,15 +1,14 @@
 <template>
   <div ref="tooltip" class="bubble-tooltip card">
     <v-card-title class=" tooltipTitle headline grey lighten-2" primary-title>
-      <p>{{ currentNode.top_level }}</p>
+      <p>{{ currentNode.subject }}</p>
     </v-card-title>
     <v-card-text class="tooltipText">
-      <h3>{{ currentNode.name }}</h3>
+      <h3>{{ currentNode.title }}</h3>
       <p>{{string['$TOOLTIP_PERCENTAGE']}}</p>
       <ul>
-        <li>{{string['$TOOLTIP_PERCENTAGE_MEANING_1']}}<b><rate :rate="currentNode.percentageOfTheTotalAmount" /></b></li>
-        <li>{{string['$TOOLTIP_PERCENTAGE_MEANING_2']}}<b><rate :rate="currentNode.percentageOfTheTopParition" /></b></li>
-        <li>{{string['$TOOLTIP_PERCENTAGE_MEANING_3']}}<b><rate :rate="currentNode.percentageOfTheSecondParition" /></b></li>
+        <li v-for="(p,index) in currentNode.percentages" :key="index">
+          {{p.string}}{{p.part?string['$TOOLTIP_PERCENTAGE_MEANING']:string['$TOOLTIP_TOTAL_MEANING']}}<b><rate :rate="p.value" /></b></li>
       </ul>
     </v-card-text>
     <div class="numberContainer">

@@ -36,44 +36,46 @@ export function calcCenterOfBlocks(childNodes) {
 }
 
 export function filterPassed(d, filters) {
-  if (filters.top_partition.length && filters.second_partition.length) {
-    return (
-      filters.top_partition.includes(d.partitions.top_partition) &&
-      filters.second_partition.includes(d.partitions.second_partition)
-    );
+  let filterKeys= Object.keys(filters);
+  let testPassed=[];
+  for(let key=0; key<filterKeys.length;++key){
+    if(filters[filterKeys[key]].length!=0){
+      let contenuto=false
+      d.partitionLabel.map((d)=>{
+        if(filters[filterKeys[key]].includes(d)){
+          contenuto=true
+        }
+      });
+      if(contenuto){
+        testPassed[key]=1;
+      }else{
+        testPassed[key]=0;
+      }
+    }else{
+      testPassed[key]=1;
+    }
   }
-  if (filters.top_partition.length || filters.second_partition.length) {
-    return (
-      filters.top_partition.includes(d.partitions.top_partition) ||
-      filters.second_partition.includes(d.partitions.second_partition)
-    );
-  }
-  return true;
+  return testPassed.reduce((somma,current)=>{return somma+current},0)==filterKeys.length
 }
 
 export function computeNewFilteredTotals(partitionLabels, filteredTot) {
   let newPartitionLabels = {};
+  let partition_keys=Object.keys(partitionLabels);
   /* compute new tot */
-  newPartitionLabels.top_partition = partitionLabels.top_partition.map(item => {
-    if (filteredTot.top_partition_label[item.top_partition]) {
-      item.filteredAmount = filteredTot.top_partition_label[item.top_partition];
-    } else {
-      item.filteredAmount = 0;
-    }
-    return item;
-  });
-
-  newPartitionLabels.second_partition = partitionLabels.second_partition.map(
-    item => {
-      if (filteredTot.second_partition_label[item.second_partition]) {
-        item.filteredAmount =
-          filteredTot.second_partition_label[item.second_partition];
+  for(let i=0;i<partition_keys.length;++i){
+    newPartitionLabels[partition_keys[i]]=partitionLabels[partition_keys[i]]
+    newPartitionLabels[partition_keys[i]].partitions.map(item=>{
+      if (filteredTot[partition_keys[i]][item.title]) {
+        item.filteredAmount = filteredTot[partition_keys[i]][item.title];
       } else {
         item.filteredAmount = 0;
       }
       return item;
-    }
-  );
+    });
+    
+  }
+  console.log(newPartitionLabels);
+  
   return newPartitionLabels;
 }
 
