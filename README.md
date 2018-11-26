@@ -83,9 +83,11 @@ npm run build
 To customize the settings add a `config.js` file in the `public` directory with this content:
 
 ```
-(function (window) {
-    window.__configurationUrl = '/config.json';
-}(this));
+(function(window) {
+  window.__configurationUrl = "/config.json";
+  window.__stringUrl = "/strings/inps.json";
+})(this);
+
 ```
 
 Anr a `config.json` file to the `public` directory with this content and customize the parameters:
