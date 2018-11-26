@@ -50,12 +50,12 @@
       </div>
 
 
-      <!--TooltipBubble
+      <TooltipBubble
         class="tooltip"
         :style="{ top: hoveredNode.y + 'px' , left: hoveredNode.x + 'px' }"
         :current-node="hoveredNode" :bg-color="hoveredNode.colorBg"
         v-if="showTooltip" @mounted="calcTooltipPos"
-      /-->
+      />
 
 
 
@@ -208,27 +208,28 @@ export default {
       };
         let percentage=[];
         let keys =Object.keys(this.budget.partitionLabels)
+        console.log(node.partitionLabel);
+        
+        node.partitionLabel.map((tag)=>{
         keys.map((k)=>{
-          let obj={};
-          if(this.budget.partitionLabels[k].partitions==0){
-            obj["part"]=false
-            obj["value"]=node.amount/this.totAmount.amount
-          }else{
+          if(this.budget.partitionLabels[k].partitions!=0){
+            console.log("PARTITION SCHEMA ",k);
+            let obj={};
             obj["part"]=true
             obj["string"]=this.budget.partitionLabels[k].title
-            node.partitionLabel.map((tag)=>{
-              console.log(tag)
               let element=this.budget.partitionLabels[k].partitions.find((el)=>{
-                console.log(el);
-                
                 return el.label==tag
-              })                   
+              })
+              console.log(element);
+            if(element){
+                console.log("AGGIUNTO");
                 obj["value"]=node.amount/element.partitionAmount
-            });
+                percentage.push(obj)
+            }
           }
-          percentage.push(obj)
-          //console.log(obj);
+          });
         })
+        percentage.push({part:false,value:node.amount/this.totAmount.amount})
       n["percentages"]=percentage;
       this.hoveredNode = n;
       this.showTooltip = true;
