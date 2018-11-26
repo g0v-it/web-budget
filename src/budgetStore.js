@@ -53,11 +53,6 @@ export let actions = {
     
   },
 
-  /* readPartitionLabels: async () => {
-     const { data } = await get(`${__apiEndpoint}/partition_labels`);
-     state.partitionLabels = data;
-   },*/
-
   readFilteredTots: async (filters) => {
     //const { data } = await post(`${__apiEndpoint}/filter`, filters);
     
@@ -75,7 +70,8 @@ export let actions = {
 
   selectNode: async code => {
     try {
-      const { data } = await get(`${__apiEndpoint}/account/${code}`);
+      //const { data } = await get(`${__apiEndpoint}/account/${code}`);
+      const { data } = await get(`http://194.177.121.230:8080/account/${code}`);
       state.selectedNode = data;
     } catch (error) {
       state.selectedNode = {};
