@@ -1,19 +1,24 @@
 <template>
   <div class="legend">
     <div class="legend-description">
-      <h2 class="title">{{ datasetMeta.title }}
+      <h2 class="title">
+        {{ datasetMeta.title }}
         <a target="_blank" :href="datasetMeta.source">
           <img :src="logo_rdf" class="g0v-rdf-logo">
         </a>
       </h2>
-      <p v-if="show_description" class="description">{{ datasetMeta.description }}</p>
-      <p>{{string['$INFO_TOTAL_LABEL']}}<b> <amount :amount="totAmount.amount" /></b></p>
-      <p v-if="totAmount.amount !== totAmount.filteredAmount">{{string['$INFO_TOTAL_FILTERED_LABEL']}}<b> <amount :amount="totAmount.filteredAmount" /></b></p>
+      <p v-if="show_description" class="description">
+        {{ datasetMeta.description }}
+      </p>
+      <p>{{ string['$INFO_TOTAL_LABEL'] }}<b> <Amount :amount="totAmount.amount" /></b></p>
+      <p v-if="showFilteredTot">
+        {{ string['$INFO_TOTAL_FILTERED_LABEL'] }}<b> <Amount :amount="totAmount.filteredAmount" /></b>
+      </p>
     </div>
     <div class="legend-mef">
       <a :href="url_mef" target="_blank">
-        <small>{{string['$DATA_SOURCE_TEXT']}}</small>
-        <v-img
+        <small>{{ string['$DATA_SOURCE_TEXT'] }}</small>
+        <VImg
           v-if="logo_mef_show" :src="logo_mef"
           class="g0v-mef-logo"
         />
@@ -25,12 +30,12 @@
 <script>
 import Configuration from "@/utils/configuration";
 
-import fileString from '@/assets/string.js'
+import fileString from "@/assets/string.js";
 export default {
-  data(){
-    return{
-      string:fileString
-    }
+  data() {
+    return {
+      string: fileString
+    };
   },
   props: {
     datasetMeta: Object,
@@ -51,6 +56,12 @@ export default {
     },
     show_description: function() {
       return window.innerHeight > 570;
+    },
+    showFilteredTot() {
+      return (
+        this.totAmount.amount !== this.totAmount.filteredAmount &&
+        isFinite(this.totAmount.filteredAmount)
+      );
     }
   }
 };
