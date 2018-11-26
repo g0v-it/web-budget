@@ -1,24 +1,24 @@
 <template>
   <div class="g0v-container">
     <v-card class="details">
-      <h2>{{ currentNode.name }}
+      <h2>{{ currentNode.title }}
         <a
           target="_blank"
-          :href="currentNode.account"
+          :href="currentNode.source"
           alt="Visualizza i linked data"
           title="Visualizza i linked-data"
         >
           <img :src="logo_rdf" class="g0v-rdf-logo">
         </a>
       </h2>
-      <p class="top">{{ string['$TOP_PARTITION'] }}: {{ currentNode.top_level }}</p>
-      <p class="second">{{ string['$SECOND_PARTITION'] }}: {{ currentNode.partitions.second_partition }}</p>
+      <span><p v-for="(l,index) in currentNode.partitionLabel" :key="index" class="top"> {{l+"  "}}</p></span>
+
       <p class="description">{{ currentNode.description | capitalize }}</p>
       <div class="numbers">
         <p class="amount"><amount :amount="currentNode.amount" /></p>
         <div class="rate">
-          <small>{{ string['$PERCENTAGE_EXPLANATION_TEXT'] }} {{ +budget.meta.year - 1 }}
-            <span v-if="!variation_available">{{ string['$VARIATION_NOT_AVAIlABLE'] }}</span>
+          <small>{{ string['$PERCENTAGE_EXPLANATION_TEXT'] }} {{ currentNode.version - 1 }}
+            <span v-if="!variation_available">{{ string['$VARIATION_NOT_AVAILABLE'] }}</span>
           </small>
           <div
             v-if="variation_available" class="diff"
@@ -31,20 +31,21 @@
     </v-card>
     <v-card class=" history">
       <h2>{{ string['$HISTORY_CARD_TITLE'] }}</h2>
-      <HistoryChart
+      <HistoryChart v-if="currentNode.isVersionOf.length!=0"
         :values="history"
         :dataset-meta="budget.meta"
         style=""
       />
+      <p v-if="currentNode.isVersionOf.length==0">{{ string['$HISTORY_NOT_AVAILABLE'] }}</p>
     </v-card>
-    <v-card class="partition">
+    <v-card v-if="currentNode.hasPart.length!=0" class="partition">
       <h2>{{ string['$LOWER_PARTITION_CARD_TITLE'] }}</h2>
       <CdsChart
         :values="{lower_partition:currentNode.cds,sum:currentNode.amount}"
         style=""
       />
     </v-card>
-    <v-card class="comments">
+    <v-card v-if="show_comment" class="comments">
       <TweetsWall />
     </v-card>
   </div>
@@ -98,6 +99,10 @@ export default {
   computed: {
     logo_rdf() {
       return require("@/assets/rdf_flyer.svg");
+    },
+    show_comment(){
+      //valore sarà settato dal file di configurazione
+      return false;
     },
     variation_available() {
       return isFinite(this.currentNode.diff);

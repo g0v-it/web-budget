@@ -120,7 +120,6 @@ export default {
           });
         }
       }
-      console.log(amount);
       
       return { amount, filteredAmount };
     },
@@ -147,7 +146,6 @@ export default {
           });
         }
       }
-      console.log(partitions_labels);
       return partitions_labels;
     },
 
@@ -158,7 +156,6 @@ export default {
           i
         ].model;
       }
-      console.log(filterObj);
 
       return filterObj;
     }
@@ -197,6 +194,8 @@ export default {
 
   methods: {
     onClick(node) {
+      console.log("click");
+      
       this.$router.push({ name: "account-details", params: { code: node.id } });
     },
     onMouseOver(node) {
@@ -208,21 +207,16 @@ export default {
       };
         let percentage=[];
         let keys =Object.keys(this.budget.partitionLabels)
-        console.log(node.partitionLabel);
-        
         node.partitionLabel.map((tag)=>{
         keys.map((k)=>{
           if(this.budget.partitionLabels[k].partitions!=0){
-            console.log("PARTITION SCHEMA ",k);
             let obj={};
             obj["part"]=true
             obj["string"]=this.budget.partitionLabels[k].title
               let element=this.budget.partitionLabels[k].partitions.find((el)=>{
                 return el.label==tag
               })
-              console.log(element);
             if(element){
-                console.log("AGGIUNTO");
                 obj["value"]=node.amount/element.partitionAmount
                 percentage.push(obj)
             }

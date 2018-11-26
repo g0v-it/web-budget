@@ -24,8 +24,9 @@ export default{
     "$TOOLTIP_PERCENTAGE":"Percentuale rispetto a:",
     "$TOOLTIP_PERCENTAGE_MEANING":" di appartenenza: ",
     "$TOOLTIP_TOTAL_MEANING":"totale del bilancio: ",
-    "$VARIATION_NOT_AVAIlABLE":"non disponibile.",
+    "$VARIATION_NOT_AVAILABLE":"non disponibile.",
     "$HISTORY_CARD_TITLE":"Storico dell'azione",
     "$LOWER_PARTITION_CARD_TITLE":"Dettaglio capitoli di spesa",
-    "$LOWER_PARTITION_PERCENTAGE_MEANING":"sul totale dell'azione"
+    "$LOWER_PARTITION_PERCENTAGE_MEANING":"sul totale dell'azione",
+    "$HISTORY_NOT_AVAILABLE":"Non ci sono informazioni sui valori precedenti di questa azione"
 }

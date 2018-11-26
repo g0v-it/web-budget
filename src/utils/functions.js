@@ -74,7 +74,6 @@ export function computeNewFilteredTotals(partitionLabels, filteredTot) {
     });
     
   }
-  console.log(newPartitionLabels);
   
   return newPartitionLabels;
 }
