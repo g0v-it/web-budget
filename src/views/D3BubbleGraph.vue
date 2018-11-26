@@ -277,10 +277,11 @@ export default {
       readPartitionLabels(this.filters);
     },
     encodeFilters(filters) {
-      return gzip.compress(JSON.stringify(filters));
+      return gzip.compressToBase64(JSON.stringify(filters));
     },
     decodeFilters(compressed) {
-      return gzip.decompress(compressed);
+      console.log("filters", gzip.decompressFromBase64(compressed));
+      return gzip.decompressFromBase64(compressed);
     }
   }
 };
