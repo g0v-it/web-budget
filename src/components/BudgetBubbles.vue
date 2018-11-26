@@ -127,8 +127,8 @@ export default {
           minRadius_x = 3;
           this.center_x = this.$refs.vis.offsetWidth / 2;
         }
-        console.log(window.innerHeight);
-        console.log(window.innerWidth);
+        //console.log(window.innerHeight);
+        //console.log(window.innerWidth);
         if (window.innerHeight < 400) {
           maxRadius_y = 40;
           minRadius_y = 1;
@@ -144,8 +144,8 @@ export default {
         }
         maxRadius = Math.min(maxRadius_x, maxRadius_y);
         minRadius = Math.min(minRadius_x, minRadius_y);
-        console.log("MINIMOX,", maxRadius);
-        console.log("MASSIMOX", minRadius);
+        //console.log("MINIMOX,", maxRadius);
+        //console.log("MASSIMOX", minRadius);
 
         let powRadiusScale = d3
           .scalePow()
@@ -278,7 +278,7 @@ export default {
     },
     splitBubbles(group_cat_id) {
       //assign center to bubble
-      console.log(group_cat_id);
+      //console.log(group_cat_id);
 
       for (let i = 0; i < nodes.length; ++i) {
         let center = group_cat_id.labels.find(function(el) {
@@ -323,7 +323,7 @@ export default {
           partition: this.partitionId,
           labels: centers
         };
-        console.log(groupCatId);
+        //console.log(groupCatId);
         this.splitBubbles(groupCatId);
       }
     },

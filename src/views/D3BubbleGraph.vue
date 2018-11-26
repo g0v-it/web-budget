@@ -1,25 +1,27 @@
 <template>
   <div class="g0v-container">
     <div class="g0v-partitions-header">
-      <v-btn-toggle v-model="budget.selectedPartition" mandatory>
-        <v-btn v-for="(b,index) in budget.partitionButtons" :key="index"
+      <VBtnToggle v-model="budget.selectedPartition" mandatory>
+        <VBtn
+          v-for="(b,index) in budget.partitionButtons" :key="index"
           flat color="primary"
           :value="b.value"
-          @click="onPartitionChange(b.value)">
-          {{b.title}}
-        </v-btn>
-      </v-btn-toggle>
+          @click="onPartitionChange(b.value)"
+        >
+          {{ b.title }}
+        </VBtn>
+      </VBtnToggle>
     </div>
 
     <div ref="container" class="g0v-content">
       <div v-if="budget.selectedPartition=='default'" class="g0v-content-grid">
-
         <div v-responsive.lg.xl class="left-column ">
           <BubbleChartInfo :dataset-meta="budget.meta" :tot-amount="totAmount" />
         </div>
 
         <div v-responsive.md.lg.xl class="right-column">
-          <v-select v-for="(s,index) in budget.filterSelect" :key="index"
+          <VSelect
+            v-for="(s,index) in budget.filterSelect" :key="index"
             :items="s.labels" v-model="s.model"
             @change="onFiltersChange"
             :label="string['$PARTITION_FILTER_TEXT']+' '+s.title" multiple
@@ -33,12 +35,13 @@
 
       <div class="g0v-bubble-chart">
         <div v-responsive.md.sm.xs>
-          <h2 class="title">{{string['$MAIN_TITLE']}} {{ budget.meta.year }}
+          <h2 class="title">
+            {{ string['$MAIN_TITLE'] }} {{ budget.meta.year }}
             <a target="_blank" :href="budget.meta.source">
               <img :src="logo_rdf" class="g0v-rdf-logo">
             </a>
           </h2>
-          <p>{{string['$INFO_TOTAL_LABEL']}}<b> <amount :amount="totAmount.amount" /></b></p>
+          <p>{{ string['$INFO_TOTAL_LABEL'] }}<b> <Amount :amount="totAmount.amount" /></b></p>
         </div>
         <BudgetBubbles
           @click="onClick" @over="onMouseOver"
@@ -56,11 +59,7 @@
         :current-node="hoveredNode" :bg-color="hoveredNode.colorBg"
         v-if="showTooltip" @mounted="calcTooltipPos"
       /-->
-
-
-
     </div>
-
   </div>
 </template>
 
@@ -74,6 +73,13 @@ import * as BudgetStore from "@/budgetStore.js";
 import fileString from "@/assets/string.js";
 
 import { debounce } from "lodash";
+import gzip from "lz-string";
+
+const options = {
+  level: 3,
+  name: "hello-world.txt",
+  timestamp: parseInt(Date.now() / 1000, 10)
+};
 
 let readPartitionLabels = null;
 
@@ -120,8 +126,8 @@ export default {
           });
         }
       }
-      console.log(amount);
-      
+      //console.log(amount);
+
       return { amount, filteredAmount };
     },
     /*genera array di stringhe per popolare lista filtri */
@@ -147,7 +153,7 @@ export default {
           });
         }
       }
-      console.log(partitions_labels);
+      //console.log(partitions_labels);
       return partitions_labels;
     },
 
@@ -158,7 +164,7 @@ export default {
           i
         ].model;
       }
-      console.log(filterObj);
+      //console.log(filterObj);
 
       return filterObj;
     }
@@ -181,14 +187,14 @@ export default {
 
   created() {
     /* Init filters from url params */
+    if (this.$route.query.filters) {
+      let filters = JSON.parse(this.decodeFilters(this.$route.query.filters));
+      console.log("url filters", filters);
       this.budget.filterSelect.map(s => {
-      s.model = [];
-      if (Array.isArray(this.$route.query[s.value])) {
-        s.model = this.$route.query[s.value];
-      } else if (this.$route.query[s.value]) {
-        s.model.push(this.$route.query[s.value]);
-      }
-    });
+        /* console.log("s.value", s.value); */
+        s.model = filters[s.value];
+      });
+    }
     BudgetStore.actions.readFilteredTots(this.filters);
     /* set partition to show */
     BudgetStore.actions.selectPartition(this.urlPartitionID);
@@ -206,30 +212,30 @@ export default {
         x: node.x + node.radius / 1.4142,
         y: node.y + node.radius / 1.4142
       };
-        let percentage=[];
-        let keys =Object.keys(this.budget.partitionLabels)
-        keys.map((k)=>{
-          let obj={};
-          if(this.budget.partitionLabels[k].partitions==0){
-            obj["part"]=false
-            obj["value"]=node.amount/this.totAmount.amount
-          }else{
-            obj["part"]=true
-            obj["string"]=this.budget.partitionLabels[k].title
-            node.partitionLabel.map((tag)=>{
-              console.log(tag)
-              let element=this.budget.partitionLabels[k].partitions.find((el)=>{
-                console.log(el);
-                
-                return el.label==tag
-              })                   
-                obj["value"]=node.amount/element.partitionAmount
+      let percentage = [];
+      let keys = Object.keys(this.budget.partitionLabels);
+      keys.map(k => {
+        let obj = {};
+        if (this.budget.partitionLabels[k].partitions == 0) {
+          obj["part"] = false;
+          obj["value"] = node.amount / this.totAmount.amount;
+        } else {
+          obj["part"] = true;
+          obj["string"] = this.budget.partitionLabels[k].title;
+          node.partitionLabel.map(tag => {
+            //console.log(tag);
+            let element = this.budget.partitionLabels[k].partitions.find(el => {
+              //console.log(el);
+
+              return el.label == tag;
             });
-          }
-          percentage.push(obj)
-          //console.log(obj);
-        })
-      n["percentages"]=percentage;
+            obj["value"] = node.amount / element.partitionAmount;
+          });
+        }
+        percentage.push(obj);
+        ////console.log(obj);
+      });
+      n["percentages"] = percentage;
       this.hoveredNode = n;
       this.showTooltip = true;
     },
@@ -253,22 +259,28 @@ export default {
       if (partitionId === "default") {
         this.$router.push({
           name: "d3-bubble-graph",
-         query: { ...this.filters }
+          query: { filters: this.encodeFilters(this.filters) }
         });
       } else {
         this.$router.push({
           name: "accounts-partition",
           params: { urlPartitionID: partitionId },
-          query: { ...this.filters }
+          query: { filters: this.encodeFilters(this.filters) }
         });
       }
     },
     onFiltersChange() {
       this.$router.replace({
         name: "d3-bubble-graph",
-        query: { ...this.filters }
+        query: { filters: this.encodeFilters(this.filters) }
       });
       readPartitionLabels(this.filters);
+    },
+    encodeFilters(filters) {
+      return gzip.compress(JSON.stringify(filters));
+    },
+    decodeFilters(compressed) {
+      return gzip.decompress(compressed);
     }
   }
 };
