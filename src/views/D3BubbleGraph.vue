@@ -1,25 +1,27 @@
 <template>
   <div class="g0v-container">
     <div class="g0v-partitions-header">
-      <v-btn-toggle v-model="budget.selectedPartition" mandatory>
-        <v-btn v-for="(b,index) in budget.partitionButtons" :key="index"
+      <VBtnToggle v-model="budget.selectedPartition" mandatory>
+        <VBtn
+          v-for="(b,index) in budget.partitionButtons" :key="index"
           flat color="primary"
           :value="b.value"
-          @click="onPartitionChange(b.value)">
-          {{b.title}}
-        </v-btn>
-      </v-btn-toggle>
+          @click="onPartitionChange(b.value)"
+        >
+          {{ b.title }}
+        </VBtn>
+      </VBtnToggle>
     </div>
 
     <div ref="container" class="g0v-content">
       <div v-if="budget.selectedPartition=='default'" class="g0v-content-grid">
-
         <div v-responsive.lg.xl class="left-column ">
           <BubbleChartInfo :dataset-meta="budget.meta" :tot-amount="totAmount" />
         </div>
 
         <div v-responsive.md.lg.xl class="right-column">
-          <v-select v-for="(s,index) in budget.filterSelect" :key="index"
+          <VSelect
+            v-for="(s,index) in budget.filterSelect" :key="index"
             :items="s.labels" v-model="s.model"
             @change="onFiltersChange"
             :label="string['$PARTITION_FILTER_TEXT']+' '+s.title" multiple
@@ -33,12 +35,13 @@
 
       <div class="g0v-bubble-chart">
         <div v-responsive.md.sm.xs>
-          <h2 class="title">{{string['$MAIN_TITLE']}} {{ budget.meta.year }}
+          <h2 class="title">
+            {{ string['$MAIN_TITLE'] }} {{ budget.meta.year }}
             <a target="_blank" :href="budget.meta.source">
               <img :src="logo_rdf" class="g0v-rdf-logo">
             </a>
           </h2>
-          <p>{{string['$INFO_TOTAL_LABEL']}}<b> <amount :amount="totAmount.amount" /></b></p>
+          <p>{{ string['$INFO_TOTAL_LABEL'] }}<b> <Amount :amount="totAmount.amount" /></b></p>
         </div>
         <BudgetBubbles
           @click="onClick" @over="onMouseOver"
@@ -56,11 +59,7 @@
         :current-node="hoveredNode" :bg-color="hoveredNode.colorBg"
         v-if="showTooltip" @mounted="calcTooltipPos"
       />
-
-
-
     </div>
-
   </div>
 </template>
 
@@ -71,7 +70,7 @@ import TooltipBubble from "@/components/TooltipBubble.vue";
 import BubbleChartInfo from "@/components/BubbleChartInfo.vue";
 import BubbleChartLegend from "@/components/BubbleChartLegend.vue";
 import * as BudgetStore from "@/budgetStore.js";
-import fileString from "@/assets/string.js";
+import Configuration from "@/utils/configuration";
 
 import { debounce } from "lodash";
 
@@ -95,7 +94,7 @@ export default {
 
   data: function() {
     return {
-      string: fileString,
+      string: Configuration.current().strings,
       dialog: false,
       hoveredNode: {},
       showTooltip: false,
@@ -121,7 +120,7 @@ export default {
         }
       }
       console.log(amount);
-      
+
       return { amount, filteredAmount };
     },
     /*genera array di stringhe per popolare lista filtri */
@@ -181,7 +180,7 @@ export default {
 
   created() {
     /* Init filters from url params */
-      this.budget.filterSelect.map(s => {
+    this.budget.filterSelect.map(s => {
       s.model = [];
       if (Array.isArray(this.$route.query[s.value])) {
         s.model = this.$route.query[s.value];
@@ -206,31 +205,34 @@ export default {
         x: node.x + node.radius / 1.4142,
         y: node.y + node.radius / 1.4142
       };
-        let percentage=[];
-        let keys =Object.keys(this.budget.partitionLabels)
-        console.log(node.partitionLabel);
-        
-        node.partitionLabel.map((tag)=>{
-        keys.map((k)=>{
-          if(this.budget.partitionLabels[k].partitions!=0){
-            console.log("PARTITION SCHEMA ",k);
-            let obj={};
-            obj["part"]=true
-            obj["string"]=this.budget.partitionLabels[k].title
-              let element=this.budget.partitionLabels[k].partitions.find((el)=>{
-                return el.label==tag
-              })
-              console.log(element);
-            if(element){
-                console.log("AGGIUNTO");
-                obj["value"]=node.amount/element.partitionAmount
-                percentage.push(obj)
+      let percentage = [];
+      let keys = Object.keys(this.budget.partitionLabels);
+      console.log(node.partitionLabel);
+
+      node.partitionLabel.map(tag => {
+        keys.map(k => {
+          if (this.budget.partitionLabels[k].partitions != 0) {
+            console.log("PARTITION SCHEMA ", k);
+            let obj = {};
+            obj["part"] = true;
+            obj["string"] = this.budget.partitionLabels[k].title;
+            let element = this.budget.partitionLabels[k].partitions.find(el => {
+              return el.label == tag;
+            });
+            console.log(element);
+            if (element) {
+              console.log("AGGIUNTO");
+              obj["value"] = node.amount / element.partitionAmount;
+              percentage.push(obj);
             }
           }
-          });
-        })
-        percentage.push({part:false,value:node.amount/this.totAmount.amount})
-      n["percentages"]=percentage;
+        });
+      });
+      percentage.push({
+        part: false,
+        value: node.amount / this.totAmount.amount
+      });
+      n["percentages"] = percentage;
       this.hoveredNode = n;
       this.showTooltip = true;
     },
@@ -254,7 +256,7 @@ export default {
       if (partitionId === "default") {
         this.$router.push({
           name: "d3-bubble-graph",
-         query: { ...this.filters }
+          query: { ...this.filters }
         });
       } else {
         this.$router.push({

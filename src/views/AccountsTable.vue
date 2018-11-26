@@ -75,7 +75,7 @@
 
 <script>
 import * as BudgetStore from "@/budgetStore.js";
-import fileString from "@/assets/string.js";
+import Configuration from "@/utils/configuration";
 
 const previousYear = function(meta) {
   return +meta.year - 1;
@@ -84,7 +84,7 @@ export default {
   name: "TableView",
   data() {
     return {
-      string: fileString,
+      string: Configuration.current().strings,
       accounts: [],
       pagination: {
         sortBy: "amount",

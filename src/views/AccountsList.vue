@@ -3,12 +3,12 @@
     <div v-for="account in budget.accounts.slice(0, visibleAccounts)" :key="account.code">
       <AccountItem :account="account" :r="radiusScale(account.amount)" />
     </div>
-    <v-btn
+    <VBtn
       block @click="visibleAccounts += 10"
       style="width:25em; margin: 5em auto 0 auto;"
     >
-      {{string['$SHOW_MORE_LIST_BUTTON']}}
-    </v-btn>
+      {{ string['$SHOW_MORE_LIST_BUTTON'] }}
+    </VBtn>
   </div>
 </template>
 
@@ -16,14 +16,14 @@
 import { min, max, scalePow } from "d3";
 import * as BudgetStore from "@/budgetStore.js";
 import AccountItem from "@/components/AccountListItem.vue";
-import stringFile from '@/assets/string.js'
+import Configuration from "@/utils/configuration";
 export default {
   components: {
     AccountItem
   },
   data() {
     return {
-      string:stringFile,
+      string: Configuration.current().strings,
       visibleAccounts: 5,
       minAmount: 0,
       maxAmount: 0

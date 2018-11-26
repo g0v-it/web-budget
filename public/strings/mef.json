@@ -1,4 +1,4 @@
-export default{
+{
     "$FIRST_VIEW":"Grafico a Bolle",
     "$SECOND_VIEW":"Lista Azioni",
     "$THIRD_VIEW":"Tabella Azioni",
@@ -17,7 +17,7 @@ export default{
     "$GLOBAL_NAME":"stato",
     "$PARTITION_FILTER_TEXT":"Filtra per",
     "$MAIN_TITLE":"Legge di Bilancio",
-    "$INFO_TOTAL_LABEL":"Spese totali: ",
+    "$INFO_TOTAL_LABEL":"Spese totali mef: ",
     "$INFO_TOTAL_FILTERED_LABEL":"Spese filtrate: ",
     "$DATA_SOURCE_TEXT":"Elaborazione su dati del Ministero dell'Economia e delle Finanze",
     "$PERCENTAGE_EXPLANATION_TEXT":"Variazione rispetto alla legge di bilancio precedente",

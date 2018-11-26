@@ -6,7 +6,7 @@ An interactive web application that visualizes the Italian Government budget dat
 
 This application is inspired by similar applications developed by the [g0v community](http://gov.asia/) in [Taiwan](https://github.com/g0v/twbudget) and [Taipey](https://github.com/tony1223/tw-budget-platform)
 
-g0v is a decentralized civic tech community to advocate transparency of information and build tech solutions 
+g0v is a decentralized civic tech community to advocate transparency of information and build tech solutions
 for citizens to participate in public affairs from the bottom up. The g0v community was born in Taiwan thanks to [Audrey Tang](https://de.wikipedia.org/wiki/Audrey_Tang), [Chia-liang Kao](https://github.com/clkao) and many others.
 
 
@@ -14,7 +14,7 @@ for citizens to participate in public affairs from the bottom up. The g0v commun
 
 ### run docker image
 
-Docker images are published to dockerhub (https://hub.docker.com/r/copernicani/web-budget/). 
+Docker images are published to dockerhub (https://hub.docker.com/r/copernicani/web-budget/).
 In the following example the container will be configured with the  api endpoint https://data.budget.g0v.it/api/v1 and listening on port 9999:
 
 
@@ -29,6 +29,7 @@ docker run -i -t --rm \
 You can use the following environment variables with the container image:
 
 - `G0V_CONFIG_URL` -> is the URL to the application JSON configuration (if not passed in a json file is generated from the other environment variables and put in `/config.json`)
+- `G0V_STRING_URL` -> is the URL to the application JSON strings (if not passed the default `/strings/mef.json` is used)
 - `G0V_LOCALE` -> `locale` (the application Locale)
 - `G0V_AMOUNT_FORMAT` -> `amountFormat` (the format for currency values)
 - `G0V_RATE_FORMAT` -> `rateFormat` (the format for percentages)
@@ -41,7 +42,8 @@ You can use the following environment variables with the container image:
 - `G0V_G0V_LOGO_URL` -> `g0vLogoUrl` (where to link the g0v logo)
 
 
-### build docker image 
+
+### build docker image
 
 the project contains a `Dockerfile` which uses a two-stages build process: it first creates an image with the full node.js environment where the `npm build` step is run and then it creates an image containing only the compiled application files and the nginx server to serv them.
 
@@ -51,12 +53,12 @@ whoever runs the image to customize the application configuration simply by pass
 The `docker` directory contains the nginx configuration and the command run by the image.
 
 To build the image a `Makefile` is provided that builds and tags the image:
- 
+
 ```$bash
 make build
-``` 
+```
 
-The `NAME` and `VERSION` variables in the `Makefile` set the docker image name and tag (look at the file to see the details).  
+The `NAME` and `VERSION` variables in the `Makefile` set the docker image name and tag (look at the file to see the details).
 
 The image exposes the web server on port `8080`.
 
@@ -128,7 +130,7 @@ For answers you may not find in here or in the Wiki, avoid posting issues. Feel 
 ## Credits
 
 - [Miah Mohd Ehtesham](https://github.com/miahmohd), [Leonardo Longhi](https://github.com/LeonardoLonghi) and [Luca Mearelli](https://github.com/luca) for the webapp code design.
-- [Enrico Fagnoni](https://github.com/ecow), [Yassine Ouahidi](https://github.com/YassineOuahidi) and [LinkedData.Center](http://linkeddata.center) for the smart data management platform 
+- [Enrico Fagnoni](https://github.com/ecow), [Yassine Ouahidi](https://github.com/YassineOuahidi) and [LinkedData.Center](http://linkeddata.center) for the smart data management platform
 - [Mike Bostock](https://bost.ocks.org/mike/) for the [D3.js library](https://d3js.org/)
 - [Evan You](http://evanyou.me/) and he [Vue community](https://vuejs.org) for the great framework
 

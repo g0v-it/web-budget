@@ -1,5 +1,5 @@
 import { get } from "axios";
-
+import def from "@/assets/default.js";
 const ConfigurationFactory = function() {
   let __loading = false;
 
@@ -26,7 +26,9 @@ const ConfigurationFactory = function() {
     mefLogoUrl: "https://bdap-opendata.mef.gov.it/catalog",
 
     // G0V logo URL
-    g0vLogoUrl: "https://copernicani.it/g0v"
+    g0vLogoUrl: "https://copernicani.it/g0v",
+
+    strings: def
   };
 
   let __proxy = {
@@ -43,9 +45,9 @@ const ConfigurationFactory = function() {
       !__proxy.loaded
     ) {
       __loading = true;
-      get(window.__configurationUrl)
+      Promise.all([get(window.__configurationUrl), get(window.__stringUrl)])
         .then(res => {
-          __current = { ...__current, ...res.data };
+          __current = { ...__current, ...res[0].data, strings: res[1].data };
           __proxy.loaded = true;
           if (vm) {
             vm.$data.configurationLoaded = true;

@@ -1,0 +1,33 @@
+export default {
+  $FIRST_VIEW: "Grafico a Bolle",
+  $SECOND_VIEW: "Lista Azioni",
+  $THIRD_VIEW: "Tabella Azioni",
+  $CREDIT_PAGE: "crediti",
+  $TERMS_PAGE: "termini d'uso",
+  $FOLLOW_US_TEXT: "Seguici su Github",
+  $FOLLOW_US_LINK: "https://github.com/g0v-it",
+  $SHOW_MORE_LIST_BUTTON: "Visualizza altri",
+  $TOP_PARTITION: "Ministero",
+  $SECOND_PARTITION: "Missione",
+  $HEADER_COLUMN_3: "Var. da legge di bilancio ",
+  $HEADER_COLUMN_2: "Spesa",
+  $HEADER_COLUMN_1: "Nome",
+  $SEARCH_LABEL: "Cerca",
+  $PAGINATOR_TABLE_TEXT: "Righe per pagina",
+  $GLOBAL_NAME: "stato",
+  $PARTITION_FILTER_TEXT: "Filtra per",
+  $MAIN_TITLE: "Legge di Bilancio",
+  $INFO_TOTAL_LABEL: "Spese totali: ",
+  $INFO_TOTAL_FILTERED_LABEL: "Spese filtrate: ",
+  $DATA_SOURCE_TEXT:
+    "Elaborazione su dati del Ministero dell'Economia e delle Finanze",
+  $PERCENTAGE_EXPLANATION_TEXT:
+    "Variazione rispetto alla legge di bilancio precedente",
+  $TOOLTIP_PERCENTAGE: "Percentuale rispetto a:",
+  $TOOLTIP_PERCENTAGE_MEANING: " di appartenenza: ",
+  $TOOLTIP_TOTAL_MEANING: "totale del bilancio: ",
+  $VARIATION_NOT_AVAIlABLE: "non disponibile.",
+  $HISTORY_CARD_TITLE: "Storico dell'azione",
+  $LOWER_PARTITION_CARD_TITLE: "Dettaglio capitoli di spesa",
+  $LOWER_PARTITION_PERCENTAGE_MEANING: "sul totale dell'azione"
+};

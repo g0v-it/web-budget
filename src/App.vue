@@ -94,7 +94,7 @@
 <script>
 import { get, post } from "axios";
 import Configuration from "@/utils/configuration";
-import fileString from "@/assets/string.js";
+
 var resizeTimer;
 var currentWidth;
 
@@ -104,7 +104,7 @@ export default {
     return {
       drawer: false,
       clipped: false,
-      string: fileString,
+      string: Configuration.current().strings,
       title: "",
       version: ""
     };

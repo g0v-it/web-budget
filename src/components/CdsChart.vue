@@ -15,7 +15,7 @@
 <script>
 import * as d3 from "d3";
 import { formatAmount, formatRate } from "@/utils/functions";
-import fileString from '@/assets/string.js'
+import Configuration from "@/utils/configuration";
 //---------------------------------------------------------
 //BUILDER
 let cdsSpeed = 4000;
@@ -117,7 +117,7 @@ export default {
   props: { values: Object },
   data() {
     return {
-      string:fileString,
+      string:Configuration.current().strings,
       name: undefined,
       amount: undefined
     };

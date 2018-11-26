@@ -53,12 +53,11 @@
   </div>
 </template>
 <script>
-
-import fileString from '@/assets/string.js'
+import Configuration from "@/utils/configuration";
 export default {
   data(){
     return{
-      string:fileString
+      string:Configuration.current().strings
     }
   },
   props: {

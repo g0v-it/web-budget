@@ -33,7 +33,7 @@ const configuration = Configuration;
 
 var vm = new Vue({
   data: {
-    configurationLoaded: process.env.NODE_ENV === "development" || false,
+    configurationLoaded: false,
     budgetState: BudgetStore.state
   },
   router,

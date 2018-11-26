@@ -57,7 +57,7 @@ import CdsChart from "@/components/CdsChart.vue";
 import TweetsWall from "@/components/TweetsWall.vue";
 import { fillColor } from "@/utils/functions.js";
 import * as BudgetStore from "@/budgetStore.js";
-import fileString from "@/assets/string.js";
+import Configuration from "@/utils/configuration";
 
 export default {
   components: {
@@ -72,7 +72,7 @@ export default {
 
   data() {
     return {
-      string: fileString,
+      string: Configuration.current().strings,
       currentNode: {}
     };
   },

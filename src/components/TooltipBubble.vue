@@ -24,12 +24,12 @@
   </div>
 </template>
 <script>
+import Configuration from "@/utils/configuration";
 
-import fileString from '@/assets/string.js'
 export default {
-  data(){
+  data() {
     return{
-      string:fileString
+      string: Configuration.current().strings
     }
   },
   props: {

@@ -9,10 +9,18 @@ else
     G0V_CONFIG_URL="window.__configurationUrl = \"/config.json\";"
 fi
 
+if [ "$G0V_STRING_URL" != "" ]
+then
+    G0V_STRING_URL="window.__stringUrl = \"$G0V_STRING_URL\";"
+else
+    G0V_STRING_URL="window.__stringUrl = \"/strings/mef.json\";"
+fi
+
 cat > /usr/share/nginx/html/config.js <<CONF
 
 (function (window) {
     $G0V_CONFIG_URL
+    $G0V_STRING_URL
 }(this));
 
 CONF
