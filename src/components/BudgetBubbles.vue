@@ -279,10 +279,10 @@ export default {
     splitBubbles(group_cat_id) {
       //assign center to bubble
       console.log(group_cat_id);
-      
+
       for (let i = 0; i < nodes.length; ++i) {
         let center = group_cat_id.labels.find(function(el) {
-          return  nodes[i].partitionLabel.includes(el.value);
+          return nodes[i].partitionLabel.includes(el.value);
         });
         nodes[i].group_center = { x: center.x, y: center.y };
       }
@@ -323,7 +323,7 @@ export default {
           partition: this.partitionId,
           labels: centers
         };
-        console.log(groupCatId)
+        console.log(groupCatId);
         this.splitBubbles(groupCatId);
       }
     },
@@ -371,15 +371,16 @@ export default {
 .grid {
   text-align: center;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(25em, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   grid-auto-rows: 30rem;
   pointer-events: all;
 }
 
-@media screen and (min-width: 900px) {
+@media screen and (min-width: 700px) {
   .grid-one-line {
     grid-template-columns: 1fr 1fr;
     grid-auto-rows: 100%;
+    height: 100%;
   }
 }
 
