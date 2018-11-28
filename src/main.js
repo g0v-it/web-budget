@@ -31,16 +31,16 @@ Vue.filter("capitalize", function(value) {
 
 const configuration = Configuration;
 
-var vm = new Vue({
-  data: {
-    configurationLoaded: false,
-    budgetState: BudgetStore.state
-  },
-  router,
-  methods: {
-    ...BudgetStore.actions
-  },
-  render: h => h(App)
-}).$mount("#app");
-
-configuration.load(vm);
+configuration.load().then(() => {
+  new Vue({
+    data: {
+      configurationLoaded: true,
+      budgetState: BudgetStore.state
+    },
+    router,
+    methods: {
+      ...BudgetStore.actions
+    },
+    render: h => h(App)
+  }).$mount("#app");
+});

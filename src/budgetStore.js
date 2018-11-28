@@ -1,7 +1,7 @@
 import { get, post } from "axios";
 import { computeNewFilteredTotals } from "./utils/functions";
 import Configuration from "./utils/configuration";
-const __apiEndpoint = Configuration.current().apiEndpoint;
+import { encodeFilters, decodeFilters } from "@/utils/functions.js";
 import json from "@/assets/example.json.js";
 import filter from "@/assets/filtered_tot.js";
 
@@ -18,14 +18,17 @@ export let state = {
 
 export let actions = {
   readAccounts: async () => {
-    //const { data } = await get(`${__apiEndpoint}/accounts`);
-    const { data } = await get(`http://194.177.121.230:8080/accounts`);
+    const { data } = await get(
+      `${Configuration.current().apiEndpoint}/accounts`
+    );
+    //const { data } = await get(`http://194.177.121.230:8080/accounts`);
     state.accounts = data.accounts;
     state.meta = { ...data };
     delete state.meta.accounts;
     delete state.meta.partitionScheme;
     delete state.meta.partitionOrderedList;
     state.partitionLabels = data.partitionScheme;
+
     //itera i patition schema che saranno visualizzati
     for (let i = 0; i < data.partitionOrderedList.length; ++i) {
       //creo l'oggetto per la visualizzazione del bottone
@@ -65,16 +68,21 @@ export let actions = {
   },
 
   readFilteredTots: async filters => {
-    //const { data } = await post(`${__apiEndpoint}/filter`, filters);
-    console.log("filters", filters);
-    const { data } = await get(`http://194.177.121.230:8080/filter`, {
-      data: filters
-    });
+    const { data } = await get(
+      `${Configuration.current().apiEndpoint}/filter?filters=${encodeFilters(
+        filters
+      )}`
+    );
+    //console.log("filters req", filters);
+    /* const { data } = await get(
+      `http://194.177.121.230:8080/filter?filters=${encodeFilters(filters)}`
+    ); */
+    console.log("reding filters");
     state.partitionLabels = computeNewFilteredTotals(
       state.partitionLabels,
       data
     );
-    console.log("partilabel", state.partitionLabels);
+
     state.filteredTot = data;
   },
 
@@ -84,8 +92,10 @@ export let actions = {
 
   selectNode: async code => {
     try {
-      //const { data } = await get(`${__apiEndpoint}/account/${code}`);
-      const { data } = await get(`http://194.177.121.230:8080/account/${code}`);
+      const { data } = await get(
+        `${Configuration.current().apiEndpoint}/account/${code}`
+      );
+      //const { data } = await get(`http://194.177.121.230:8080/account/${code}`);
       state.selectedNode = data;
     } catch (error) {
       state.selectedNode = {};

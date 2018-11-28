@@ -1,6 +1,7 @@
 import Configuration from "@/utils/configuration";
 import numeral from "@/utils/numeralCustomizations";
 import { scaleThreshold } from "d3";
+import gzip from "lz-string";
 
 export function fillColor(val) {
   const colorScale = scaleThreshold()
@@ -63,24 +64,38 @@ export function filterPassed(d, filters) {
 }
 
 export function computeNewFilteredTotals(partitionLabels, filteredTot) {
+  console.warn("inside compute");
+  console.log("partitionLabels", partitionLabels);
+  console.log("filteredTot", filteredTot);
   let newPartitionLabels = {};
   let partition_keys = Object.keys(partitionLabels);
   /* compute new tot */
   for (let i = 0; i < partition_keys.length; ++i) {
     newPartitionLabels[partition_keys[i]] = partitionLabels[partition_keys[i]];
-    newPartitionLabels[partition_keys[i]].partitions.map(item => {
-      if (filteredTot[partition_keys[i]][item.title]) {
-        item.filteredAmount = filteredTot[partition_keys[i]][item.title];
+
+    newPartitionLabels[partition_keys[i]].partitions = partitionLabels[
+      partition_keys[i]
+    ].partitions.map(item => {
+      if (filteredTot[partition_keys[i]][item.label]) {
+        item.filteredAmount = filteredTot[partition_keys[i]][item.label];
       } else {
         item.filteredAmount = 0;
       }
       return item;
     });
   }
-  console.log(newPartitionLabels);
+  console.log("newPartitionLabels", newPartitionLabels);
 
   return newPartitionLabels;
 }
+
+export let encodeFilters = filters => {
+  return gzip.compressToBase64(JSON.stringify(filters));
+};
+
+export let decodeFilters = compressed => {
+  return JSON.parse(gzip.decompressFromBase64(compressed));
+};
 
 //----------------------------------------------------------
 // FORMATTING

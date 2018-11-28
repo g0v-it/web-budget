@@ -150,12 +150,9 @@ export default {
         let powRadiusScale = d3
           .scalePow()
           .exponent(0.5)
-          .domain([minAmount, maxAmount])
+          .domain([0, maxAmount])
           .range([minRadius, maxRadius]);
-        let linearRadiusScale = d3
-          .scaleLinear()
-          .domain([minAmount, maxAmount])
-          .range([minRadius, maxRadius]);
+
         let heightScale = d3
           .scalePow()
           /* .clamp(true) */
@@ -170,8 +167,7 @@ export default {
             id: d.code,
             title: d.title,
             subject: d.subject,
-            radiusPow: powRadiusScale(+d.amount),
-            radiusLinear: linearRadiusScale(+d.amount),
+            radiusPow: powRadiusScale(Math.abs(d.amount)),
             amount: d.amount,
             diff: diff,
             partitionLabel: d.partitionLabel,

@@ -38,14 +38,17 @@ const ConfigurationFactory = function() {
     loaded: false
   };
 
-  __proxy.load = function(vm) {
+  __proxy.load = async function(vm) {
     if (
       window.__configurationUrl !== undefined &&
       !__loading &&
       !__proxy.loaded
     ) {
       __loading = true;
-      Promise.all([get(window.__configurationUrl), get(window.__stringUrl)])
+      return Promise.all([
+        get(window.__configurationUrl),
+        get(window.__stringUrl)
+      ])
         .then(res => {
           __current = { ...__current, ...res[0].data, strings: res[1].data };
           __proxy.loaded = true;
