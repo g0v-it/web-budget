@@ -57,6 +57,10 @@ export default {
       return window.innerHeight > 570;
     },
     showFilteredTot() {
+      console.log(this.totAmount.amount,this.totAmount.filteredAmount);
+      console.log(isFinite(this.totAmount.filteredAmount));
+      
+      
       return (
         this.totAmount.amount !== this.totAmount.filteredAmount &&
         isFinite(this.totAmount.filteredAmount)

@@ -5,11 +5,11 @@
     </v-card-title>
     <v-card-text class="tooltipText">
       <h3>{{ currentNode.title }}</h3>
-      <p>{{string['$TOOLTIP_PERCENTAGE']}}</p>
+      <!--p>{{string['$TOOLTIP_PERCENTAGE']}}</p>
       <ul>
         <li v-for="(p,index) in currentNode.percentages" :key="index">
           {{p.string}}{{p.part?string['$TOOLTIP_PERCENTAGE_MEANING']:string['$TOOLTIP_TOTAL_MEANING']}}<b><rate :rate="p.value" /></b></li>
-      </ul>
+      </ul-->
     </v-card-text>
     <div class="numberContainer">
 

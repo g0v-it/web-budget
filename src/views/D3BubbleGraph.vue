@@ -207,7 +207,7 @@ export default {
         x: node.x + node.radius / 1.4142,
         y: node.y + node.radius / 1.4142
       };
-      let percentage = [];
+      /*let percentage = [];
       let keys = Object.keys(this.budget.partitionLabels);
       node.partitionLabel.map(tag => {
         keys.map(k => {
@@ -229,7 +229,7 @@ export default {
         part: false,
         value: node.amount / this.totAmount.amount
       });
-      n["percentages"] = percentage;
+      n["percentages"] = percentage;*/
       this.hoveredNode = n;
       this.showTooltip = true;
     },

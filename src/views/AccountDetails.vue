@@ -108,8 +108,8 @@ export default {
       return isFinite(this.currentNode.diff);
     },
     history: function() {
-      var history = this.currentNode.past_values;
-      history["current"] = this.currentNode.amount;
+      var history = this.currentNode.isVersionOf;
+      history.push({"version":this.currentNode.version,"amount":this.currentNode.amount});
       return history;
     },
     budget: function() {
