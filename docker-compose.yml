@@ -1,0 +1,9 @@
+version: '3'
+services:
+  webapp:
+    environment:
+      - G0V_TWEETS_URL=https://docs.google.com/spreadsheets/d/1IKb7W6MwpWODE4j2UOSti9tmOw3oh676sEXjlpECvQI/edit?usp=sharing
+      - G0V_API_ENDPOINT=http://pub.linkeddata.center:29312
+    build: .
+    ports:
+      - "$webport:8080"
