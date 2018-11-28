@@ -73,6 +73,13 @@ import * as BudgetStore from "@/budgetStore.js";
 import Configuration from "@/utils/configuration";
 
 import { debounce } from "lodash";
+import gzip from "lz-string";
+
+const options = {
+  level: 3,
+  name: "hello-world.txt",
+  timestamp: parseInt(Date.now() / 1000, 10)
+};
 
 let readPartitionLabels = null;
 
@@ -119,6 +126,7 @@ export default {
           });
         }
       }
+      //console.log(amount);
 
       return { amount, filteredAmount };
     },
@@ -145,6 +153,7 @@ export default {
           });
         }
       }
+      //console.log(partitions_labels);
       return partitions_labels;
     },
 
@@ -155,6 +164,7 @@ export default {
           i
         ].model;
       }
+      //console.log(filterObj);
 
       return filterObj;
     }
@@ -177,14 +187,14 @@ export default {
 
   created() {
     /* Init filters from url params */
-    this.budget.filterSelect.map(s => {
-      s.model = [];
-      if (Array.isArray(this.$route.query[s.value])) {
-        s.model = this.$route.query[s.value];
-      } else if (this.$route.query[s.value]) {
-        s.model.push(this.$route.query[s.value]);
-      }
-    });
+    if (this.$route.query.filters) {
+      let filters = JSON.parse(this.decodeFilters(this.$route.query.filters));
+      console.log("url filters", filters);
+      this.budget.filterSelect.map(s => {
+        /* console.log("s.value", s.value); */
+        s.model = filters[s.value];
+      });
+    }
     BudgetStore.actions.readFilteredTots(this.filters);
     /* set partition to show */
     BudgetStore.actions.selectPartition(this.urlPartitionID);
@@ -250,22 +260,29 @@ export default {
       if (partitionId === "default") {
         this.$router.push({
           name: "d3-bubble-graph",
-          query: { ...this.filters }
+          query: { filters: this.encodeFilters(this.filters) }
         });
       } else {
         this.$router.push({
           name: "accounts-partition",
           params: { urlPartitionID: partitionId },
-          query: { ...this.filters }
+          query: { filters: this.encodeFilters(this.filters) }
         });
       }
     },
     onFiltersChange() {
       this.$router.replace({
         name: "d3-bubble-graph",
-        query: { ...this.filters }
+        query: { filters: this.encodeFilters(this.filters) }
       });
       readPartitionLabels(this.filters);
+    },
+    encodeFilters(filters) {
+      return gzip.compressToBase64(JSON.stringify(filters));
+    },
+    decodeFilters(compressed) {
+      console.log("filters", gzip.decompressFromBase64(compressed));
+      return gzip.decompressFromBase64(compressed);
     }
   }
 };
