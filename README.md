@@ -90,7 +90,7 @@ To customize the settings add a `config.js` file in the `public` directory with 
 
 ```
 
-Anr a `config.json` file to the `public` directory with this content and customize the parameters:
+And a `config.json` file to the `public` directory with this content and customize the parameters:
 
 ```
 {
@@ -141,5 +141,3 @@ Thanks to all project contributors, to the [Copernicani community](https://coper
 ## License
 
 The MIT License (MIT). Please see License File for more information.
-
-
