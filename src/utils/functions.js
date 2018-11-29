@@ -64,9 +64,9 @@ export function filterPassed(d, filters) {
 }
 
 export function computeNewFilteredTotals(partitionLabels, filteredTot) {
-  console.warn("inside compute");
+  /*   console.warn("inside compute");
   console.log("partitionLabels", partitionLabels);
-  console.log("filteredTot", filteredTot);
+  console.log("filteredTot", filteredTot); */
   let newPartitionLabels = {};
   let partition_keys = Object.keys(partitionLabels);
   /* compute new tot */
@@ -84,7 +84,7 @@ export function computeNewFilteredTotals(partitionLabels, filteredTot) {
       return item;
     });
   }
-  console.log("newPartitionLabels", newPartitionLabels);
+  // console.log("newPartitionLabels", newPartitionLabels);
 
   return newPartitionLabels;
 }

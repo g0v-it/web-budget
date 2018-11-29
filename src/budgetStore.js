@@ -2,8 +2,8 @@ import { get, post } from "axios";
 import { computeNewFilteredTotals } from "./utils/functions";
 import Configuration from "./utils/configuration";
 import { encodeFilters, decodeFilters } from "@/utils/functions.js";
-import json from "@/assets/example.json.js";
-import filter from "@/assets/filtered_tot.js";
+/* import json from "@/assets/example.json.js";
+import filter from "@/assets/filtered_tot.js"; */
 
 export let state = {
   meta: {},
@@ -68,16 +68,27 @@ export let actions = {
   },
 
   readFilteredTots: async filters => {
+    console.log("filters", filters);
+    console.log("filters stringify", JSON.stringify(filters));
+    let s = encodeFilters(filters);
+    console.log("filters encoded", s);
+    console.log("filter decoded", decodeFilters(s));
+    console.log(
+      "request",
+      `${Configuration.current().apiEndpoint}/filter?filters=${encodeFilters(
+        filters
+      )}`
+    );
     const { data } = await get(
       `${Configuration.current().apiEndpoint}/filter?filters=${encodeFilters(
         filters
       )}`
     );
+    console.log("response", data);
     //console.log("filters req", filters);
     /* const { data } = await get(
       `http://194.177.121.230:8080/filter?filters=${encodeFilters(filters)}`
     ); */
-    console.log("reding filters");
     state.partitionLabels = computeNewFilteredTotals(
       state.partitionLabels,
       data

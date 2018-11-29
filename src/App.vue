@@ -1,5 +1,5 @@
 <template>
-  <v-app v-if="configurationLoaded">
+  <VApp v-if="configurationLoaded">
     <v-toolbar app :clipped-left="clipped">
       <a
         :href="url_g0v" target="_blank"
@@ -85,7 +85,7 @@
         </li>
       </ul>
     </footer>
-  </v-app>
+  </VApp>
   <div v-else-if="!configurationLoaded" class="progress">
     <div class="indeterminate" />
   </div>
@@ -146,11 +146,11 @@ export default {
           title: this.string["$FIRST_VIEW"],
           path: "/"
         },
-        {
+        /* {
           icon: "view_list",
           title: this.string["$SECOND_VIEW"],
           path: "/list"
-        },
+        }, */
         {
           icon: "table_chart",
           title: this.string["$THIRD_VIEW"],

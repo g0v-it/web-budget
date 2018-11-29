@@ -44,7 +44,7 @@
               class="account-name" width="35%"
               style="font-weight: 500;"
             >
-              {{ props.item.name }} <RouterLink :to="{name:'account-details', params:{code:props.item.code}}">
+              {{ props.item.title }} <RouterLink :to="{name:'account-details', params:{code:props.item.code}}">
                 <VIcon small color="blue">
                   link
                 </VIcon>
@@ -57,10 +57,7 @@
               <Rate :rate="props.item.rate" format="+0.0 %" />
             </td>
             <td class="account-top" width="15%">
-              {{ props.item.partitions.top_partition }}
-            </td>
-            <td class="account-second" width="">
-              {{ props.item.partitions.second_partition }}
+              {{ props.item.partitionLabel.join(', ') }}
             </td>
           </template>
 
@@ -82,6 +79,7 @@ const previousYear = function(meta) {
 };
 export default {
   name: "TableView",
+
   data() {
     return {
       string: Configuration.current().strings,
@@ -93,24 +91,19 @@ export default {
       search: ""
     };
   },
+
   computed: {
     headers() {
       return [
-        { text: this.string["$HEADER_COLUMN_1"], value: "name" },
+        { text: this.string["$HEADER_COLUMN_1"], value: "title" },
         { text: this.string["$HEADER_COLUMN_2"], value: "amount" },
         {
-          text:
-            this.string["$HEADER_COLUMN_3"] +
-            previousYear(this.$root.$data.budgetState.meta),
+          text: this.string["$HEADER_COLUMN_3"],
           value: "rate"
         },
         {
-          text: this.string["$TOP_PARTITION"],
-          value: "partitions.top_partition"
-        },
-        {
-          text: this.string["$SECOND_PARTITION"],
-          value: "partitions.second_partition"
+          text: this.string["$HEADER_COLUMN_4"],
+          value: "partitionLabel[0]"
         }
       ];
     },
@@ -118,6 +111,22 @@ export default {
       return this.$root.$data.budgetState;
     }
   },
+
+  async beforeRouteEnter(to, from, next) {
+    if (BudgetStore.state.accounts.length === 0) {
+      await BudgetStore.actions.readAccounts();
+    }
+    next();
+  },
+
+  mounted() {
+    this.accounts = this.budget.accounts.map(item => {
+      item.rate = (item.amount - item.previousValue) / item.previousValue;
+      item.rate = isFinite(item.rate) ? item.rate : NaN;
+      return item;
+    });
+  },
+
   methods: {
     changeSort(column) {
       if (this.pagination.sortBy === column) {
@@ -127,19 +136,6 @@ export default {
         this.pagination.descending = false;
       }
     }
-  },
-  async beforeRouteEnter(to, from, next) {
-    if (BudgetStore.state.accounts.length === 0) {
-      await BudgetStore.actions.readAccounts();
-    }
-    next();
-  },
-  mounted() {
-    this.accounts = this.budget.accounts.map(item => {
-      item.rate = (item.amount - item.last_amount) / item.last_amount;
-      item.rate = isFinite(item.rate) ? item.rate : NaN;
-      return item;
-    });
   }
 };
 </script>

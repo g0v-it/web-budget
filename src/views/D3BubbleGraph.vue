@@ -187,7 +187,6 @@ export default {
         s.model = filters[s.value];
       });
     }
-    console.log("filters", this.filters);
     BudgetStore.actions.readFilteredTots(this.filters);
     /* set partition to show */
     BudgetStore.actions.selectPartition(this.urlPartitionID);
