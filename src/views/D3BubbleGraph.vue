@@ -203,8 +203,8 @@ export default {
       let n = {
         ...node,
         colorBg: node.colorBg,
-        x: node.x + node.radius / 1.4142,
-        y: node.y + node.radius / 1.4142
+        x: node.x + node.radius,
+        y: node.y + node.radius
       };
       /*let percentage = [];
       let keys = Object.keys(this.budget.partitionLabels);
