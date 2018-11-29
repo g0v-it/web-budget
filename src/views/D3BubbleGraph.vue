@@ -168,6 +168,11 @@ export default {
       return filterObj;
     }
   },
+  watch: {
+    $route(to, from) {
+      BudgetStore.actions.selectPartition(this.urlPartitionID);
+    }
+  },
 
   async beforeRouteEnter(to, from, next) {
     if (
