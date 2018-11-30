@@ -17,7 +17,7 @@
       <div class="numbers">
         <p class="amount"><amount :amount="currentNode.amount" /></p>
         <div class="rate">
-          <small>{{ string['$PERCENTAGE_EXPLANATION_TEXT'] }} {{ currentNode.version - 1 }}
+          <small>{{ string['$PERCENTAGE_EXPLANATION_TEXT_ACCOUNT'] }}
             <span v-if="!variation_available">{{ string['$VARIATION_NOT_AVAILABLE'] }}</span>
           </small>
           <div
@@ -92,8 +92,8 @@ export default {
   created() {
     this.currentNode = this.budget.selectedNode;
     this.currentNode.diff =
-      (this.currentNode.amount - this.currentNode.last_amount) /
-      this.currentNode.last_amount;
+      (this.currentNode.amount - this.currentNode.previousValue) /
+      this.currentNode.previousValue;
     this.currentNode.bgColor = fillColor(this.currentNode.diff);
   },
   computed: {

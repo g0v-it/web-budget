@@ -37,7 +37,9 @@
             </VListTileAction>
             <VListTileContent>
               <VListTileTitle>
-                <RouterLink :to="item.path" v-text="item.title" />
+                <RouterLink v-if="!item.external" :to="item.path" v-text="item.title" />
+                <a v-if="item.external" target="_blank" rel="noopener noreferrer" :href="item.path">{{item.title}}</a>
+                 <v-icon v-if="item.external" size="10px" class="external-link">launch</v-icon>
               </VListTileTitle>
             </VListTileContent>
           </VListTile>
@@ -50,12 +52,12 @@
       >
         <img :src="string['$LOGO_HEADER_1']" class="g0v-header-logo">
       </a>
-      <RouterLink
+      <!--RouterLink
         :to="{ name: 'accounts-partition',params:{urlPartitionID:$root.$data.budgetState.selectedPartition} }"
         class="g0v-header-link"
       >
         <img :src="string['$LOGO_HEADER_2']" class="g0v-header-logo-g0v">
-      </RouterLink>
+      </RouterLink-->
       <VFlex class="text-xs-left">
         <VToolbarTitle v-text="title" class="g0v-header-title" />
       </VFlex>
@@ -85,6 +87,12 @@
     <footer>
       <ul class="g0v-footer">
         <li>
+          <a :href="string['$LOGO_FOOTER_G0V_HREF']" target="_blank">
+            <img :src="string['$LOGO_FOOTER_G0V']" 
+            class="g0v-logo"/>
+          </a>
+        </li>
+        <li>
           <a
             target="_blank" rel="noopener noreferrer"
             :href="string['$FOLLOW_US_LINK']"
@@ -98,11 +106,13 @@
           </RouterLink>
         </li>
         <li class="hide">
-          <RouterLink :to="{ name: 'terms-and-conditions' }">
+          <a
+            target="_blank" rel="noopener noreferrer" :href="string['$TERMS_URL']"
+          >
             {{ string['$TERMS_PAGE'] }}
-          </RouterLink>
+          </a>
         </li>
-        <li class="g0v-version">
+        <li class="g0v-version hide">
           {{ version }}
         </li>
         <li class="g0v-license hide">
@@ -174,7 +184,8 @@ export default {
         {
           icon: "bubble_chart",
           title: this.string["$FIRST_VIEW"],
-          path: "/"
+          path: "/",
+          external:false
         },
         /* {
           icon: "view_list",
@@ -184,17 +195,32 @@ export default {
         {
           icon: "table_chart",
           title: this.string["$THIRD_VIEW"],
-          path: "/table"
+          path: "/table",
+          external:false
         },
         {
           icon: "people",
           title: this.string["$CREDIT_PAGE"],
-          path: "/credits"
+          path: "/credits",
+          external:false
         },
         {
           icon: "account_balance",
           title: this.string["$TERMS_PAGE"],
-          path: "/terms-and-conditions"
+          path: this.string["$TERMS_URL"],
+          external:true
+        },
+        {
+          icon: "cloud",
+          title: this.string["$SPARQL_PAGE"],
+          path: this.string["$URL_SPARQL_PAGE"],
+          external:true
+        },
+        {
+          icon: "share",
+          title: this.string["$LOD_PAGE"],
+          path: this.string["$URL_LOD_PAGE"],
+          external:true
         }
       ];
     },
@@ -237,8 +263,18 @@ export default {
 </script>
 
 <style>
+
 a {
   text-decoration: none;
+}
+.external-link{
+  margin-left:0.5rem;
+}
+.g0v-logo{
+  margin-left:2rem ;
+  margin-right:2rem ;
+  height: 20px;
+  width: 50px;
 }
 
 @media (min-width: 768px) {
@@ -272,6 +308,9 @@ a {
     list-style: none;
     column-count: 2;
     text-align: start;
+  }
+  .hide {
+    display: none;
   }
 }
 @media (max-height: 415px) {

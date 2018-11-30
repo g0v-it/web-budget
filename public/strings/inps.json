@@ -2,8 +2,8 @@
     "$FIRST_VIEW":"Grafico a Bolle",
     "$SECOND_VIEW":"Lista Azioni",
     "$THIRD_VIEW":"Tabella Azioni",
-    "$CREDIT_PAGE":"crediti",
-    "$TERMS_PAGE":"termini d'uso",
+    "$CREDIT_PAGE":"Crediti",
+    "$TERMS_PAGE":"Termini d'uso",
     "$FOLLOW_US_TEXT":"Seguici su Github",
     "$FOLLOW_US_LINK":"https://github.com/g0v-it",
     "$SHOW_MORE_LIST_BUTTON":"Visualizza altri",
@@ -24,6 +24,7 @@
     "$DATA_SOURCE_LOGO":"https://www.inps.it/nuovoportaleinps/modelliNuovo/assets/img/logo-inps-pos.png",
     "$DATA_SOURCE_URL":"https://www.inps.it/NuovoportaleINPS/default.aspx?itemdir=46772&lang=IT",
     "$PERCENTAGE_EXPLANATION_TEXT":"Variazione rispetto al precedente bilancio (grigio=N.A.)",
+    "$PERCENTAGE_EXPLANATION_TEXT_ACCOUNT":"Variazione rispetto al precedente bilancio",
     "$TOOLTIP_PERCENTAGE":"Percentuale rispetto a:",
     "$TOOLTIP_PERCENTAGE_MEANING":" di appartenenza: ",
     "$TOOLTIP_TOTAL_MEANING":"totale del bilancio: ",
@@ -34,5 +35,11 @@
     "$HISTORY_NOT_AVAILABLE":"Non ci sono informazioni sui valori precedenti",
     "$TABLE_TOTAL":"Totale visualizzato:",
     "$LOGO_HEADER_1":"/logos/copernicani_orizzontale.png",
-    "$LOGO_HEADER_2":"/logos/g0v.svg"
+    "$LOGO_FOOTER_G0V":"/logos/g0v.png",
+    "$LOGO_FOOTER_G0V_HREF":"https://copernicani.it/g0v/",
+    "$SPARQL_PAGE":"SPARQL",
+    "$LOD_PAGE":"LOD",
+    "$URL_SPARQL_PAGE":"http://yasgui.org/short/ka2zWs9XK",
+    "$URL_LOD_PAGE":"http://inps.linkeddata.cloud/resource/ultimo_bilancio_disponibile",
+    "$TERMS_URL":"/terms-and-conditions"
 }

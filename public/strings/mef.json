@@ -29,5 +29,6 @@
     "$HISTORY_CARD_TITLE":"Storico dell'azione",
     "$LOWER_PARTITION_CARD_TITLE":"Dettaglio capitoli di spesa",
     "$LOWER_PARTITION_PERCENTAGE_MEANING":"sul totale dell'azione",
-    "$HISTORY_NOT_AVAILABLE":"Non ci sono informazioni sui valori precedenti di questa azione"
+    "$HISTORY_NOT_AVAILABLE":"Non ci sono informazioni sui valori precedenti di questa azione",
+    "$LOGO_FOOTER_G0V":"/logos/g0v.png"
 }

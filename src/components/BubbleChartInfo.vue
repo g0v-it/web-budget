@@ -81,6 +81,7 @@ export default {
   position: absolute;
 }
 .g0v-mef-logo {
+  margin-top:1rem;
   max-width: 50px;
 }
 .g0v-rdf-logo {
