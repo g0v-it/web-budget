@@ -1,64 +1,86 @@
 <template>
   <VApp v-if="configurationLoaded">
-    <v-toolbar app :clipped-left="clipped">
+    <!--  <VNavigationDrawer
+      temporary v-model="drawer"
+      app
+    >
+      <VList>
+        <VListTile
+          value="true"
+          v-for="(item, i) in items"
+          :key="i"
+        >
+          <VListTileAction>
+            <VIcon v-html="item.icon" />
+          </VListTileAction>
+          <VListTileContent>
+            <VListTileTitle><RouterLink :to="item.path" v-text="item.title" /></VListTileTitle>
+          </VListTileContent>
+        </VListTile>
+      </VList>
+    </VNavigationDrawer> -->
+
+    <VToolbar app :clipped-left="clipped">
+      <!--  <VToolbarSideIcon @click.stop="drawer = !drawer" /> -->
+      <VMenu :nudge-width="100">
+        <!-- <VToolbarTitle slot="activator"> -->
+        <VToolbarSideIcon slot="activator" />
+        <!--  </VToolbarTitle> -->
+
+        <VList>
+          <VListTile
+            value="true" v-for="(item, i) in items"
+            :key="i"
+          >
+            <VListTileAction>
+              <VIcon v-html="item.icon" />
+            </VListTileAction>
+            <VListTileContent>
+              <VListTileTitle>
+                <RouterLink :to="item.path" v-text="item.title" />
+              </VListTileTitle>
+            </VListTileContent>
+          </VListTile>
+        </VList>
+      </VMenu>
+
       <a
         :href="url_g0v" target="_blank"
         class="g0v-header-link"
-      ><img :src="logo_copernicani_orizzontale" class="g0v-header-logo"></a>
-      <router-link
+      >
+        <img :src="string['$LOGO_HEADER_1']" class="g0v-header-logo">
+      </a>
+      <RouterLink
         :to="{ name: 'accounts-partition',params:{urlPartitionID:$root.$data.budgetState.selectedPartition} }"
         class="g0v-header-link"
-      ><img :src="logo_g0v" class="g0v-header-logo-g0v"></router-link>
-      <v-flex class="text-xs-left">
-        <v-toolbar-title v-text="title" class="g0v-header-title" />
-      </v-flex>
+      >
+        <img :src="string['$LOGO_HEADER_2']" class="g0v-header-logo-g0v">
+      </RouterLink>
+      <VFlex class="text-xs-left">
+        <VToolbarTitle v-text="title" class="g0v-header-title" />
+      </VFlex>
 
-      <social-sharing
+      <SocialSharing
         inline-template
         :hashtags="appHashtag"
         class="g0v-social-buttons"
       >
         <div>
-          <network network="twitter" class="g0v-social-link">
+          <Network network="twitter" class="g0v-social-link">
             <i class="fab fa-twitter" />
-          </network>
-          <network network="facebook" class="g0v-social-link">
+          </Network>
+          <Network network="facebook" class="g0v-social-link">
             <i class="fab fa-facebook-f" />
-          </network>
+          </Network>
         </div>
-      </social-sharing>
+      </SocialSharing>
+    </VToolbar>
 
-      <v-menu :nudge-width="100">
-        <v-toolbar-title slot="activator">
-          <v-icon>{{ currentItemIcon }}</v-icon><v-icon>arrow_drop_down</v-icon>
-        </v-toolbar-title>
-
-        <v-list>
-          <v-list-tile
-            value="true" v-for="(item, i) in items"
-            :key="i"
-          >
-
-            <v-list-tile-action>
-              <v-icon v-html="item.icon" />
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>
-                <router-link :to="item.path" v-text="item.title" />
-              </v-list-tile-title>
-            </v-list-tile-content>
-
-          </v-list-tile>
-        </v-list>
-      </v-menu>
-
-    </v-toolbar>
-
-    <v-content>
-      <keep-alive :include="['BubbleView', 'TableView']">
-        <router-view />
-      </keep-alive>
-    </v-content>
+    <VContent>
+      <KeepAlive :include="['BubbleView', 'TableView']">
+        <RouterView />
+      </KeepAlive>
+    </VContent>
 
     <footer>
       <ul class="g0v-footer">
@@ -66,15 +88,23 @@
           <a
             target="_blank" rel="noopener noreferrer"
             :href="string['$FOLLOW_US_LINK']"
-          >{{ string['$FOLLOW_US_TEXT'] }}</a>
+          >
+            {{ string['$FOLLOW_US_TEXT'] }}
+          </a>
         </li>
         <li class="g0v-credits hide">
-          <router-link :to="{ name: 'credits' }">{{ string['$CREDIT_PAGE'] }}</router-link>
+          <RouterLink :to="{ name: 'credits' }">
+            {{ string['$CREDIT_PAGE'] }}
+          </RouterLink>
         </li>
         <li class="hide">
-          <router-link :to="{ name: 'terms-and-conditions' }">{{ string['$TERMS_PAGE'] }}</router-link>
+          <RouterLink :to="{ name: 'terms-and-conditions' }">
+            {{ string['$TERMS_PAGE'] }}
+          </RouterLink>
         </li>
-        <li class="g0v-version">{{ version }}</li>
+        <li class="g0v-version">
+          {{ version }}
+        </li>
         <li class="g0v-license hide">
           <a
             target="_blank" rel="license"
@@ -92,7 +122,7 @@
 </template>
 
 <script>
-import { get, post } from "axios";
+import { get } from "axios";
 import Configuration from "@/utils/configuration";
 
 var resizeTimer;
@@ -168,12 +198,12 @@ export default {
         }
       ];
     },
-    logo_copernicani_orizzontale() {
+    /* logo_copernicani_orizzontale() {
       return require("@/assets/copernicani_orizzontale.png");
     },
     logo_g0v() {
       return require("@/assets/g0v.svg");
-    },
+    }, */
     url_g0v() {
       return Configuration.current().g0vLogoUrl;
     },

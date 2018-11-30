@@ -80,9 +80,7 @@ export let actions = {
       )}`
     );
     const { data } = await get(
-      `${Configuration.current().apiEndpoint}/filter?filters=${encodeFilters(
-        filters
-      )}`
+      `${Configuration.current().apiEndpoint}/filter/${encodeFilters(filters)}`
     );
     console.log("response", data);
     //console.log("filters req", filters);

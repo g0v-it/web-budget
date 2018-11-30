@@ -38,7 +38,6 @@ You can use the following environment variables with the container image:
 - `G0V_APP_HASHTAG` -> `appHashtag` (the application hashtag)
 - `G0V_APP_HASHTAG` -> `appHashtag` (the application hashtag)
 - `G0V_SHOW_MEF_LOGO` -> `showMefLogo` (whether to show the MEF logo)
-- `G0V_MEF_LOGO_URL` -> `mefLogoUrl` (where to link the MEF logo)
 - `G0V_G0V_LOGO_URL` -> `g0vLogoUrl` (where to link the g0v logo)
 
 
@@ -95,13 +94,12 @@ And a `config.json` file to the `public` directory with this content and customi
 ```
 {
   "locale": "it",
-  "amountFormat": "$ 0,0. ",
+  "amountFormat": "$ 0,0 ",
   "rateFormat": "0.0 %",
   "tweetsUrl": "",
   "appHashtag": "",
-  "apiEndpoint": "https://data.budget.g0v.it/api/v1",
+  "apiEndpoint": "http://data.budget.g0v.it/api/v1",
   "showMefLogo": true,
-  "mefLogoUrl": "https://bdap-opendata.mef.gov.it/catalog",
   "g0vLogoUrl": "https://copernicani.it/g0v"
 }
 ```

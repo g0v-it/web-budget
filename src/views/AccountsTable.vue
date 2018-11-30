@@ -4,6 +4,9 @@
       <!--  -->
       <VCard>
         <VCardTitle>
+          <h2 class="title">
+            {{ string['$TABLE_TOTAL'] }} <Amount :amount="totals" />
+          </h2>
           <VSpacer />
           <VSpacer />
           <VTextField
@@ -14,8 +17,8 @@
         </VCardTitle>
         <VDataTable
           :headers="headers"
-          :items="accounts"
-          :search="search"
+          :items="filteredAccounts"
+
           :pagination.sync="pagination"
           :rows-per-page-text="string['$PAGINATOR_TABLE_TEXT']"
           :rows-per-page-items="[25,50,100,{text:'Tutti',value:-1}]"
@@ -65,6 +68,7 @@
             {{ props.pageStart }} - {{ props.pageStop }} di {{ props.itemsLength }}
           </template>
         </VDataTable>
+        </vcardtitle>
       </VCard>
     </div>
   </div>
@@ -84,6 +88,7 @@ export default {
     return {
       string: Configuration.current().strings,
       accounts: [],
+      selected: [],
       pagination: {
         sortBy: "amount",
         descending: true
@@ -93,6 +98,16 @@ export default {
   },
 
   computed: {
+    totals() {
+      return this.filteredAccounts.reduce((sum, node) => {
+        return sum + node.amount;
+      }, 0);
+    },
+    filteredAccounts() {
+      return this.accounts.filter(node => {
+        return node.title.toLowerCase().includes(this.search);
+      });
+    },
     headers() {
       return [
         { text: this.string["$HEADER_COLUMN_1"], value: "title" },
