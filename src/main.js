@@ -18,8 +18,8 @@ Vue.config.productionTip = false;
 
 Vue.component("Rate", Rate);
 Vue.component("Amount", Amount);
-Vue.component("social-sharing", SocialSharing);
-Vue.component("network", SocialSharingNetwork);
+Vue.component("SocialSharing", SocialSharing);
+Vue.component("Network", SocialSharingNetwork);
 
 Vue.use(responsive);
 

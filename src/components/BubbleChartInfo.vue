@@ -16,10 +16,10 @@
       </p>
     </div>
     <div class="legend-mef">
-      <a :href="url_mef" target="_blank">
+      <a :href="string['$DATA_SOURCE_URL']" target="_blank">
         <small>{{ string['$DATA_SOURCE_TEXT'] }}</small>
         <VImg
-          v-if="logo_mef_show" :src="logo_mef"
+          v-if="logo_mef_show" :src="string['$DATA_SOURCE_LOGO']"
           class="g0v-mef-logo"
         />
       </a>
@@ -44,15 +44,12 @@ export default {
     logo_rdf() {
       return require("@/assets/rdf_flyer.svg");
     },
-    logo_mef() {
-      return require("@/assets/logo_mef.svg");
-    },
     logo_mef_show() {
       return Configuration.current().showMefLogo;
     },
-    url_mef() {
+    /* url_mef() {
       return Configuration.current().mefLogoUrl;
-    },
+    }, */
     show_description: function() {
       return window.innerHeight > 570;
     },

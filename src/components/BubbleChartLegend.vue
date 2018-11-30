@@ -1,38 +1,7 @@
 <template>
   <div class="legend">
-    <div v-if="show_legend_radius" class="legend-radius">
-      <svg height="200">
-        <circle
-          vector-effect="non-scaling-stroke" cx="137.5000000000001"
-          cy="141.49999999999991" r="15"
-          fill="none" stroke-width="1"
-          stroke="rgb(190,190,190)"
-        />
-        <circle
-          vector-effect="non-scaling-stroke" cx="115.00000000000009"
-          cy="160.5" r="4"
-          fill="none" stroke-width="1"
-          stroke="rgb(190,190,190)"
-        />
-        <circle
-          vector-effect="non-scaling-stroke" cx="208"
-          cy="105.49999999999994" r="50"
-          fill="none" stroke-width="1"
-          stroke="rgb(190,190,190)"
-        />
-        <g transform="matrix(1,0,0,1,68,57.5)">
-          <text transform="matrix(1,0,0,1,0,12.574)" style="font-family:&quot;Roboto Mono&quot;;font-weight:100;font-size:12px;font-style:normal;fill:#000000;stroke:none;">50.000 milioni</text>
-        </g>
-        <g transform="matrix(1,0,0,1,42.5,112.5)">
-          <text transform="matrix(1,0,0,1,0,12.574)" style="font-family:&quot;Roboto Mono&quot;;font-weight:100;font-size:12px;font-style:normal;fill:#000000;stroke:none;">5.000 milioni</text>
-        </g>
-        <g transform="matrix(1,0,0,1,34,141.5)">
-          <text transform="matrix(1,0,0,1,0,12.574)" style="font-family:&quot;Roboto Mono&quot;;font-weight:100;font-size:12px;font-style:normal;fill:#000000;stroke:none;">50 milioni</text>
-        </g>
-      </svg>
-    </div>
     <div v-if="show_legend_colors" class="legend-colors">
-      <small>{{string['$PERCENTAGE_EXPLANATION_TEXT']}}</small>
+      <small>{{ string['$PERCENTAGE_EXPLANATION_TEXT'] }}</small>
       <ul class="colors">
         <li class="change-dec3" />
         <li class="change-dec2" />
@@ -55,20 +24,20 @@
 <script>
 import Configuration from "@/utils/configuration";
 export default {
-  data(){
-    return{
-      string:Configuration.current().strings
-    }
+  data() {
+    return {
+      string: Configuration.current().strings
+    };
   },
   props: {
     datasetMeta: Object
   },
-  computed:{
-    show_legend_radius : function(){
-      return (window.innerHeight>700)
+  computed: {
+    show_legend_radius: function() {
+      return window.innerHeight > 700;
     },
-    show_legend_colors : function(){
-      return (window.innerHeight>540)
+    show_legend_colors: function() {
+      return window.innerHeight > 540;
     }
   }
 };
