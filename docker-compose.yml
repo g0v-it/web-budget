@@ -5,7 +5,7 @@ services:
       - G0V_TWEETS_URL=https://docs.google.com/spreadsheets/d/1IKb7W6MwpWODE4j2UOSti9tmOw3oh676sEXjlpECvQI/edit?usp=sharing
       - G0V_API_ENDPOINT=http://pub.linkeddata.center:29312
       - G0V_STRING_URL=/strings/inps.json
-      - G0V_SHOW_MEF_LOGO=false
+      - G0V_SHOW_MEF_LOGO=0
       - G0V_MEF_LOGO_URL=https://www.inps.it/nuovoportaleinps/modelliNuovo/assets/img/logo-inps-pos.png
     build: .
     ports:
