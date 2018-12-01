@@ -2,7 +2,7 @@
     "$FIRST_VIEW":"Grafico a Bolle",
     "$SECOND_VIEW":"Lista Azioni",
     "$THIRD_VIEW":"Tabella Azioni",
-    "$CREDIT_PAGE":"Crediti",
+    "$CREDIT_PAGE":"Credits",
     "$TERMS_PAGE":"Termini d'uso",
     "$FOLLOW_US_TEXT":"Seguici su Github",
     "$FOLLOW_US_LINK":"https://github.com/g0v-it",
@@ -38,7 +38,7 @@
     "$LOGO_FOOTER_G0V":"/logos/g0v.png",
     "$LOGO_FOOTER_G0V_HREF":"https://copernicani.it/g0v/",
     "$SPARQL_PAGE":"SPARQL",
-    "$LOD_PAGE":"LOD",
+    "$LOD_PAGE":"Linked Open Data",
     "$URL_SPARQL_PAGE":"http://yasgui.org/short/ka2zWs9XK",
     "$URL_LOD_PAGE":"http://inps.linkeddata.cloud/resource/ultimo_bilancio_disponibile",
     "$TERMS_URL":"/terms-and-conditions"

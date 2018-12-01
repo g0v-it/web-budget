@@ -199,18 +199,6 @@ export default {
           external:false
         },
         {
-          icon: "people",
-          title: this.string["$CREDIT_PAGE"],
-          path: "/credits",
-          external:false
-        },
-        {
-          icon: "account_balance",
-          title: this.string["$TERMS_PAGE"],
-          path: this.string["$TERMS_URL"],
-          external:true
-        },
-        {
           icon: "cloud",
           title: this.string["$SPARQL_PAGE"],
           path: this.string["$URL_SPARQL_PAGE"],
@@ -220,6 +208,18 @@ export default {
           icon: "share",
           title: this.string["$LOD_PAGE"],
           path: this.string["$URL_LOD_PAGE"],
+          external:true
+        },
+        {
+          icon: "people",
+          title: this.string["$CREDIT_PAGE"],
+          path: "/credits",
+          external:false
+        },
+        {
+          icon: "account_balance",
+          title: this.string["$TERMS_PAGE"],
+          path: this.string["$TERMS_URL"],
           external:true
         }
       ];

@@ -2,17 +2,33 @@
     <div class="container terms_and_conditions">
         <h2 id="condizioni_di_accesso_e_finalit_d8217uso">CONDIZIONI DI ACCESSO E FINALITÀ D&#8217;USO</h2>
 
-        <p>L’Associazione Copernicani, con sede in Via Giuseppe Verdi 3/bis, Busto Arsizio, C.F. 97803240155 (di seguito “<b>Associazione Copernicani</b>”), ha realizzato una applicazione  web operativa sul sito budget.g0v.it (di seguito l’”<b>Applicazione</b>”) per monitorare, sulla base delle informazioni rese pubblicamente disponibili dal Ministero dell’Economia e delle Finanze italiano (di seguito “<b>MEF</b>”), i dati di spesa relativi alla Legge di Bilancio Pubblicata per l&#8217;esercizio finanziario di riferimento (di seguito i “<b>Dati di Spesa Pubblica</b>”).</p>
+        <p>L’Associazione Copernicani, con sede in Via Giuseppe Verdi 3/bis, Busto Arsizio, C.F. 97803240155 
+        (di seguito “<b>Associazione Copernicani</b>”), ha realizzato questa applicazione web 
+        (di seguito l’”<b>Applicazione</b>”) per visualizzare, 
+        sulla base delle informazioni  pubblicamente disponibili , 
+        dati relativi ai bilanci ddella Pubblica Mamministrazione.</p>
 
-        <p>L&#8217;utilizzo della Applicazione è gratuito. L’Applicazione ha carattere puramente informativo e ha lo scopo di favorire la trasparenza sulla spesa pubblica italiana. </p>
+        <p>L&#8217;utilizzo della Applicazione è gratuito. 
+        L’Applicazione ha carattere puramente informativo e ha lo scopo di favorire 
+        la trasparenza sulla spesa pubblica italiana. </p>
 
-        <p>L’Associazione Copernicani, titolare della Applicazione, ha l&#8217;esclusivo ed insindacabile diritto di modificare, in tutto o in parte, senza alcun preavviso ed a propria assoluta discrezione, il contenuto, le immagini, i termini e/o le condizioni di accesso alla Applicazione. L&#8217;Associazione Copernicani, anche per il tramite di suoi rappresentanti o delegati potrà pertanto in qualunque momento intervenire sulla Applicazione e sulle presenti condizioni di accesso e finalità d’uso al fine, ad esempio, di modificarne i contenuti, sospenderne l&#8217;accesso, prevedere diversi criteri di accesso o funzionalità, ovvero effettuarne la disconnessione nei confronti di ciascun utilizzatore (d&#8217;ora in poi “<b>Utente</b>”).</p>
+        <p>L’Associazione Copernicani, titolare della Applicazione, 
+        ha l&#8217;esclusivo ed insindacabile diritto di modificare, 
+        in tutto o in parte, senza alcun preavviso ed a propria assoluta discrezione, 
+        il contenuto, le immagini, i termini e/o le condizioni di accesso alla Applicazione.
+         L&#8217;Associazione Copernicani, anche per il tramite di suoi rappresentanti o delegati potrà pertanto in qualunque momento intervenire sulla Applicazione e sulle presenti condizioni di accesso e finalità d’uso al fine, ad esempio, di modificarne i contenuti, sospenderne l&#8217;accesso, prevedere diversi criteri di accesso o funzionalità, ovvero effettuarne la disconnessione nei confronti di ciascun utilizzatore (d&#8217;ora in poi “<b>Utente</b>”).</p>
 
         <h2 id="propriet_intellettuale">PROPRIETÀ INTELLETTUALE</h2>
 
         <ol>
-            <li><p>I contenuti del sito – codice di script, grafica, testi, tabelle, immagini, video, layout grafici, nonchè il logo della Associazione Copernicani e ogni altra informazione disponibile in qualunque forma nel sito budget.g0v.it (i “<b>Contenuti Protetti</b>”) – con esclusione dei Dati di Spesa Pubblica – sono riservati all’Associazione Copernicani o ai singoli soggetti terzi (“i “Terzi”) che hanno realizzato i Contenuti Protetti ai sensi della normativa in materia di diritto d’autore (Legge n. 633/1941 s.m.i.);</p></li>
-            <li><p>Se non diversamente indicato, è garantito il permesso di copiare e distribuire i Dati di Spesa Pubblica così come catalogati per il tramite dell’Applicazione (il “Database”), secondo le condizioni della licenza Creative Commons Attribuzione-Non Commerciale – Condividi allo stesso modo 3.0 (CC BY-NC-SA 3.0 IT), il cui testo è disponibile a questo indirizzo <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/it/legalcode">https://creativecommons.org/licenses/by-nc-sa/3.0/it/legalcode</a>  <img alt="Licenza Creative Commons" style="height:20px; border-width:0; margin-left:0.3em; vertical-align:middle;" src="https://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png" />.  </p>
+            <li><p>I contenuti del sito – codice di script, grafica, testi, tabelle, 
+            immagini, video, layout grafici, nonchè il logo della Associazione Copernicani e 
+            ogni altra informazione visualizzata in qualunque forma nella applicazione (i “<b>Contenuti Protetti</b>”) – 
+            con esclusione dei Dati  – sono riservati all’Associazione Copernicani o ai singoli 
+            soggetti terzi (“i “Terzi”) che hanno realizzato i Contenuti Protetti ai 
+            sensi della normativa in materia di diritto d’autore (Legge n. 633/1941 s.m.i.);</p></li>
+            <li><p>Se non diversamente indicato, è garantito il permesso
+             di copiare e distribuire i Dati di Spesa Pubblica così come catalogati per il tramite dell’Applicazione (il “Database”), secondo le condizioni della licenza Creative Commons Attribuzione-Non Commerciale – Condividi allo stesso modo 3.0 (CC BY-NC-SA 3.0 IT), il cui testo è disponibile a questo indirizzo <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/it/legalcode">https://creativecommons.org/licenses/by-nc-sa/3.0/it/legalcode</a>  <img alt="Licenza Creative Commons" style="height:20px; border-width:0; margin-left:0.3em; vertical-align:middle;" src="https://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png" />.  </p>
 
                 <p>Inoltre il Database è liberamente utilizzabile da qualunque testata giornalistica, sia distribuita su internet che in cartaceo e sia che abbia finalità lucrative o meno, secondo le condizioni della licenza Creative Commons Attribuzione 3.0 Unported (CC BY 3.0), il cui testo è disponibile a questo indirizzo <a href="https://creativecommons.org/licenses/by/3.0/legalcode">https://creativecommons.org/licenses/by/3.0/legalcode</a>  <img alt="Licenza Creative Commons" style="height:20px; border-width:0; margin-left:0.3em; vertical-align:middle;" src="https://i.creativecommons.org/l/by/3.0/88x31.png" />. </p>
 
