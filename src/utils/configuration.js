@@ -12,6 +12,7 @@ const ConfigurationFactory = function() {
 
     rateFormat: "0.0 %",
 
+    // Url for the tweets google sheet, if empty the function is disabled.
     tweetsUrl: "",
 
     appHashtag: "",

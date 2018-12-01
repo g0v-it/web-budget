@@ -38,14 +38,18 @@
       />
       <p v-if="currentNode.isVersionOf.length==0">{{ string['$HISTORY_NOT_AVAILABLE'] }}</p>
     </v-card>
-    <v-card v-if="currentNode.hasPart.length!=0" class="partition">
+    <v-card v-if="currentNode.hasPart.length!=0"
+            class="partition"
+            v-bind:class="{ 'wide-bottom': !show_comment }">
       <h2>{{ string['$LOWER_PARTITION_CARD_TITLE'] }}</h2>
       <CdsChart
         :values="{lower_partition:currentNode.cds,sum:currentNode.amount}"
         style=""
       />
     </v-card>
-    <v-card v-if="show_comment" class="comments">
+    <v-card v-if="show_comment"
+            class="comments"
+            v-bind:class="{ 'wide-bottom': currentNode.hasPart.length==0 }">
       <TweetsWall />
     </v-card>
   </div>
@@ -101,8 +105,8 @@ export default {
       return require("@/assets/rdf_flyer.svg");
     },
     show_comment(){
-      //valore sarà settato dal file di configurazione
-      return false;
+      // Will show the tweet wall if the tweetsUrl is defined
+      return Configuration.current().tweetsUrl!=="";
     },
     variation_available() {
       return isFinite(this.currentNode.diff);
@@ -125,15 +129,17 @@ export default {
   padding: 0;
   display: grid;
   grid-template:
-    "info bar" 1fr
-    "cake social" minmax(50%, auto) / 1fr 1fr;
+    "top top" 1fr
+    "bottom bottom" minmax(auto, auto) / 1fr 1fr;
   grid-gap: 2em;
+}
+.wide-bottom {
+  grid-area: bottom;
 }
 .g0v-rdf-logo {
   height: 20px;
   vertical-align: middle;
 }
-
 h2 {
   font-weight: 500;
   margin-bottom: 1em;
