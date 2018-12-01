@@ -35,11 +35,9 @@
 
     <p>
       Tutto il codice, sia relativo alla visualizzazione sia della piattaforma di gestione dei dati è disponibile
-      con licenza Open Source su GitHub rispettivamente nei  repository
-      <a href="https://github.com/g0v-it/web-budget">
-        web-budget
-      </a> e <a href="https://github.com/g0v-it/data-budget">
-        data-budget
+      con licenza Open Source su 
+      <a href="https://github.com/g0v-it">
+        GitHub 
       </a>.
     </p>
 

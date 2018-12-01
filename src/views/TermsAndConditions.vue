@@ -4,9 +4,9 @@
 
         <p>L’Associazione Copernicani, con sede in Via Giuseppe Verdi 3/bis, Busto Arsizio, C.F. 97803240155 
         (di seguito “<b>Associazione Copernicani</b>”), ha realizzato questa applicazione web 
-        (di seguito l’”<b>Applicazione</b>”) per visualizzare, 
-        sulla base delle informazioni  pubblicamente disponibili , 
-        dati relativi ai bilanci ddella Pubblica Mamministrazione.</p>
+        (di seguito l’”<b>Applicazione</b>”) per analizzare, 
+        sulla base di informazioni  pubblicamente disponibili , 
+        i dati relativi ai bilanci ddella Pubblica Amministrazione.</p>
 
         <p>L&#8217;utilizzo della Applicazione è gratuito. 
         L’Applicazione ha carattere puramente informativo e ha lo scopo di favorire 
