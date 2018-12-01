@@ -1,7 +1,7 @@
 {
     "$FIRST_VIEW":"Grafico a Bolle",
-    "$SECOND_VIEW":"Lista Azioni",
-    "$THIRD_VIEW":"Tabella Azioni",
+    "$SECOND_VIEW":"Lista Capitoli",
+    "$THIRD_VIEW":"Tabella Capitoli",
     "$CREDIT_PAGE":"Credits",
     "$TERMS_PAGE":"Termini d'uso",
     "$FOLLOW_US_TEXT":"Seguici su Github",
