@@ -14,6 +14,12 @@
             :label="string['$SEARCH_LABEL']" single-line
             hide-details
           />
+          <vue-csv-downloader
+                  :data="exportData"
+                  :fields="exportFields"
+                  download-name="bilancio-inps-filtrato.csv"
+          ><v-icon size="30px" class="download-csv">cloud_download</v-icon>
+          </vue-csv-downloader>
         </VCardTitle>
         <VDataTable
           :headers="headers"
@@ -77,13 +83,17 @@
 <script>
 import * as BudgetStore from "@/budgetStore.js";
 import Configuration from "@/utils/configuration";
+import VueCsvDownloader from 'vue-csv-downloader';
+import { orderBy } from "lodash";
 
 const previousYear = function(meta) {
   return +meta.year - 1;
 };
 export default {
   name: "TableView",
-
+  components: {
+    VueCsvDownloader,
+  },
   data() {
     return {
       string: Configuration.current().strings,
@@ -112,14 +122,29 @@ export default {
       return [
         { text: this.string["$HEADER_COLUMN_1"], value: "title" },
         { text: this.string["$HEADER_COLUMN_2"], value: "amount" },
-        {
-          text: this.string["$HEADER_COLUMN_3"],
-          value: "rate"
-        },
-        {
-          text: this.string["$HEADER_COLUMN_4"],
-          value: "partitionLabel[0]"
-        }
+        { text: this.string["$HEADER_COLUMN_3"], value: "rate" },
+        { text: this.string["$HEADER_COLUMN_4"], value: "partitionLabel[0]" }
+      ];
+    },
+    exportData() {
+      let sortedFiltered = orderBy(this.filteredAccounts,
+                                  [this.pagination.sortBy],
+                                  [this.pagination.descending ? "desc" : "asc"]);
+      return sortedFiltered.map(item => {
+        let row = {}
+        row[this.string["$HEADER_COLUMN_1"]] = item.title;
+        row[this.string["$HEADER_COLUMN_2"]] = item.amount;
+        row[this.string["$HEADER_COLUMN_3"]] = item.rate||'';
+        row[this.string["$HEADER_COLUMN_4"]] = item.partitionLabel.join(', ');
+        return row;
+      });
+    },
+    exportFields() {
+      return [
+        this.string["$HEADER_COLUMN_1"],
+        this.string["$HEADER_COLUMN_2"],
+        this.string["$HEADER_COLUMN_3"],
+        this.string["$HEADER_COLUMN_4"]
       ];
     },
     budget() {
@@ -167,7 +192,9 @@ export default {
 td::first-letter {
   text-transform: uppercase;
 }
-
+.download-csv {
+  margin-left: 1rem;
+}
 /* .account-second {
   width: auto;
 } */
