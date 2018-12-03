@@ -17,11 +17,11 @@ export default {
   $PAGINATOR_TABLE_TEXT: "Righe per pagina",
   $GLOBAL_NAME: "stato",
   $PARTITION_FILTER_TEXT: "Filtra per",
-  $MAIN_TITLE: "Bilancio finanziario",
+  $MAIN_TITLE: "MAIN_TITLE ",
   $INFO_TOTAL_LABEL: "Totale: ",
   $INFO_TOTAL_FILTERED_LABEL: "Totale filtrato: ",
   $DATA_SOURCE_TEXT:
-    "Elaborazione su dati dell Istituto Italiano di previdenza Sociale",
+    "DATA_SOURCE_TEXT",
   $PERCENTAGE_EXPLANATION_TEXT: "Variazione rispetto al precedente bilancio",
   $TOOLTIP_PERCENTAGE: "Percentuale rispetto a:",
   $TOOLTIP_PERCENTAGE_MEANING: " di appartenenza: ",

@@ -20,7 +20,7 @@
     "$MAIN_TITLE":"Bilancio finanziario",
     "$INFO_TOTAL_LABEL":"Totale (entrate-uscite): ",
     "$INFO_TOTAL_FILTERED_LABEL":"Totale filtrato: ",
-    "$DATA_SOURCE_TEXT":"Elaborazione su dati dell Istituto Italiano di previdenza Sociale",
+    "$DATA_SOURCE_TEXT":"Elaborazione su dati dell Istituto Nazionale di Previdenza Sociale",
     "$DATA_SOURCE_LOGO":"https://www.inps.it/nuovoportaleinps/modelliNuovo/assets/img/logo-inps-pos.png",
     "$DATA_SOURCE_URL":"https://www.inps.it/NuovoportaleINPS/default.aspx?itemdir=46772&lang=IT",
     "$PERCENTAGE_EXPLANATION_TEXT":"Variazione rispetto al precedente bilancio (grigio=N.A.)",

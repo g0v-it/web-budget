@@ -1,5 +1,11 @@
 <template>
   <div class="legend">
+  	<p>
+	    <VImg
+	      v-if="logo_mef_show" :src="string['$DATA_SOURCE_LOGO']"
+	      class="g0v-mef-logo"
+	  	/>
+	</p>
     <div class="legend-description">
       <h2 class="title">
         {{ datasetMeta.title }}
@@ -18,10 +24,6 @@
     <div class="legend-mef">
       <a :href="string['$DATA_SOURCE_URL']" target="_blank">
         <small>{{ string['$DATA_SOURCE_TEXT'] }}</small>
-        <VImg
-          v-if="logo_mef_show" :src="string['$DATA_SOURCE_LOGO']"
-          class="g0v-mef-logo"
-        />
       </a>
     </div>
   </div>
