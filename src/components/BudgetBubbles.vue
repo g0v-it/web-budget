@@ -55,6 +55,15 @@ export default {
 
   computed: {
     partitionBlocks: function() {
+      /* if (this.partitionId !== "default") {
+        const orderedPart = Array.from(
+          this.partitionLabels[this.partitionId].partitions
+        );
+        return orderedPart.sort(
+          (a, b) => Math.abs(b.filteredAmount) - Math.abs(a.filteredAmount)
+        );
+      }
+      return []; */
       return this.partitionId !== "default"
         ? this.partitionLabels[this.partitionId].partitions
         : [];
@@ -175,7 +184,7 @@ export default {
             y: heightScale(diffForHeight)
           };
         });
-        return myNodes;
+        return myNodes; /* .sort((a, b) => Math.abs(b.amount) - Math.abs(a.amount)); */
       };
 
       // convert raw data into nodes data

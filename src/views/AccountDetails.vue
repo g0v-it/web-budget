@@ -1,7 +1,8 @@
 <template>
   <div class="g0v-container">
-    <v-card class="details">
-      <h2>{{ currentNode.title }}
+    <VCard class="details">
+      <h2>
+        {{ currentNode.title }}
         <a
           target="_blank"
           :href="currentNode.source"
@@ -11,49 +12,67 @@
           <img :src="logo_rdf" class="g0v-rdf-logo">
         </a>
       </h2>
-      <span><p v-for="(l,index) in currentNode.partitionLabel" :key="index" class="top"> {{l+"  "}}</p></span>
+      <span>
+        <p
+          v-for="(l,index) in currentNode.partitionLabel" :key="index"
+          class="top"
+        >
+          {{ l+"  " }}
+        </p>
+      </span>
 
-      <p class="description">{{ currentNode.description | capitalize }}</p>
+      <p class="description">
+        {{ currentNode.description | capitalize }}
+      </p>
       <div class="numbers">
-        <p class="amount"><amount :amount="currentNode.amount" /></p>
+        <p class="amount">
+          <Amount :amount="currentNode.amount" />
+        </p>
         <div class="rate">
-          <small>{{ string['$PERCENTAGE_EXPLANATION_TEXT_ACCOUNT'] }}
-            <span v-if="!variation_available">{{ string['$VARIATION_NOT_AVAILABLE'] }}</span>
+          <small>
+            {{ string['$PERCENTAGE_EXPLANATION_TEXT_ACCOUNT'] }}
+            <span v-if="!variation_available">
+              {{ string['$VARIATION_NOT_AVAILABLE'] }}
+            </span>
           </small>
           <div
             v-if="variation_available" class="diff"
             :style="{backgroundColor:currentNode.bgColor}"
           >
-            <h3><rate :rate="currentNode.diff" /></h3>
+            <h3><Rate :rate="currentNode.diff" /></h3>
           </div>
         </div>
       </div>
-    </v-card>
-    <v-card class=" history">
+    </VCard>
+    <VCard class=" history">
       <h2>{{ string['$HISTORY_CARD_TITLE'] }}</h2>
-      <HistoryChart v-if="currentNode.isVersionOf.length!=0"
+      <HistoryChart
+        v-if="currentNode.isVersionOf.length!=0"
         :values="history"
         :dataset-meta="budget.meta"
         style=""
       />
-      <p v-if="currentNode.isVersionOf.length==0">{{ string['$HISTORY_NOT_AVAILABLE'] }}</p>
-    </v-card>
-    <v-card v-if="currentNode.hasPart.length!=0"
-            class="partition"
-            v-bind:class="{ 'wide-bottom': !show_comment }">
+      <p v-if="currentNode.isVersionOf.length==0">
+        {{ string['$HISTORY_NOT_AVAILABLE'] }}
+      </p>
+    </VCard>
+    <VCard
+      v-if="currentNode.hasPart.length!=0"
+      class="partition"
+    >
       <h2>{{ string['$LOWER_PARTITION_CARD_TITLE'] }}</h2>
       <CdsChart
         :values="{lower_partition:currentNode.cds,sum:currentNode.amount}"
         style=""
       />
-    </v-card>
-    <v-card v-if="show_comment"
-            class="comments"
-            v-bind:class="{ 'wide-bottom': currentNode.hasPart.length==0 }">
+    </VCard>
+    <VCard
+      v-if="show_comment"
+      class="comments"
+    >
       <TweetsWall />
-    </v-card>
+    </VCard>
   </div>
-
 </template>
 
 <script>
@@ -104,16 +123,19 @@ export default {
     logo_rdf() {
       return require("@/assets/rdf_flyer.svg");
     },
-    show_comment(){
+    show_comment() {
       // Will show the tweet wall if the tweetsUrl is defined
-      return Configuration.current().tweetsUrl!=="";
+      return Configuration.current().tweetsUrl !== "";
     },
     variation_available() {
       return isFinite(this.currentNode.diff);
     },
     history: function() {
       var history = this.currentNode.isVersionOf;
-      history.push({"version":this.currentNode.version,"amount":this.currentNode.amount});
+      history.push({
+        version: this.currentNode.version,
+        amount: this.currentNode.amount
+      });
       return history;
     },
     budget: function() {
@@ -129,8 +151,8 @@ export default {
   padding: 0;
   display: grid;
   grid-template:
-    "top top" 1fr
-    "bottom bottom" minmax(auto, auto) / 1fr 1fr;
+    "info bar" 1fr
+    "cake social" minmax(50%, auto) / 1fr 1fr;
   grid-gap: 2em;
 }
 .wide-bottom {
@@ -200,7 +222,7 @@ h2 {
 .numbers .diff {
   display: inline-grid;
   width: 8rem;
-  color: #fff;
+  /*   color: #fff; */
   padding: 0.5rem;
   margin: 0.5rem;
 
@@ -210,6 +232,16 @@ h2 {
     0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
   box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
     0 1px 3px 0 rgba(0, 0, 0, 0.12);
+}
+
+.diff h3 {
+  background: inherit;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  width: 8rem;
+  text-align: center;
+  filter: invert(1) grayscale(1) contrast(7);
 }
 
 @media screen and (max-width: 900px) {
