@@ -75,12 +75,14 @@ export let actions = {
     console.log("filter decoded", decodeFilters(s));
     console.log(
       "request",
-      `${Configuration.current().apiEndpoint}/filter?filters=${encodeFilters(
-        filters
+      `${Configuration.current().apiEndpoint}/filter/${encodeURIComponent(
+        encodeFilters(filters)
       )}`
     );
     const { data } = await get(
-      `${Configuration.current().apiEndpoint}/filter/${encodeFilters(filters)}`
+      `${Configuration.current().apiEndpoint}/filter/${encodeURIComponent(
+        encodeFilters(filters)
+      )}`
     );
     console.log("response", data);
     //console.log("filters req", filters);
