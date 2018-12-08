@@ -55,7 +55,7 @@ export default {
 
   computed: {
     partitionBlocks: function() {
-      /* if (this.partitionId !== "default") {
+      if (this.partitionId !== "default") {
         const orderedPart = Array.from(
           this.partitionLabels[this.partitionId].partitions
         );
@@ -63,10 +63,10 @@ export default {
           (a, b) => Math.abs(b.filteredAmount) - Math.abs(a.filteredAmount)
         );
       }
-      return []; */
-      return this.partitionId !== "default"
+      return [];
+      /* return this.partitionId !== "default"
         ? this.partitionLabels[this.partitionId].partitions
-        : [];
+        : []; */
     }
   },
 

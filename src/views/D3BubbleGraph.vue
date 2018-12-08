@@ -118,7 +118,12 @@ export default {
       let filteredAmount = 0;
       let partition_keys = Object.keys(this.budget.partitionLabels);
       if (partition_keys.length > 1) {
-        if (this.budget.partitionLabels[partition_keys[1]].partitions) {
+        if (this.budget.partitionLabels[partition_keys[0]].partitions) {
+          this.budget.partitionLabels[partition_keys[0]].partitions.map(i => {
+            filteredAmount += parseFloat(i.filteredAmount);
+            amount += parseFloat(i.partitionAmount);
+          });
+        } else {
           this.budget.partitionLabels[partition_keys[1]].partitions.map(i => {
             filteredAmount += parseFloat(i.filteredAmount);
             amount += parseFloat(i.partitionAmount);
