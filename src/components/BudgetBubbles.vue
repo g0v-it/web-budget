@@ -164,7 +164,6 @@ export default {
 
         let heightScale = d3
           .scalePow()
-          /* .clamp(true) */
           .exponent(0.1)
           .domain([minRate, maxRate])
           .range([this.$refs.vis.offsetHeight, 0]);
@@ -184,7 +183,7 @@ export default {
             y: heightScale(diffForHeight)
           };
         });
-        return myNodes; /* .sort((a, b) => Math.abs(b.amount) - Math.abs(a.amount)); */
+        return myNodes.sort((a, b) => Math.abs(b.amount) - Math.abs(a.amount));
       };
 
       // convert raw data into nodes data
