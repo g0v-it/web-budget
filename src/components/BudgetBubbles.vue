@@ -133,7 +133,7 @@ export default {
           this.center_x = this.$refs.vis.offsetWidth / 2;
         } else {
           maxRadius_x = 90;
-          minRadius_x = 3;
+          minRadius_x = 2;
           this.center_x = this.$refs.vis.offsetWidth / 2;
         }
         //console.log(window.innerHeight);

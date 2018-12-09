@@ -118,7 +118,7 @@ export default {
   color: transparent;
   width: 8rem;
   text-align: center;
-  filter: invert(1) grayscale(1) contrast(7);
+  filter: invert(1) grayscale(1) contrast(9);
 }
 /* .numberContainer .diff h3 {
 
