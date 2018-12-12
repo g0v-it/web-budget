@@ -2,17 +2,17 @@
     <div class="container terms_and_conditions">
         <h2 id="condizioni_di_accesso_e_finalit_d8217uso">CONDIZIONI DI ACCESSO E FINALITÀ D&#8217;USO</h2>
 
-        <p>L’Associazione Copernicani, con sede in Via Giuseppe Verdi 3/bis, Busto Arsizio, C.F. 97803240155 
+        <p>L'Associazione Copernicani, con sede in Via Giuseppe Verdi 3/bis, Busto Arsizio, C.F. 97803240155 
         (di seguito “<b>Associazione Copernicani</b>”), ha realizzato questa applicazione web 
         (di seguito l’”<b>Applicazione</b>”) per analizzare, 
         sulla base di informazioni  pubblicamente disponibili , 
         i dati relativi ai bilanci ddella Pubblica Amministrazione.</p>
 
-        <p>L&#8217;utilizzo della Applicazione è gratuito. 
+        <p>L'utilizzo della Applicazione è gratuito. 
         L’Applicazione ha carattere puramente informativo e ha lo scopo di favorire 
         la trasparenza sulla spesa pubblica italiana. </p>
 
-        <p>L’Associazione Copernicani, titolare della Applicazione, 
+        <p>L'Associazione Copernicani, titolare della Applicazione, 
         ha l&#8217;esclusivo ed insindacabile diritto di modificare, 
         in tutto o in parte, senza alcun preavviso ed a propria assoluta discrezione, 
         il contenuto, le immagini, i termini e/o le condizioni di accesso alla Applicazione.

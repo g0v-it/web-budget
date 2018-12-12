@@ -2,30 +2,39 @@
 
 # web-budget
 
-An interactive web application that visualizes the Italian Government budget data.
+An interactive web application that visualizes government financial reports.
 
 This application is inspired by similar applications developed by the [g0v community](http://gov.asia/) in [Taiwan](https://github.com/g0v/twbudget) and [Taipey](https://github.com/tony1223/tw-budget-platform)
 
 g0v is a decentralized civic tech community to advocate transparency of information and build tech solutions
 for citizens to participate in public affairs from the bottom up. The g0v community was born in Taiwan thanks to [Audrey Tang](https://de.wikipedia.org/wiki/Audrey_Tang), [Chia-liang Kao](https://github.com/clkao) and many others.
 
+## Who is using it
+
+As we know, this code is used to:
+
+- visualize the Italian Budget (Legge di bilancio), see https://budget.g0v.it/
+- visualize the public Financial Reports of INPS, see https://inps.g0v.it/
+
 
 ## Docker
 
-### run docker image
+### run local docker image
 
 The webapp requires to connect to a platform that provides the data, e.g:
 
 ```bash
 git clone https://github.com/g0v-it/data-inps.git ../testdata
 cd ../testdata; docker-compose up -d
+#take note of the created bridge nework e.g:
+NETWORK=testdata_default
 ```
 
 Than you are ready to build and run webapp container:
 
 ```bash
 docker build -t webapp .
-docker run --rm -p 29313:8080 -e G0V_API_ENDPOINT=http://localhost:29313 webapp
+docker run --rm -p 29313:8080 --net $NETWORK -e G0V_API_ENDPOINT=http://api:29312/ webapp
 ```
 
 Try it pointing your browser to http://localhost:29313

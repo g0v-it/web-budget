@@ -16,7 +16,7 @@
         </a> e
         <a href="https://github.com/luca">
           Luca Mearelli
-        </a> per l&#8217; sviluppo del codice di visualizzazione
+        </a> per lo sviluppo del codice di visualizzazione
         dei dati.
       </li>
       <li>
@@ -28,13 +28,13 @@
         </a> e
         <a href="http://linkeddata.center">
           LinkedData.Center
-        </a> lo svilppo della piattaforma di gestione
+        </a> per lo svilppo della piattaforma di gestione
         dei dati
       </li>
     </ul>
 
     <p>
-      Tutto il codice, sia relativo alla visualizzazione sia della piattaforma di gestione dei dati è disponibile
+      Tutto il codice, sia relativo alla visualizzazione, sia della piattaforma di gestione dei dati è disponibile
       con licenza Open Source su 
       <a href="https://github.com/g0v-it">
         GitHub 
