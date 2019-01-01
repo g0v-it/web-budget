@@ -26,19 +26,20 @@ The webapp requires to connect to a platform that provides the data, e.g:
 ```bash
 git clone https://github.com/g0v-it/data-inps.git ../testdata
 cd ../testdata; docker-compose up -d
-#take note of the created bridge nework e.g:
-NETWORK=testdata_default
+#take note of the api container port, e.g.
+APIPORT=29322
 ```
 
 Than you are ready to build and run webapp container:
 
 ```bash
 docker build -t webapp .
-docker run --rm -p 29313:8080 --net $NETWORK -e G0V_API_ENDPOINT=http://api:29312/ webapp
+docker run -d --name webapp -p 29313:8080 -e G0V_API_ENDPOINT=http://localhost:$APIPORT webapp
 ```
 
 Try it pointing your browser to http://localhost:29313
 
+Remove the container with `docker rm -f webapp`
 
 
 You can use the following environment variables with the container image:
