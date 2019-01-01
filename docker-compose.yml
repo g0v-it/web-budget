@@ -2,7 +2,7 @@ version: '3'
 services:
   webapp:
     environment:
-      - G0V_API_ENDPOINT=http://inps.g0v.it:29312
+      - G0V_API_ENDPOINT=https://data.inps.g0v.it/ldp
       - G0V_STRING_URL=/strings/inps.json
       - G0V_SHOW_MEF_LOGO=1
     build: .
