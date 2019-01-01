@@ -2,7 +2,7 @@ version: '3'
 services:
   webapp:
     environment:
-      - G0V_API_ENDPOINT=http:/194.177.121.230:29322
+      - G0V_API_ENDPOINT=http://194.177.121.230:29322
       - G0V_STRING_URL=/strings/mef.json
       - G0V_SHOW_MEF_LOGO=0
     build: .
