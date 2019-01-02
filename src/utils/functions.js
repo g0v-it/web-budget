@@ -12,7 +12,7 @@ export function fillColor(val) {
     /* 3 .range(["#d73027", "#fc8d59", "#fee08b", "#d9ef8b", "#91cf60", "#1a9850"]); */
     /* -1 .range(["#f0f9e8", "#ccebc5", "#a8ddb5", "#7bccc4", "#43a2ca", "#0868ac"]); */
     /*  4.range(["#762a83", "#af8dc3", "#e7d4e8", "#d9f0d3", "#7fbf7b", "#1b7837"]); */
-    .range(["#b2182b", "#ef8a62", "#fddbc7", "#d9f0d3", "#7fbf7b", "#1b7837"]);
+    .range(["#762a83", "#af8dc3", "#e7d4e8", "#d9f0d3", "#7fbf7b", "#1b7837"]);
 
   if (isFinite(val)) {
     return colorScale(val);

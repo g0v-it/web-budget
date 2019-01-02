@@ -83,15 +83,15 @@ export default {
   height: 1rem;
   width: 16%;
 }
-/* ["#b2182b", "#ef8a62", "#fddbc7",'#d9f0d3','#7fbf7b','#1b7837']*/
+/* ['#762a83','#af8dc3','#e7d4e8','#d9f0d3','#7fbf7b','#1b7837']*/
 .change-dec3 {
-  background: #b2182b;
+  background: #762a83;
 }
 .change-dec2 {
-  background: #ef8a62;
+  background: #af8dc3;
 }
 .change-dec1 {
-  background: #fddbc7;
+  background: #e7d4e8;
 }
 .change-inc1 {
   background: #d9f0d3;
