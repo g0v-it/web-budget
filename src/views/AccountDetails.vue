@@ -62,7 +62,7 @@
     >
       <h2>{{ string['$LOWER_PARTITION_CARD_TITLE'] }}</h2>
       <CdsChart
-        :values="{lower_partition:currentNode.cds,sum:currentNode.amount}"
+        :values="{lower_partition:currentNode.hasPart,sum:currentNode.amount}"
         style=""
       />
     </VCard>
@@ -114,6 +114,8 @@ export default {
   },
   created() {
     this.currentNode = this.budget.selectedNode;
+    console.log(this.currentNode);
+    
     this.currentNode.diff =
       (this.currentNode.amount - this.currentNode.previousValue) /
       this.currentNode.previousValue;

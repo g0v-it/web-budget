@@ -2,7 +2,7 @@
   <div id="container" class="cds-container">
     <div ><svg class="chart js-chart pie-chart" /></div>
     <div class="cds-detail">
-      <p class="cds-desc">{{ name }}</p>
+      <p class="cds-desc">{{ title }}</p>
       <div class="cds-detail-data">
         <h4>{{ formattedAmount }}</h4>
         <p>{{ formattedPercentage }} {{string['$LOWER_PARTITION_PERCENTAGE_MEANING']}}</p>
@@ -35,7 +35,7 @@ let updateDetail = function(context, overed_index) {
   }
   slices[currentElement].classList.add("selected");
   context.amount = slices[currentElement].__data__.data.amount;
-  context.name = slices[currentElement].__data__.data.name;
+  context.title = slices[currentElement].__data__.data.title;
   currentElement = (currentElement + 1) % slices.length;
 };
 const computeBoundaries = function() {
@@ -74,7 +74,7 @@ function pieChart(options) {
   }
 
   function joinKey(d) {
-    return d.data.name;
+    return d.data.title;
   }
 
   function pieChart(context) {
@@ -118,7 +118,7 @@ export default {
   data() {
     return {
       string:Configuration.current().strings,
-      name: undefined,
+      title: undefined,
       amount: undefined
     };
   },
