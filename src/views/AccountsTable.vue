@@ -1,29 +1,35 @@
 <template>
   <div class="container">
-
-
     <div class="g0v-table-container">
       <!--  -->
-      <v-card>
-        <v-card-title>
-          <v-spacer />
-          <v-spacer />
-          <v-text-field
+      <VCard>
+        <VCardTitle>
+          <h2 class="title">
+            {{ string['$TABLE_TOTAL'] }} <Amount :amount="totals" />
+          </h2>
+          <VSpacer />
+          <VSpacer />
+          <VTextField
             v-model="search" append-icon="search"
-            label="Cerca" single-line
+            :label="string['$SEARCH_LABEL']" single-line
             hide-details
           />
-        </v-card-title>
-        <v-data-table
+          <vue-csv-downloader
+                  :data="exportData"
+                  :fields="exportFields"
+                  download-name="bilancio-inps-filtrato.csv"
+          ><v-icon size="30px" class="download-csv">cloud_download</v-icon>
+          </vue-csv-downloader>
+        </VCardTitle>
+        <VDataTable
           :headers="headers"
-          :items="accounts"
-          :search="search"
+          :items="filteredAccounts"
+
           :pagination.sync="pagination"
-          rows-per-page-text="Righe per pagina"
+          :rows-per-page-text="string['$PAGINATOR_TABLE_TEXT']"
           :rows-per-page-items="[25,50,100,{text:'Tutti',value:-1}]"
           class="elevation-1"
         >
-
           <template slot="headers" slot-scope="props">
             <tr>
               <th
@@ -34,58 +40,133 @@
                 @click="changeSort(header.value)"
               >
                 {{ header.text }}
-                <v-icon small>arrow_upward</v-icon>
+                <VIcon small>
+                  arrow_upward
+                </VIcon>
               </th>
             </tr>
           </template>
 
 
           <template slot="items" slot-scope="props">
-            <td class="account-name" width="35%" style="font-weight: 500;">
-              {{ props.item.name }} <router-link :to="{name:'account-details', params:{code:props.item.code}}"><v-icon small color="blue">link</v-icon></router-link>
+            <td
+              class="account-name" width="35%"
+              style="font-weight: 500;"
+            >
+              {{ props.item.title }} <RouterLink :to="{name:'account-details', params:{code:props.item.code}}">
+                <VIcon small color="blue">
+                  link
+                </VIcon>
+              </RouterLink>
             </td>
-            <td class="account-amount" width="10%"><amount :amount="props.item.amount" format="$ 0.0 a" /></td>
-            <td class="account-amount" width="10%"><rate :rate="props.item.rate" format="+0.0 %" /></td>
-            <td class="account-top" width="15%">{{ props.item.partitions.top_partition }}</td>
-            <td class="account-second" width="">{{ props.item.partitions.second_partition }}</td>
+            <td class="account-amount" width="10%">
+              <Amount :amount="props.item.amount" format="$ 0.0 a" />
+            </td>
+            <td class="account-amount" width="10%">
+              <Rate :rate="props.item.rate" format="+0.0 %" />
+            </td>
+            <td class="account-top" width="15%">
+              {{ props.item.partitionLabel.join(', ') }}
+            </td>
           </template>
 
           <template slot="pageText" slot-scope="props">
             {{ props.pageStart }} - {{ props.pageStop }} di {{ props.itemsLength }}
           </template>
-        </v-data-table>
-      </v-card>
+        </VDataTable>
+        </vcardtitle>
+      </VCard>
     </div>
   </div>
 </template>
 
 <script>
+import * as BudgetStore from "@/budgetStore.js";
+import Configuration from "@/utils/configuration";
+import VueCsvDownloader from 'vue-csv-downloader';
+import { orderBy } from "lodash";
+
 const previousYear = function(meta) {
-  return +meta.year-1;
-}
+  return +meta.year - 1;
+};
 export default {
+  name: "TableView",
+  components: {
+    VueCsvDownloader,
+  },
   data() {
     return {
+      string: Configuration.current().strings,
       accounts: [],
+      selected: [],
       pagination: {
         sortBy: "amount",
         descending: true
       },
-      search: "",
-      headers: [
-        { text: "Nome", value: "name" },
-        { text: "Spesa", value: "amount" },
-        { text: "Var. da legge di bilancio "+previousYear(this.$root.$data.budget.state.meta), value: "rate" },
-        { text: "Ministero", value: "partitions.top_partition" },
-        { text: "Missione", value: "partitions.second_partition" }
-      ]
+      search: ""
     };
   },
+
   computed: {
-    budget: function() {
-      return this.$root.$data.budget.state;
+    totals() {
+      return this.filteredAccounts.reduce((sum, node) => {
+        return sum + node.amount;
+      }, 0);
+    },
+    filteredAccounts() {
+      return this.accounts.filter(node => {
+        return node.title.toLowerCase().includes(this.search);
+      });
+    },
+    headers() {
+      return [
+        { text: this.string["$HEADER_COLUMN_1"], value: "title" },
+        { text: this.string["$HEADER_COLUMN_2"], value: "amount" },
+        { text: this.string["$HEADER_COLUMN_3"], value: "rate" },
+        { text: this.string["$HEADER_COLUMN_4"], value: "partitionLabel[0]" }
+      ];
+    },
+    exportData() {
+      let sortedFiltered = orderBy(this.filteredAccounts,
+                                  [this.pagination.sortBy],
+                                  [this.pagination.descending ? "desc" : "asc"]);
+      return sortedFiltered.map(item => {
+        let row = {}
+        row[this.string["$HEADER_COLUMN_1"]] = item.title;
+        row[this.string["$HEADER_COLUMN_2"]] = item.amount;
+        row[this.string["$HEADER_COLUMN_3"]] = item.rate||'';
+        row[this.string["$HEADER_COLUMN_4"]] = item.partitionLabel.join(', ');
+        return row;
+      });
+    },
+    exportFields() {
+      return [
+        this.string["$HEADER_COLUMN_1"],
+        this.string["$HEADER_COLUMN_2"],
+        this.string["$HEADER_COLUMN_3"],
+        this.string["$HEADER_COLUMN_4"]
+      ];
+    },
+    budget() {
+      return this.$root.$data.budgetState;
     }
   },
+
+  async beforeRouteEnter(to, from, next) {
+    if (BudgetStore.state.accounts.length === 0) {
+      await BudgetStore.actions.readAccounts();
+    }
+    next();
+  },
+
+  mounted() {
+    this.accounts = this.budget.accounts.map(item => {
+      item.rate = (item.amount - item.previousValue) / item.previousValue;
+      item.rate = isFinite(item.rate) ? item.rate : NaN;
+      return item;
+    });
+  },
+
   methods: {
     changeSort(column) {
       if (this.pagination.sortBy === column) {
@@ -95,22 +176,6 @@ export default {
         this.pagination.descending = false;
       }
     }
-  },
-  mounted() {
-    if (!this.budget.accounts.length) {
-      this.$root.$data.budget.readAccounts().then(res => {
-        this.accounts = res.data.accounts.map(item => {
-          item.rate = (item.amount - item.last_amount) / item.last_amount;
-          item.rate = isFinite(item.rate) ? item.rate : NaN;
-          return item;
-        });
-      });
-    }
-    this.accounts = this.budget.accounts.map(item => {
-      item.rate = (item.amount - item.last_amount) / item.last_amount;
-      item.rate = isFinite(item.rate) ? item.rate : NaN;
-      return item;
-    });
   }
 };
 </script>
@@ -127,7 +192,9 @@ export default {
 td::first-letter {
   text-transform: uppercase;
 }
-
+.download-csv {
+  margin-left: 1rem;
+}
 /* .account-second {
   width: auto;
 } */

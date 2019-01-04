@@ -2,10 +2,10 @@
   <div id="container" class="cds-container">
     <div ><svg class="chart js-chart pie-chart" /></div>
     <div class="cds-detail">
-      <h3>{{ name }}</h3>
+      <p class="cds-desc">{{ title }}</p>
       <div class="cds-detail-data">
         <h4>{{ formattedAmount }}</h4>
-        <p>{{ formattedPercentage }} sul totale dell'azione</p>
+        <p>{{ formattedPercentage }} {{string['$LOWER_PARTITION_PERCENTAGE_MEANING']}}</p>
       </div>
 
 
@@ -15,14 +15,14 @@
 <script>
 import * as d3 from "d3";
 import { formatAmount, formatRate } from "@/utils/functions";
-
+import Configuration from "@/utils/configuration";
 //---------------------------------------------------------
 //BUILDER
 let cdsSpeed = 4000;
-let width;// = 400;
-let height;// = 500;
-let outerRadius;// = 180;
-let innerRadius;// = 110;
+let width; // = 400;
+let height; // = 500;
+let outerRadius; // = 180;
+let innerRadius; // = 110;
 let currentElement = 0;
 let slices;
 let intervalID;
@@ -30,27 +30,24 @@ let updateDetail = function(context, overed_index) {
   for (let index = 0; index < slices.length; index++) {
     slices[index].classList.remove("selected");
   }
-  /*  console.log(overed_index); */
   if (overed_index != -1) {
     currentElement = overed_index;
   }
   slices[currentElement].classList.add("selected");
   context.amount = slices[currentElement].__data__.data.amount;
-  context.name = slices[currentElement].__data__.data.name;
+  context.title = slices[currentElement].__data__.data.title;
   currentElement = (currentElement + 1) % slices.length;
 };
-const computeBoundaries= function(){
-  let container = d3.select("#container")._groups[0][0]
-  if(window.innerWidth< 1100){
-    width=container.offsetWidth;
-  }else{
-    width=container.offsetWidth*60/100; 
-    console.log(width) 
+const computeBoundaries = function() {
+  let container = d3.select("#container")._groups[0][0];
+  if (window.innerWidth < 1100) {
+    width = container.offsetWidth;
+  } else {
+    width = (container.offsetWidth * 60) / 100;
   }
-    outerRadius=(width-width*10/100)/2;
-    innerRadius=outerRadius-70;
-    height=2*outerRadius    
-
+  outerRadius = (width - (width * 20) / 100) / 2;
+  innerRadius = outerRadius - 70;
+  height = 2 * outerRadius;
 };
 /* global d3, document, window */
 function pieChart(options) {
@@ -63,6 +60,7 @@ function pieChart(options) {
     pie = d3
       .pie()
       .sort(null)
+      //.padAngle(0.02)
       .value(function(d) {
         return d.amount;
       });
@@ -76,7 +74,7 @@ function pieChart(options) {
   }
 
   function joinKey(d) {
-    return d.data.name;
+    return d.data.title;
   }
 
   function pieChart(context) {
@@ -91,6 +89,8 @@ function pieChart(options) {
       .style("fill", function(d) {
         return color(joinKey(d));
       });
+     console.log("SLICES", newSlices);
+
     var t = d3.transition().duration(animationDuration);
 
     arc.innerRadius(innerRadius).outerRadius(outerRadius);
@@ -110,7 +110,6 @@ function pieChart(options) {
   pieChart.outerRadius = function(_) {
     return arguments.length ? ((outerRadius = _), pieChart) : outerRadius;
   };
-
   return pieChart;
 }
 //---------------------------------------------------------
@@ -118,7 +117,8 @@ export default {
   props: { values: Object },
   data() {
     return {
-      name: undefined,
+      string:Configuration.current().strings,
+      title: undefined,
       amount: undefined
     };
   },
@@ -128,11 +128,11 @@ export default {
     },
     formattedPercentage: function() {
       if (this.amount == undefined) {
-        return 'N/A';
+        return "N/A";
       } else {
-        let r = this.amount/this.values.sum;
-        if (r<0.001) {
-          return "Meno dello 0,1%"
+        let r = this.amount / this.values.sum;
+        if (r < 0.001) {
+          return "Meno dello 0,1%";
         } else {
           return formatRate(r);
         }
@@ -170,6 +170,9 @@ export default {
     intervalID = window.setInterval(() => {
       updateDetail(this, -1);
     }, cdsSpeed);
+  },
+  beforeDestroy() {
+    window.clearInterval(intervalID);
   }
 };
 </script>
@@ -181,6 +184,9 @@ export default {
 .slice {
   stroke-width: 0.3;
 }
+.cds-desc{
+  overflow: auto;
+}
 .cds-container {
   margin: 0;
   padding: 0rem 0rem;
@@ -188,7 +194,7 @@ export default {
   width: 100%;
   /* height: 100vh; */
   text-align: start;
-  display: grid; 
+  display: grid;
   grid-row-gap: 2rem;
   grid-column-gap: 2rem;
   grid-template-columns: repeat(2, 1fr);
@@ -206,15 +212,15 @@ export default {
   justify-content: space-around;
 }
 .cds-detail-data {
-  margin-top:1em;
+  margin-top: 1em;
 }
 .cds-detail-data h4 {
-  font-size:1.3em;
+  font-size: 1.3em;
 }
 .cds-detail-data p {
   color: dimgrey;
 }
- @media screen and (max-width: 1100px) {
+@media screen and (max-width: 1100px) {
   .cds-container {
     margin: 0;
     padding: 0rem 0rem;
@@ -227,5 +233,5 @@ export default {
   .details .numbers {
     grid-template-areas: "amount" "rate";
   }
-} 
+}
 </style>

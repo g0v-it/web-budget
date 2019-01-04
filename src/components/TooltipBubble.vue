@@ -1,31 +1,38 @@
 <template>
   <div ref="tooltip" class="bubble-tooltip card">
-    <v-card-title class=" tooltipTitle headline grey lighten-2" primary-title>
-      <p>{{ currentNode.top_level }}</p>
-    </v-card-title>
-    <v-card-text class="tooltipText">
-      <h3>{{ currentNode.name }}</h3>
-      <p>Percentuale: </p>
+    <VCardTitle class=" tooltipTitle headline grey lighten-2" primary-title>
+      <p>{{ currentNode.subject }}</p>
+    </VCardTitle>
+    <VCardText class="tooltipText">
+      <h3>{{ currentNode.title }}</h3>
+      <!--p>{{string['$TOOLTIP_PERCENTAGE']}}</p>
       <ul>
-        <li>sul totale del bilancio: <b><rate :rate="currentNode.percentageOfTheTotalAmount" /></b></li>
-        <li>sul ministero di appartenenza : <b><rate :rate="currentNode.percentageOfTheTopParition" /></b></li>
-        <li>sulla missione di appartenenza: <b><rate :rate="currentNode.percentageOfTheSecondParition" /></b></li>
-      </ul>
-    </v-card-text>
+        <li v-for="(p,index) in currentNode.percentages" :key="index">
+          {{p.string}}{{p.part?string['$TOOLTIP_PERCENTAGE_MEANING']:string['$TOOLTIP_TOTAL_MEANING']}}<b><rate :rate="p.value" /></b></li>
+      </ul-->
+    </VCardText>
     <div class="numberContainer">
-
       <div class="amount">
-        <h3><amount :amount="currentNode.amount" /></h3>
+        <h3><Amount :amount="currentNode.amount" /></h3>
       </div>
-      <div v-if="variation_available" class="diff" :style="{backgroundColor:bgColor}">
-        <h3><rate :rate="currentNode.diff" /></h3>
+      <div
+        v-if="variation_available" class="diff"
+        :style="{background:bgColor }"
+      >
+        <h3><Rate :rate="currentNode.diff" /></h3>
       </div>
-
     </div>
   </div>
 </template>
 <script>
+import Configuration from "@/utils/configuration";
+
 export default {
+  data() {
+    return {
+      string: Configuration.current().strings
+    };
+  },
   props: {
     currentNode: Object,
     bgColor: String
@@ -95,17 +102,25 @@ export default {
 }
 .numberContainer .diff {
   width: 8rem;
-  color: #fff;
   padding: 0.5rem;
   margin-bottom: 0.5rem;
-  text-align: center;
   border-radius: 28px;
   -webkit-box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2),
     0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
   box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
     0 1px 3px 0 rgba(0, 0, 0, 0.12);
 }
-.numberContainer .diff h3 {
+
+.diff h3 {
+  background: inherit;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
   width: 8rem;
+  text-align: center;
+  filter: invert(1) grayscale(1) contrast(9);
 }
+/* .numberContainer .diff h3 {
+
+} */
 </style>

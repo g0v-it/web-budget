@@ -1,6 +1,7 @@
 import Configuration from "@/utils/configuration";
 import numeral from "@/utils/numeralCustomizations";
 import { scaleThreshold } from "d3";
+import gzip from "lz-string";
 
 export function fillColor(val) {
   const colorScale = scaleThreshold()
@@ -11,12 +12,12 @@ export function fillColor(val) {
     /* 3 .range(["#d73027", "#fc8d59", "#fee08b", "#d9ef8b", "#91cf60", "#1a9850"]); */
     /* -1 .range(["#f0f9e8", "#ccebc5", "#a8ddb5", "#7bccc4", "#43a2ca", "#0868ac"]); */
     /*  4.range(["#762a83", "#af8dc3", "#e7d4e8", "#d9f0d3", "#7fbf7b", "#1b7837"]); */
-    .range(["#762a83", "#af8dc3", "#e7d4e8", "#b8e2ae", "#6cb366", "#1b7837"]);
+    .range(["#762a83", "#af8dc3", "#e7d4e8", "#d9f0d3", "#7fbf7b", "#1b7837"]);
 
   if (isFinite(val)) {
     return colorScale(val);
   }
-  return "#AAAAAA";
+  return "#BBBBBB";
 }
 
 export function calcCenterOfBlocks(childNodes) {
@@ -36,50 +37,69 @@ export function calcCenterOfBlocks(childNodes) {
 }
 
 export function filterPassed(d, filters) {
-  if (filters.top_partition.length && filters.second_partition.length) {
-    return (
-      filters.top_partition.includes(d.partitions.top_partition) &&
-      filters.second_partition.includes(d.partitions.second_partition)
-    );
+  let filterKeys = Object.keys(filters);
+  let testPassed = [];
+  for (let key = 0; key < filterKeys.length; ++key) {
+    if (filters[filterKeys[key]].length != 0) {
+      let contenuto = false;
+      d.partitionLabel.map(d => {
+        if (filters[filterKeys[key]].includes(d)) {
+          contenuto = true;
+        }
+      });
+      if (contenuto) {
+        testPassed[key] = 1;
+      } else {
+        testPassed[key] = 0;
+      }
+    } else {
+      testPassed[key] = 1;
+    }
   }
-  if (filters.top_partition.length || filters.second_partition.length) {
-    return (
-      filters.top_partition.includes(d.partitions.top_partition) ||
-      filters.second_partition.includes(d.partitions.second_partition)
-    );
-  }
-  return true;
+  return (
+    testPassed.reduce((somma, current) => {
+      return somma + current;
+    }, 0) == filterKeys.length
+  );
 }
 
 export function computeNewFilteredTotals(partitionLabels, filteredTot) {
+  /*   console.warn("inside compute");
+  console.log("partitionLabels", partitionLabels);
+  console.log("filteredTot", filteredTot); */
   let newPartitionLabels = {};
+  let partition_keys = Object.keys(partitionLabels);
   /* compute new tot */
-  newPartitionLabels.top_partition = partitionLabels.top_partition.map(item => {
-    if (filteredTot.top_partition_label[item.top_partition]) {
-      item.filteredAmount = filteredTot.top_partition_label[item.top_partition];
-    } else {
-      item.filteredAmount = 0;
-    }
-    return item;
-  });
+  for (let i = 0; i < partition_keys.length; ++i) {
+    newPartitionLabels[partition_keys[i]] = partitionLabels[partition_keys[i]];
 
-  newPartitionLabels.second_partition = partitionLabels.second_partition.map(
-    item => {
-      if (filteredTot.second_partition_label[item.second_partition]) {
-        item.filteredAmount =
-          filteredTot.second_partition_label[item.second_partition];
+    newPartitionLabels[partition_keys[i]].partitions = partitionLabels[
+      partition_keys[i]
+    ].partitions.map(item => {
+      if (filteredTot[partition_keys[i]][item.label]) {
+        item.filteredAmount = filteredTot[partition_keys[i]][item.label];
       } else {
         item.filteredAmount = 0;
       }
       return item;
-    }
-  );
+    });
+  }
+  // console.log("newPartitionLabels", newPartitionLabels);
+
   return newPartitionLabels;
 }
 
+export let encodeFilters = filters => {
+  return gzip.compressToBase64(JSON.stringify(filters));
+};
+
+export let decodeFilters = compressed => {
+  return JSON.parse(gzip.decompressFromBase64(compressed));
+};
+
 //----------------------------------------------------------
 // FORMATTING
-const amountFormat = Configuration().current().amountFormat;
+const amountFormat = Configuration.current().amountFormat;
 export function formatAmount(amount) {
   let amt = Number(amount);
   if (isFinite(amt)) {
@@ -87,7 +107,7 @@ export function formatAmount(amount) {
   }
   return "N/A";
 }
-const rateFormat = Configuration().current().rateFormat;
+const rateFormat = Configuration.current().rateFormat;
 export function formatRate(amt) {
   if (isFinite(amt)) {
     return numeral(amt).format(rateFormat);

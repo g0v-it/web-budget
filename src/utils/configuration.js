@@ -1,15 +1,18 @@
-export default function() {
-  let __current = {
-    loaded: false,
+import { get } from "axios";
+import def from "@/assets/default.js";
+const ConfigurationFactory = function() {
+  let __loading = false;
 
+  let __current = {
     debug: true,
 
     locale: "it",
 
-    amountFormat: "$ 0,0. ",
+    amountFormat: "$ 0,0 ",
 
     rateFormat: "0.0 %",
 
+    // Url for the tweets google sheet, if empty the function is disabled.
     tweetsUrl: "",
 
     appHashtag: "",
@@ -24,17 +27,45 @@ export default function() {
     mefLogoUrl: "https://bdap-opendata.mef.gov.it/catalog",
 
     // G0V logo URL
-    g0vLogoUrl: "https://copernicani.it/g0v"
+    g0vLogoUrl: "https://copernicani.it/g0v",
+
+    strings: def
   };
 
   let __proxy = {
     current: function() {
-      if (window.__settings !== undefined && !__current.loaded) {
-        __current = { ...__current, ...window.__settings, loaded: true };
-      }
       return __current;
+    },
+    loaded: false
+  };
+
+  __proxy.load = async function(vm) {
+    if (
+      window.__configurationUrl !== undefined &&
+      !__loading &&
+      !__proxy.loaded
+    ) {
+      __loading = true;
+      return Promise.all([
+        get(window.__configurationUrl),
+        get(window.__stringUrl)
+      ])
+        .then(res => {
+          __current = { ...__current, ...res[0].data, strings: res[1].data };
+          __proxy.loaded = true;
+          if (vm) {
+            vm.$data.configurationLoaded = true;
+          }
+        })
+        .catch(error => {
+          __loading = false;
+        });
     }
   };
 
   return __proxy;
-}
+};
+
+const Configuration = ConfigurationFactory();
+
+export default Configuration;

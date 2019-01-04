@@ -3,8 +3,8 @@ import Configuration from "@/utils/configuration";
 import moment from "@/utils/momentCustomization.js";
 
 const TweetData = function() {
-  const __tweetsUrl = Configuration().current().tweetsUrl;
-  const __debug = Configuration().current().debug;
+  const __tweetsUrl = Configuration.current().tweetsUrl;
+  const __debug = Configuration.current().debug;
 
   const log = what => {
     if (__debug) console.log(what);

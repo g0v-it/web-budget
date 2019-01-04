@@ -10,7 +10,9 @@ import * as d3 from "d3";
 import numeral from "@/utils/numeralCustomizations";
 import Configuration from "@/utils/configuration";
 import { formatAmount, formatRate } from "@/utils/functions";
-
+let css_bar_class;
+let string;
+let divide;
 //---------------------------------------------------------
 //BOUNDARIES
   let margin_top;
@@ -25,16 +27,53 @@ import { formatAmount, formatRate } from "@/utils/functions";
   let t;
   let svg;
   let chart;
+  
   //---------------------------------------------------------
   //SCALE FUNCTIONS
   let xScale;
   let yScale;
+  const compare=function(a,b) {
+  if (a.version < b.version)
+    return -1;
+  if (a.version > b.version)
+    return 1;
+  return 0;
+}
+
   const optimize= function(input, meta){
+    input.sort(compare)  
+    css_bar_class="bar"
     let output=[]
-    Object.keys(input).forEach(element => {
-      let y = element==='current' ? +meta.year : +element;
-      output.push({year:y,value:parseFloat(input[element])/1000000.0})
-    });
+    var min = d3.min(input, function(d) { return d.amount; });
+    var max = d3.max(input, function(d) { return d.amount; });
+    console.log(min,max);
+    
+    if (min<0&&max<0){
+      min=max
+      css_bar_class="barNeg"
+    }else{
+      css_bar_class="barPos"
+    }
+    if((Math.abs(min)/1000)<1){
+      string="€"
+      divide=1
+    }
+    if((Math.abs(min)/1000)<1000){
+      string="mila €"
+      divide=1000
+    }
+    if((Math.abs(min)/1000)<1000000){
+      string="milioni €"
+      divide=1000000
+    }else{
+      string="miliardi di €"
+      divide=1000000000
+    }
+
+    for (let index = 0; index < input.length; index++) {
+      output.push({year:input[index].version,value:Math.abs(parseFloat(input[index].amount)/divide)}) 
+    }
+    
     return(output);    
    }
 
@@ -45,7 +84,6 @@ import { formatAmount, formatRate } from "@/utils/functions";
      width=containerI.offsetWidth;//-2*margin_left;
      height=containerI.offsetHeight-2*margin_top;
     if(window.innerWidth< 900){
-      console.log("PICCOLO")
       barSeparation=0.5      
     }else{
       barSeparation=0.5
@@ -55,7 +93,7 @@ import { formatAmount, formatRate } from "@/utils/functions";
 
   //----------------------------------------------------------
   export default {
-    props: { values: Object, datasetMeta: Object},
+    props: { values: Array, datasetMeta: Object},
     mounted() {
       data=optimize(this.values, this.datasetMeta)
       computeBoundaries()
@@ -83,7 +121,7 @@ import { formatAmount, formatRate } from "@/utils/functions";
       .attr('y', margin_left*0.9)
       .attr('transform', 'rotate(-90)')
       .attr('text-anchor', 'middle')
-      .text('Milioni €');
+      .text(string);
     //LABEL X AXIS
     /*
     svg.append('text')
@@ -97,7 +135,7 @@ import { formatAmount, formatRate } from "@/utils/functions";
       .enter()
       .append('g');
     barGroups.append('rect')
-      .attr('class', 'bar')
+      .attr('class', css_bar_class)
       .attr('x', (g) => xScale(g.year))
       .attr('y', (g) => yScale(min))
       .attr("height", 0)
@@ -165,7 +203,7 @@ import { formatAmount, formatRate } from "@/utils/functions";
 
         return t => {this.textContent = formatAmount(i(t))};
       });
-  },
+  }
 };
 </script>
 <style>
@@ -201,6 +239,14 @@ div .graphSvg {
 
 .bar {
   fill: #4682B4;
+}
+
+.barNeg {
+  fill: rgb(202, 53, 53);
+}
+
+.barPos {
+  fill: rgb(79, 180, 70);
 }
 
 path {

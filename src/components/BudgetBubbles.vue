@@ -1,23 +1,24 @@
 <template>
   <div ref="vis" class="vis">
-
     <div
       ref="grid" v-if="partitionId !== 'default'"
-      class="grid"
+      :class="{ 'grid': true, 'grid-one-line': partitionBlocks.length === 2 }"
     >
       <div
-        v-for="block in partitionBlocks" :key="block[partitionId]"
+        v-for="block in partitionBlocks" :key="block.label"
         class="grid-block"
       >
-        <h3 class="subheading">{{ block[partitionId] }}</h3>
+        <h3 class="subheading">
+          {{ block.label }}
+        </h3>
         <!-- amount da calcolare in base al filtro -->
-        <h3 class="title"><amount :amount="block.filteredAmount" /></h3>
-
+        <h3 class="title">
+          <Amount :amount="block.filteredAmount" />
+        </h3>
       </div>
     </div>
 
     <svg id="bubbles" />
-
   </div>
 </template>
 
@@ -45,18 +46,27 @@ export default {
     filters: Object
   },
 
-  data: () => {
+  data() {
     return {
-      center_x:0,
-      center_y:0
+      center_x: 0,
+      center_y: 0
     };
   },
 
   computed: {
     partitionBlocks: function() {
-      return this.partitionId !== "default"
-        ? this.partitionLabels[this.partitionId]
-        : [];
+      if (this.partitionId !== "default") {
+        const orderedPart = Array.from(
+          this.partitionLabels[this.partitionId].partitions
+        );
+        return orderedPart.sort(
+          (a, b) => Math.abs(b.filteredAmount) - Math.abs(a.filteredAmount)
+        );
+      }
+      return [];
+      /* return this.partitionId !== "default"
+        ? this.partitionLabels[this.partitionId].partitions
+        : []; */
     }
   },
 
@@ -75,10 +85,20 @@ export default {
       this.toggleGrouping();
       this.filterBubbles();
     }
+    window.addEventListener(
+      "resize",
+      debounce(() => {
+        this.toggleGrouping();
+      }, 500)
+    );
   },
 
   updated() {
     this.toggleGrouping();
+  },
+
+  beforeDestroy() {
+    window.removeEventListener("resize");
   },
 
   methods: {
@@ -91,86 +111,79 @@ export default {
           return +d.amount;
         });
         let maxRate = d3.max(rawData, function(d) {
-          let rate = (d.amount - d.last_amount) / d.last_amount;
+          let rate = (d.amount - d.previousValue) / d.previousValue;
           return isFinite(rate) ? rate : 0;
         });
         let minRate = d3.min(rawData, function(d) {
-          let rate = (d.amount - d.last_amount) / d.last_amount;
+          let rate = (d.amount - d.previousValue) / d.previousValue;
           return isFinite(rate) ? rate : 0;
         });
-        let maxRadius_x, minRadius_x,maxRadius_y,minRadius_y
-        if(window.innerWidth<713){         
-            maxRadius_x=70
-            minRadius_x=1
-            this.center_x=this.$refs.vis.offsetWidth / 2;
+        let maxRadius_x, minRadius_x, maxRadius_y, minRadius_y;
+        if (window.innerWidth < 713) {
+          maxRadius_x = 70;
+          minRadius_x = 1;
+          this.center_x = this.$refs.vis.offsetWidth / 2;
+        } else if (window.innerWidth < 992) {
+          maxRadius_x = 70;
+          minRadius_x = 2;
+          this.center_x = this.$refs.vis.offsetWidth / 3;
+        } else if (window.innerWidth < 1050) {
+          maxRadius_x = 80;
+          minRadius_x = 2;
+          this.center_x = this.$refs.vis.offsetWidth / 2;
+        } else {
+          maxRadius_x = 90;
+          minRadius_x = 2;
+          this.center_x = this.$refs.vis.offsetWidth / 2;
         }
-        else if(window.innerWidth<992 ){
-          maxRadius_x=70
-            minRadius_x=2
-           this.center_x=this.$refs.vis.offsetWidth / 3;
-        }else if(window.innerWidth<1050 ){
-          maxRadius_x=80
-            minRadius_x=2
-           this.center_x=this.$refs.vis.offsetWidth / 2;
-        }else{
-          maxRadius_x=90
-            minRadius_x=3
-            this.center_x=this.$refs.vis.offsetWidth / 2;
+        //console.log(window.innerHeight);
+        //console.log(window.innerWidth);
+        if (window.innerHeight < 400) {
+          maxRadius_y = 40;
+          minRadius_y = 1;
+          this.center_y = (this.$refs.vis.offsetHeight * 7) / 16;
+        } else if (window.innerHeight < 600) {
+          maxRadius_y = 50;
+          minRadius_y = 1;
+          this.center_y = (this.$refs.vis.offsetHeight * 7) / 16;
+        } else {
+          maxRadius_y = 90;
+          minRadius_y = 2;
+          this.center_y = this.$refs.vis.offsetHeight / 2;
         }
-        console.log(window.innerHeight);
-        console.log(window.innerWidth);
-        if(window.innerHeight<400){
-          maxRadius_y=40
-            minRadius_y=1
-          this.center_y=this.$refs.vis.offsetHeight*7/16;
-        }
-        else if(window.innerHeight<600){
-            maxRadius_y=50
-            minRadius_y=1
-            this.center_y=this.$refs.vis.offsetHeight*7/16;
-        }else{ 
-          maxRadius_y=90
-            minRadius_y=2
-            this.center_y=this.$refs.vis.offsetHeight/2;
-        }
-        maxRadius=Math.min(maxRadius_x,maxRadius_y)
-        minRadius=Math.min(minRadius_x,minRadius_y)
-        console.log("MINIMOX,",maxRadius);
-        console.log("MASSIMOX",minRadius);
-        
+        maxRadius = Math.min(maxRadius_x, maxRadius_y);
+        minRadius = Math.min(minRadius_x, minRadius_y);
+        //console.log("MINIMOX,", maxRadius);
+        //console.log("MASSIMOX", minRadius);
+
         let powRadiusScale = d3
           .scalePow()
           .exponent(0.5)
-          .domain([minAmount, maxAmount])
+          .domain([0, maxAmount])
           .range([minRadius, maxRadius]);
-        let linearRadiusScale = d3
-          .scaleLinear()
-          .domain([minAmount, maxAmount])
-          .range([minRadius, maxRadius]);
+
         let heightScale = d3
           .scalePow()
-          /* .clamp(true) */
           .exponent(0.1)
           .domain([minRate, maxRate])
           .range([this.$refs.vis.offsetHeight, 0]);
 
         let myNodes = rawData.map(d => {
-          let diff = (d.amount - d.last_amount) / d.last_amount;
+          let diff = (d.amount - d.previousValue) / d.previousValue;
           let diffForHeight = isFinite(diff) ? diff : -0.000001;
           return {
             id: d.code,
-            name: d.name,
-            top_level: d.top_level,
-            radiusPow: powRadiusScale(+d.amount),
-            radiusLinear: linearRadiusScale(+d.amount),
+            title: d.title,
+            subject: d.subject,
+            radiusPow: powRadiusScale(Math.abs(d.amount)),
             amount: d.amount,
             diff: diff,
-            partitions: d.partitions,
+            partitionLabel: d.partitionLabel,
             x: (Math.random() / 2 + 0.25) * this.$refs.vis.offsetWidth,
             y: heightScale(diffForHeight)
           };
         });
-        return myNodes;
+        return myNodes.sort((a, b) => Math.abs(b.amount) - Math.abs(a.amount));
       };
 
       // convert raw data into nodes data
@@ -195,17 +208,14 @@ export default {
         .on("click", d => {
           this.$emit("click", d);
         })
-        .on("touchstart",function(d){ 
-          touched_node=d;          
+        .on("touchstart", function(d) {
+          touched_node = d;
         })
-        .on("touchmove",function(d){
-          if(touched_node!=d)
-            touched_node=null; 
+        .on("touchmove", function(d) {
+          if (touched_node != d) touched_node = null;
         })
-        .on("touchend",function(d){
-          if(touched_node!=null)
-           temp.$emit("click", d);
-          
+        .on("touchend", function(d) {
+          if (touched_node != null) temp.$emit("click", d);
         })
         .on("mouseover", function(d) {
           this.style["stroke-width"] = 3;
@@ -258,23 +268,25 @@ export default {
         d3
           .forceX()
           .strength(forceStrength)
-          .x(this.center_x));
+          .x(this.$refs.vis.offsetWidth / 2)
+      );
       simulation.force(
         "y",
         d3
           .forceY()
           .strength(forceStrength)
-          .y(this.center_y)
+          .y(this.$refs.vis.offsetHeight / 2)
       );
 
       simulation.alpha(1).restart();
     },
     splitBubbles(group_cat_id) {
       //assign center to bubble
+      //console.log(group_cat_id);
 
       for (let i = 0; i < nodes.length; ++i) {
         let center = group_cat_id.labels.find(function(el) {
-          return el.value == nodes[i].partitions[group_cat_id.partition];
+          return nodes[i].partitionLabel.includes(el.value);
         });
         nodes[i].group_center = { x: center.x, y: center.y };
       }
@@ -308,20 +320,19 @@ export default {
         let centers = calcCenterOfBlocks(this.$refs.grid.childNodes);
 
         for (let i = 0; i < this.partitionBlocks.length; i++) {
-          centers[i].value = this.partitionBlocks[i][this.partitionId];
+          centers[i].value = this.partitionBlocks[i].label;
         }
 
         let groupCatId = {
           partition: this.partitionId,
           labels: centers
         };
-
+        //console.log(groupCatId);
         this.splitBubbles(groupCatId);
       }
     },
     filterBubbles() {
-      let bubbles = d3
-        .select("#bubbles")
+      d3.select("#bubbles")
         .selectAll("circle")
         .classed("disabled", d => {
           if (filterPassed(d, this.filters)) {
@@ -364,12 +375,19 @@ export default {
 .grid {
   text-align: center;
   display: grid;
-  /*   grid-gap: 1rem; */
-  grid-row-gap: 2rem;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   grid-auto-rows: 30rem;
   pointer-events: all;
 }
+
+@media screen and (min-width: 700px) {
+  .grid-one-line {
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: 100%;
+    height: 100%;
+  }
+}
+
 .grid .subheading,
 .grid .title {
   z-index: 1;
@@ -380,18 +398,5 @@ export default {
   position: relative;
   display: flex;
   flex-direction: column;
-  /*   justify-content: space-between; */
-}
-
-@media screen and (max-width: 900px) {
-  .grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media screen and (max-width: 600px) {
-  .grid {
-    grid-template-columns: repeat(1, 1fr);
-  }
 }
 </style>
