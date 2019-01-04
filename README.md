@@ -21,23 +21,23 @@ As we know, this code is used to:
 
 ### run local docker image
 
-The webapp requires to connect to a platform that provides the data, e.g:
+
+The webapp requires to connect to a platform that provides the data. 
+The reference platform is available in the [data-budget repository](https://github.com/g0v-it/data-budget).
 
 ```bash
-git clone https://github.com/g0v-it/data-inps.git ../testdata
+git clone https://github.com/g0v-it/data-budget.git ../testdata
 cd ../testdata; docker-compose up -d
-#take note of the api container port, e.g.
-APIPORT=29322
 ```
 
 Than you are ready to build and run webapp container:
 
 ```bash
 docker build -t webapp .
-docker run -d --name webapp -p 29313:8080 -e G0V_API_ENDPOINT=http://localhost:$APIPORT webapp
+docker run -d --name webapp -p 29323:8080 -e G0V_API_ENDPOINT=http://localhost:29322 webapp
 ```
 
-Try it pointing your browser to http://localhost:29313
+Try it pointing your browser to http://localhost:29323
 
 Remove the container with `docker rm -f webapp`
 
@@ -132,9 +132,8 @@ The configuration object is also exposed as the vue prototype attribute `$settin
 
 ## Data
 
-All visualized data are extracted and processed by a dedicated *smart data management platform* (DMP) compliant with the W3C Semantic Web standards. The platform is available in the [data-budget repository](https://github.com/g0v-it/data-budget).
+All visualized data are extracted and processed by a dedicated *smart data management platform* (DMP) compliant with the W3C Semantic Web standards. The reference platform is available in the [data-budget repository](https://github.com/g0v-it/data-budget).
 
-The web application connects to data management platform through a REST endpoint that is available at the address http://data.budget.g0v.it/api/v1. Beside json APIs the platform provides a SPARQL 1.1. interface at the address http://data.budget.g0v.it/sdaas/sparql
 
 You can also run a local instance of the platform (see [data-budget repo](https://github.com/g0v-it/data-budget) for more info ).
 
