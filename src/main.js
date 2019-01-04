@@ -16,6 +16,8 @@ import responsive from "vue-responsive";
 
 Vue.config.productionTip = false;
 
+
+
 Vue.component("Rate", Rate);
 Vue.component("Amount", Amount);
 Vue.component("SocialSharing", SocialSharing);

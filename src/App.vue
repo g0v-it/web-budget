@@ -134,7 +134,6 @@
 <script>
 import { get } from "axios";
 import Configuration from "@/utils/configuration";
-
 var resizeTimer;
 var currentWidth;
 

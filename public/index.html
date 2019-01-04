@@ -23,6 +23,11 @@
     <title>g0v.it - The Financial Reporter</title>
   </head>
   <body>
+    <script>
+      if (navigator.appName.indexOf("Internet Explorer") != -1 || navigator.userAgent.match(/Trident.*rv[ :]*11\./)) {
+        window.location = "IE_alert.html";
+    }
+    </script>
     <noscript>
       <strong>We're sorry but web-budget doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
