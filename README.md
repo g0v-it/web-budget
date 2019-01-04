@@ -77,7 +77,6 @@ The `NAME` and `VERSION` variables in the `Makefile` set the docker image name a
 
 The image exposes the web server on port `8080`.
 
-
 ## Project setup
 ```
 npm install
