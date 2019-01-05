@@ -2,7 +2,7 @@
 node_modules
 /dist
 .env
-.sdmp/
+.sdmp
 
 # local env files
 .env.local
