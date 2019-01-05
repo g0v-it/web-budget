@@ -26,11 +26,11 @@ The webapp requires to connect to a platform that provides the data.
 The reference platform is available in the [data-budget repository](https://github.com/g0v-it/data-budget).
 
 ```bash
-git clone https://github.com/g0v-it/data-budget.git ../testdata
-cd ../testdata; docker-compose up -d
+git clone https://github.com/g0v-it/data-budget.git .sdmp
+docker-compose -f .sdmp/docker-compose.yml up -d
 ```
 
-Than you are ready to build and run webapp container:
+Now you are ready to build and run webapp container:
 
 ```bash
 docker build -t webapp .
@@ -39,13 +39,17 @@ docker run -d --name webapp -p 29323:8080 -e G0V_API_ENDPOINT=http://localhost:2
 
 Try it pointing your browser to http://localhost:29323
 
-Remove the container with `docker rm -f webapp`
+Free docker resources with:
+
+```
+docker rm -f webapp
+docker-compose -f .sdmp/docker-compose.yml down
+```
 
 
 You can use the following environment variables with the container image:
 
-- `G0V_CONFIG_URL` -> is the URL to the application JSON configuration (if not passed in a json file is generated from the other environment variables and put in `/config.json`)
-- `G0V_STRING_URL` -> is the URL to the application JSON strings (if not passed the default `/strings/mef.json` is used)
+- `G0V_STRING_URL` -> is the URL to the application JSON strings you can use to customize or localize the webapp (if not passed the default [/strings/default.json](public/strings/default.json) is used). It can be a web resource.
 - `G0V_LOCALE` -> `locale` (the application Locale)
 - `G0V_AMOUNT_FORMAT` -> `amountFormat` (the format for currency values)
 - `G0V_RATE_FORMAT` -> `rateFormat` (the format for percentages)

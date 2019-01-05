@@ -9,11 +9,23 @@ else
     G0V_CONFIG_URL="window.__configurationUrl = \"/config.json\";"
 fi
 
+
+# Pre-load an external string definition
+if [ "${G0V_STRING_URL:0:4}" == "http" ]
+then
+	if wget -q -O "/usr/share/nginx/html/strings/custom.json" "$G0V_STRING_URL"
+	then
+		G0V_STRING_URL="/strings/custom.json"
+	else
+		G0V_STRING_URL=""
+	fi
+fi
+
 if [ "$G0V_STRING_URL" != "" ]
 then
     G0V_STRING_URL="window.__stringUrl = \"$G0V_STRING_URL\";"
 else
-    G0V_STRING_URL="window.__stringUrl = \"/strings/mef.json\";"
+    G0V_STRING_URL="window.__stringUrl = \"/strings/default.json\";"
 fi
 
 cat > /usr/share/nginx/html/config.js <<CONF
