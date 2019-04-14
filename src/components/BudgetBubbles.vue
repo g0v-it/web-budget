@@ -159,7 +159,7 @@ export default {
         let powRadiusScale = d3
           .scalePow()
           .exponent(0.5)
-          .domain([0, maxAmount])
+          .domain([minAmount, maxAmount])
           .range([minRadius, maxRadius]);
 
         let heightScale = d3
@@ -175,6 +175,7 @@ export default {
             id: d.code,
             title: d.title,
             subject: d.subject,
+            imageURL: d.background,
             radiusPow: powRadiusScale(Math.abs(d.amount)),
             amount: d.amount,
             diff: diff,
@@ -191,6 +192,36 @@ export default {
       let touched_node;
       let temp = this;
 
+      let defssisi = d3
+        .select("#bubbles")
+        .append("defs")
+        .selectAll("pattern")
+        .data(nodes)
+        .enter()
+        .append("pattern")
+        .attr("id", function(d) {
+          return d.id;
+        })
+        .attr("width", 1)
+        .attr("height", 1)
+        .attr("patternUnits", "objectBoundingBox")
+        .append("image")
+        .attr("x", function(d) {
+          return -d.radiusPow / 2;
+        })
+        .attr("y", function(d) {
+          return -d.radiusPow / 3;
+        })
+        .attr("width", function(d) {
+          return d.radiusPow * 3;
+        })
+        .attr("height", function(d) {
+          return d.radiusPow * 3;
+        })
+        .attr("xlink:href", function(d) {
+          return d.imageURL;
+        });
+
       let bubbles = d3
         .select("#bubbles")
         .selectAll("circle")
@@ -200,7 +231,10 @@ export default {
         .classed("bubble", true)
         .attr("r", 0)
         .attr("fill", function(d) {
-          return fillColor(d.diff);
+          if (d.radiusPow < 20) {
+            return "#dedede";
+          }
+          return `url(#${d.id})`;
         })
         .attr("stroke", function(d) {
           return d3.rgb(fillColor(d.diff)).darker();
@@ -267,14 +301,14 @@ export default {
         "x",
         d3
           .forceX()
-          .strength(forceStrength)
+          .strength(forceStrength * 0.9)
           .x(this.$refs.vis.offsetWidth / 2)
       );
       simulation.force(
         "y",
         d3
           .forceY()
-          .strength(forceStrength)
+          .strength(forceStrength * 1.1)
           .y(this.$refs.vis.offsetHeight / 2)
       );
 
@@ -375,7 +409,7 @@ export default {
 .grid {
   text-align: center;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   grid-auto-rows: 30rem;
   pointer-events: all;
 }
