@@ -231,9 +231,9 @@ export default {
         .classed("bubble", true)
         .attr("r", 0)
         .attr("fill", function(d) {
-          if (d.radiusPow < 20) {
+          /* if (d.radiusPow < 20) {
             return "#dedede";
-          }
+          } */
           return `url(#${d.id})`;
         })
         .attr("stroke", function(d) {

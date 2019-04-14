@@ -2,6 +2,7 @@ import { get, post } from "axios";
 import { computeNewFilteredTotals } from "./utils/functions";
 import Configuration from "./utils/configuration";
 import { encodeFilters, decodeFilters } from "@/utils/functions.js";
+
 /* import json from "@/assets/example.json.js";
 import filter from "@/assets/filtered_tot.js"; */
 
