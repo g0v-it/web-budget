@@ -192,8 +192,7 @@ export default {
       let touched_node;
       let temp = this;
 
-      let defssisi = d3
-        .select("#bubbles")
+      d3.select("#bubbles")
         .append("defs")
         .selectAll("pattern")
         .data(nodes)
@@ -231,10 +230,10 @@ export default {
         .classed("bubble", true)
         .attr("r", 0)
         .attr("fill", function(d) {
-          /* if (d.radiusPow < 20) {
-            return "#dedede";
-          } */
-          return `url(#${d.id})`;
+          if (d.imageURL) {
+            return `url(#${d.id})`;
+          }
+          return fillColor(d.diff);
         })
         .attr("stroke", function(d) {
           return d3.rgb(fillColor(d.diff)).darker();
