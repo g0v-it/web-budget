@@ -1,29 +1,34 @@
 <template>
   <div class="legend">
-  	<p>
-	    <VImg
-	      v-if="logo_mef_show" :src="string['$DATA_SOURCE_LOGO']"
-	      class="g0v-mef-logo"
-	  	/>
-	</p>
+    <p>
+      <VImg
+        v-if="logo_mef_show"
+        :src="string['$DATA_SOURCE_LOGO']"
+        class="g0v-mef-logo"
+      />
+    </p>
     <div class="legend-description">
       <h2 class="title">
         {{ datasetMeta.title }}
         <a target="_blank" :href="datasetMeta.source">
-          <img :src="logo_rdf" class="g0v-rdf-logo">
+          <img :src="logo_rdf" class="g0v-rdf-logo"  >
         </a>
       </h2>
       <p v-if="show_description" class="description">
         {{ datasetMeta.description }}
       </p>
-      <p>{{ string['$INFO_TOTAL_LABEL'] }}<b> <Amount :amount="totAmount.amount" /></b></p>
+      <p>
+        {{ string["$INFO_TOTAL_LABEL"]
+        }}<b> <Amount :amount="totAmount.amount" /></b>
+      </p>
       <p v-if="showFilteredTot">
-        {{ string['$INFO_TOTAL_FILTERED_LABEL'] }}<b> <Amount :amount="totAmount.filteredAmount" /></b>
+        {{ string["$INFO_TOTAL_FILTERED_LABEL"]
+        }}<b> <Amount :amount="totAmount.filteredAmount" /></b>
       </p>
     </div>
     <div class="legend-mef">
       <a :href="string['$DATA_SOURCE_URL']" target="_blank">
-        <small>{{ string['$DATA_SOURCE_TEXT'] }}</small>
+        <small>{{ string["$DATA_SOURCE_TEXT"] }}</small>
       </a>
     </div>
   </div>
@@ -60,7 +65,8 @@ export default {
       //console.log(isFinite(this.totAmount.filteredAmount));
 
       return (
-        this.totAmount.amount !== this.totAmount.filteredAmount &&
+        Math.round(this.totAmount.amount) !==
+          Math.round(this.totAmount.filteredAmount) &&
         isFinite(this.totAmount.filteredAmount)
       );
     }
@@ -83,7 +89,7 @@ export default {
   position: absolute;
 }
 .g0v-mef-logo {
-  margin-top:1rem;
+  margin-top: 1rem;
   max-width: 50px;
 }
 .g0v-rdf-logo {
