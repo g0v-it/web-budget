@@ -122,9 +122,13 @@ export default {
           return isFinite(rate) ? rate : 0;
         });
 
-        let maxRadius_x = Configuration.current().g0vMaxRadius,
+        let maxRadius_x = Configuration.current().g0vMaxRadius
+            ? Configuration.current().g0vMaxRadius
+            : 60,
           minRadius_x = 1,
-          maxRadius_y = Configuration.current().g0vMaxRadius,
+          maxRadius_y = Configuration.current().g0vMaxRadius
+            ? Configuration.current().g0vMaxRadius
+            : 60,
           minRadius_y = 1;
 
         if (window.innerWidth < 713) {

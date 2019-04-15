@@ -91,9 +91,9 @@ then
     G0V_G0V_LOGO_URL="\"g0vLogoUrl\": \"$G0V_G0V_LOGO_URL\","
 fi
 
-if [ "$GOV_MAX_RADIUS" != "" ]
+if [ "$G0V_MAX_RADIUS" != "" ]
 then
-    GOV_MAX_RADIUS="\"g0vMaxRadius\": \"$GOV_MAX_RADIUS\","
+    G0V_MAX_RADIUS="\"g0vMaxRadius\": \"$G0V_MAX_RADIUS\","
 fi
 
 cat > /usr/share/nginx/html/config.json <<CONF
@@ -109,7 +109,7 @@ cat > /usr/share/nginx/html/config.json <<CONF
     $G0V_MEF_LOGO_URL
     $G0V_G0V_LOGO_URL
     $G0V_DEBUG
-    $GOV_MAX_RADIUS
+    $G0V_MAX_RADIUS
 }
 
 CONF
