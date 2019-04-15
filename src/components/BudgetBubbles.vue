@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import Configuration from "@/utils/configuration";
 import {
   fillColor,
   filterPassed,
@@ -121,9 +122,9 @@ export default {
           return isFinite(rate) ? rate : 0;
         });
 
-        let maxRadius_x = process.env.VUE_APP_BUBBLE_MAX_RADIUS?process.env.VUE_APP_BUBBLE_MAX_RADIUS:100,
+        let maxRadius_x = Configuration.current().g0vMaxRadius,
           minRadius_x = 1,
-          maxRadius_y = process.env.VUE_APP_BUBBLE_MAX_RADIUS?process.env.VUE_APP_BUBBLE_MAX_RADIUS:100,
+          maxRadius_y = Configuration.current().g0vMaxRadius,
           minRadius_y = 1;
 
         if (window.innerWidth < 713) {
