@@ -7,6 +7,7 @@ services:
       - G0V_TWEETS_URL=https://docs.google.com/spreadsheets/d/1IKb7W6MwpWODE4j2UOSti9tmOw3oh676sEXjlpECvQI/edit?usp=sharing
       - G0V_APP_HASHTAG=g0vit
       - G0V_SHOW_MEF_LOGO=0
+      - VUE_APP_BUBBLE_MAX_RADIUS=60
     build: .
     ports:
       - "29323:8080"

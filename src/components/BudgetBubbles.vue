@@ -121,9 +121,9 @@ export default {
           return isFinite(rate) ? rate : 0;
         });
 
-        let maxRadius_x = process.env.VUE_APP_BUBBLE_MAX_RADIUS,
+        let maxRadius_x = process.env.VUE_APP_BUBBLE_MAX_RADIUS?process.env.VUE_APP_BUBBLE_MAX_RADIUS:100,
           minRadius_x = 1,
-          maxRadius_y = process.env.VUE_APP_BUBBLE_MAX_RADIUS,
+          maxRadius_y = process.env.VUE_APP_BUBBLE_MAX_RADIUS?process.env.VUE_APP_BUBBLE_MAX_RADIUS:100,
           minRadius_y = 1;
 
         if (window.innerWidth < 713) {
