@@ -1,11 +1,13 @@
 <template>
   <div ref="vis" class="vis">
     <div
-      ref="grid" v-if="partitionId !== 'default'"
-      :class="{ 'grid': true, 'grid-one-line': partitionBlocks.length === 2 }"
+      ref="grid"
+      v-if="partitionId !== 'default'"
+      :class="{ grid: true, 'grid-one-line': partitionBlocks.length === 2 }"
     >
       <div
-        v-for="block in partitionBlocks" :key="block.label"
+        v-for="block in partitionBlocks"
+        :key="block.label"
         class="grid-block"
       >
         <h3 class="subheading">
@@ -118,37 +120,30 @@ export default {
           let rate = (d.amount - d.previousValue) / d.previousValue;
           return isFinite(rate) ? rate : 0;
         });
-        let maxRadius_x, minRadius_x, maxRadius_y, minRadius_y;
+
+        let maxRadius_x = process.env.VUE_APP_BUBBLE_MAX_RADIUS,
+          minRadius_x = 1,
+          maxRadius_y = process.env.VUE_APP_BUBBLE_MAX_RADIUS,
+          minRadius_y = 1;
+
         if (window.innerWidth < 713) {
-          maxRadius_x = 70;
-          minRadius_x = 1;
+          maxRadius_x -= 20;
+
           this.center_x = this.$refs.vis.offsetWidth / 2;
         } else if (window.innerWidth < 992) {
-          maxRadius_x = 70;
-          minRadius_x = 2;
+          maxRadius_x -= 10;
           this.center_x = this.$refs.vis.offsetWidth / 3;
-        } else if (window.innerWidth < 1050) {
-          maxRadius_x = 80;
-          minRadius_x = 2;
-          this.center_x = this.$refs.vis.offsetWidth / 2;
         } else {
-          maxRadius_x = 90;
-          minRadius_x = 2;
           this.center_x = this.$refs.vis.offsetWidth / 2;
         }
-        //console.log(window.innerHeight);
         //console.log(window.innerWidth);
         if (window.innerHeight < 400) {
-          maxRadius_y = 40;
-          minRadius_y = 1;
+          maxRadius_y -= 20;
           this.center_y = (this.$refs.vis.offsetHeight * 7) / 16;
         } else if (window.innerHeight < 600) {
-          maxRadius_y = 50;
-          minRadius_y = 1;
+          maxRadius_y -= 10;
           this.center_y = (this.$refs.vis.offsetHeight * 7) / 16;
         } else {
-          maxRadius_y = 90;
-          minRadius_y = 2;
           this.center_y = this.$refs.vis.offsetHeight / 2;
         }
         maxRadius = Math.min(maxRadius_x, maxRadius_y);
@@ -409,7 +404,7 @@ export default {
   text-align: center;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  grid-auto-rows: 30rem;
+  grid-auto-rows: 40em;
   pointer-events: all;
 }
 
