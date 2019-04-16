@@ -43,7 +43,7 @@ if [ "$G0V_DEBUG" != "" ]
 then
     G0V_DEBUG="\"debug\": $G0V_DEBUG"
 else
-    G0V_DEBUG="\"debug\": false"
+    G0V_DEBUG="\"debug\": false,"
 fi
 
 if [ "$G0V_LOCALE" != "" ]
