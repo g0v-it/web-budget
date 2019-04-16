@@ -43,7 +43,7 @@ if [ "$G0V_DEBUG" != "" ]
 then
     G0V_DEBUG="\"debug\": $G0V_DEBUG"
 else
-    G0V_DEBUG="\"debug\": false,"
+    G0V_DEBUG="\"debug\": false"
 fi
 
 if [ "$G0V_LOCALE" != "" ]
@@ -108,8 +108,8 @@ cat > /usr/share/nginx/html/config.json <<CONF
     $G0V_SHOW_MEF_LOGO
     $G0V_MEF_LOGO_URL
     $G0V_G0V_LOGO_URL
-    $G0V_DEBUG
     $G0V_MAX_RADIUS
+    $G0V_DEBUG
 }
 
 CONF
