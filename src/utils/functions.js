@@ -17,7 +17,7 @@ export function fillColor(val) {
   if (isFinite(val)) {
     return colorScale(val);
   }
-  return "#BBBBBB";
+  return "#dedede";
 }
 
 export function calcCenterOfBlocks(childNodes) {

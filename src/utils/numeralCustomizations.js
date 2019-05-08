@@ -2,26 +2,34 @@ import Configuration from "@/utils/configuration";
 
 import numeral from "numeral";
 
-// import 'numeral/locales';
-numeral.register("locale", "it", {
-  delimiters: {
-    thousands: ".",
-    decimal: ","
-  },
-  abbreviations: {
-    thousand: "mila",
-    million: "milioni",
-    billion: "miliardi",
-    trillion: "trilioni"
-  },
-  ordinal: function(number) {
-    return "º";
-  },
-  currency: {
-    symbol: "€"
+let umIsSetted = false;
+
+function init(um = "€") {
+  if (!umIsSetted) {
+    numeral.register("locale", "it", {
+      delimiters: {
+        thousands: ".",
+        decimal: ","
+      },
+      abbreviations: {
+        thousand: "mila",
+        million: "milioni",
+        billion: "miliardi",
+        trillion: "trilioni"
+      },
+      ordinal: function(number) {
+        return "º";
+      },
+      currency: {
+        symbol: um
+      }
+    });
+    numeral.locale(Configuration.current().locale);
+    umIsSetted = true;
   }
-});
 
-numeral.locale(Configuration.current().locale);
+  return numeral;
+}
+// import 'numeral/locales';
 
-export default numeral;
+export default init;

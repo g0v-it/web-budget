@@ -1,11 +1,13 @@
 <template>
   <div ref="vis" class="vis">
     <div
-      ref="grid" v-if="partitionId !== 'default'"
-      :class="{ 'grid': true, 'grid-one-line': partitionBlocks.length === 2 }"
+      ref="grid"
+      v-if="partitionId !== 'default'"
+      :class="{ grid: true, 'grid-one-line': partitionBlocks.length === 2 }"
     >
       <div
-        v-for="block in partitionBlocks" :key="block.label"
+        v-for="block in partitionBlocks"
+        :key="block.label"
         class="grid-block"
       >
         <h3 class="subheading">
@@ -23,6 +25,7 @@
 </template>
 
 <script>
+import Configuration from "@/utils/configuration";
 import {
   fillColor,
   filterPassed,
@@ -118,37 +121,34 @@ export default {
           let rate = (d.amount - d.previousValue) / d.previousValue;
           return isFinite(rate) ? rate : 0;
         });
-        let maxRadius_x, minRadius_x, maxRadius_y, minRadius_y;
+
+        let maxRadius_x = Configuration.current().g0vMaxRadius
+            ? Configuration.current().g0vMaxRadius
+            : 60,
+          minRadius_x = 1,
+          maxRadius_y = Configuration.current().g0vMaxRadius
+            ? Configuration.current().g0vMaxRadius
+            : 60,
+          minRadius_y = 1;
+
         if (window.innerWidth < 713) {
-          maxRadius_x = 70;
-          minRadius_x = 1;
+          maxRadius_x -= 20;
+
           this.center_x = this.$refs.vis.offsetWidth / 2;
         } else if (window.innerWidth < 992) {
-          maxRadius_x = 70;
-          minRadius_x = 2;
+          maxRadius_x -= 10;
           this.center_x = this.$refs.vis.offsetWidth / 3;
-        } else if (window.innerWidth < 1050) {
-          maxRadius_x = 80;
-          minRadius_x = 2;
-          this.center_x = this.$refs.vis.offsetWidth / 2;
         } else {
-          maxRadius_x = 90;
-          minRadius_x = 2;
           this.center_x = this.$refs.vis.offsetWidth / 2;
         }
-        //console.log(window.innerHeight);
         //console.log(window.innerWidth);
         if (window.innerHeight < 400) {
-          maxRadius_y = 40;
-          minRadius_y = 1;
+          maxRadius_y -= 20;
           this.center_y = (this.$refs.vis.offsetHeight * 7) / 16;
         } else if (window.innerHeight < 600) {
-          maxRadius_y = 50;
-          minRadius_y = 1;
+          maxRadius_y -= 10;
           this.center_y = (this.$refs.vis.offsetHeight * 7) / 16;
         } else {
-          maxRadius_y = 90;
-          minRadius_y = 2;
           this.center_y = this.$refs.vis.offsetHeight / 2;
         }
         maxRadius = Math.min(maxRadius_x, maxRadius_y);
@@ -159,7 +159,7 @@ export default {
         let powRadiusScale = d3
           .scalePow()
           .exponent(0.5)
-          .domain([0, maxAmount])
+          .domain([minAmount, maxAmount])
           .range([minRadius, maxRadius]);
 
         let heightScale = d3
@@ -175,6 +175,7 @@ export default {
             id: d.code,
             title: d.title,
             subject: d.subject,
+            imageURL: d.background,
             radiusPow: powRadiusScale(Math.abs(d.amount)),
             amount: d.amount,
             diff: diff,
@@ -191,6 +192,35 @@ export default {
       let touched_node;
       let temp = this;
 
+      d3.select("#bubbles")
+        .append("defs")
+        .selectAll("pattern")
+        .data(nodes)
+        .enter()
+        .append("pattern")
+        .attr("id", function(d) {
+          return d.id;
+        })
+        .attr("width", 1)
+        .attr("height", 1)
+        .attr("patternUnits", "objectBoundingBox")
+        .append("image")
+        .attr("x", function(d) {
+          return -d.radiusPow / 2;
+        })
+        .attr("y", function(d) {
+          return -d.radiusPow / 3;
+        })
+        .attr("width", function(d) {
+          return d.radiusPow * 3;
+        })
+        .attr("height", function(d) {
+          return d.radiusPow * 3;
+        })
+        .attr("xlink:href", function(d) {
+          return d.imageURL;
+        });
+
       let bubbles = d3
         .select("#bubbles")
         .selectAll("circle")
@@ -200,6 +230,9 @@ export default {
         .classed("bubble", true)
         .attr("r", 0)
         .attr("fill", function(d) {
+          if (d.imageURL) {
+            return `url(#${d.id})`;
+          }
           return fillColor(d.diff);
         })
         .attr("stroke", function(d) {
@@ -267,14 +300,14 @@ export default {
         "x",
         d3
           .forceX()
-          .strength(forceStrength)
+          .strength(forceStrength * 0.9)
           .x(this.$refs.vis.offsetWidth / 2)
       );
       simulation.force(
         "y",
         d3
           .forceY()
-          .strength(forceStrength)
+          .strength(forceStrength * 1.1)
           .y(this.$refs.vis.offsetHeight / 2)
       );
 
@@ -375,8 +408,8 @@ export default {
 .grid {
   text-align: center;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  grid-auto-rows: 30rem;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  grid-auto-rows: 40em;
   pointer-events: all;
 }
 

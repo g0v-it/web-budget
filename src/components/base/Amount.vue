@@ -5,9 +5,11 @@
 </template>
 
 <script>
-import numeral from "@/utils/numeralCustomizations";
+import numeralInit from "@/utils/numeralCustomizations";
 import Configuration from "@/utils/configuration";
+import * as BudgetStore from "@/budgetStore.js";
 
+let numeral;
 export default {
   name: "Amount",
   props: {
@@ -19,6 +21,9 @@ export default {
       type: String,
       default: Configuration.current().amountFormat
     }
+  },
+  created() {
+    numeral = numeralInit(BudgetStore.state.meta.um);
   },
   computed: {
     normalize() {
