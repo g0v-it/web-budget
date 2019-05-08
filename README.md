@@ -15,6 +15,8 @@ As we know, this code is used to:
 
 - visualize the Italian Budget (Legge di bilancio), see https://budget.g0v.it/
 - visualize the public Financial Reports of INPS, see https://inps.g0v.it/
+- visualize the data about poiliticians in TV, see https://agcom.g0v.it/
+
 
 
 ## Docker
@@ -59,6 +61,7 @@ You can use the following environment variables with the container image:
 - `G0V_APP_HASHTAG` -> `appHashtag` (the application hashtag)
 - `G0V_SHOW_MEF_LOGO` -> `showMefLogo` (whether to show the MEF logo)
 - `G0V_G0V_LOGO_URL` -> `g0vLogoUrl` (where to link the g0v logo)
+- `G0V_MAX_RADIUS` ->  the maximum bubble radius size (i.e. a scaling factor)
 
 
 
