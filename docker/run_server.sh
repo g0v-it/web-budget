@@ -93,7 +93,7 @@ fi
 
 if [ "$G0V_MAX_RADIUS" != "" ]
 then
-    G0V_MAX_RADIUS="\"g0vMaxRadius\": \"$G0V_MAX_RADIUS\","
+    G0V_MAX_RADIUS="\"g0vMaxRadius\": $G0V_MAX_RADIUS,"
 fi
 
 cat > /usr/share/nginx/html/config.json <<CONF
