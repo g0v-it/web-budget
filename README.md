@@ -2,7 +2,7 @@
 
 # web-budget
 
-An interactive web application that visualizes government financial reports.
+An interactive web application that visualizes any storicized quantitative data e.g. financial reports, presences, etc. etc.
 
 This application is inspired by similar applications developed by the [g0v community](http://gov.asia/) in [Taiwan](https://github.com/g0v/twbudget) and [Taipey](https://github.com/tony1223/tw-budget-platform)
 
