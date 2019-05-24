@@ -15,7 +15,7 @@ As we know, this code is used to:
 
 - visualize the Italian Budget (Legge di bilancio), see https://budget.g0v.it/
 - visualize the public Financial Reports of INPS, see https://inps.g0v.it/
-- visualize the data about poiliticians in TV, see https://agcom.g0v.it/
+- visualize the data about politicians in TV, see https://agcom.g0v.it/
 
 
 
