@@ -300,14 +300,14 @@ export default {
         "x",
         d3
           .forceX()
-          .strength(forceStrength * 0.9)
+          .strength(forceStrength)
           .x(this.$refs.vis.offsetWidth / 2)
       );
       simulation.force(
         "y",
         d3
           .forceY()
-          .strength(forceStrength * 1.1)
+          .strength(forceStrength)
           .y(this.$refs.vis.offsetHeight / 2)
       );
 
