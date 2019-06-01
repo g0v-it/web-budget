@@ -1,7 +1,8 @@
 import Configuration from "@/utils/configuration";
-import numeral from "@/utils/numeralCustomizations";
+import numeralInit from "@/utils/numeralCustomizations";
 import { scaleThreshold } from "d3";
 import gzip from "lz-string";
+import * as BudgetStore from "@/budgetStore.js";
 
 export function fillColor(val) {
   const colorScale = scaleThreshold()
@@ -99,6 +100,8 @@ export let decodeFilters = compressed => {
 
 //----------------------------------------------------------
 // FORMATTING
+
+let numeral = numeralInit(BudgetStore.state.meta.um);
 const amountFormat = Configuration.current().amountFormat;
 export function formatAmount(amount) {
   let amt = Number(amount);
