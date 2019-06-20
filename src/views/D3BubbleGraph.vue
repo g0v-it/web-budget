@@ -3,8 +3,10 @@
     <div class="g0v-partitions-header">
       <VBtnToggle v-model="budget.selectedPartition" mandatory>
         <VBtn
-          v-for="(b,index) in budget.partitionButtons" :key="index"
-          flat color="primary"
+          v-for="(b, index) in budget.partitionButtons"
+          :key="index"
+          flat
+          color="primary"
           :value="b.value"
           @click="onPartitionChange(b.value)"
         >
@@ -14,18 +16,28 @@
     </div>
 
     <div ref="container" class="g0v-content">
-      <div v-if="budget.selectedPartition=='default'" class="g0v-content-grid">
+      <div
+        v-if="budget.selectedPartition == 'default'"
+        class="g0v-content-grid"
+      >
         <div v-responsive.lg.xl class="left-column ">
-          <BubbleChartInfo :dataset-meta="budget.meta" :tot-amount="totAmount" />
+          <BubbleChartInfo
+            :dataset-meta="budget.meta"
+            :tot-amount="totAmount"
+          />
         </div>
 
         <div v-responsive.md.lg.xl class="right-column">
           <VSelect
-            v-for="(s,index) in budget.filterSelect" :key="index"
-            :items="s.labels" v-model="s.model"
+            v-for="(s, index) in budget.filterSelect"
+            :key="index"
+            :items="s.labels"
+            v-model="s.model"
             @change="onFiltersChange"
-            :label="string['$PARTITION_FILTER_TEXT']+' '+s.title" multiple
-            clearable deletable-chips
+            :label="string['$PARTITION_FILTER_TEXT'] + ' ' + s.title"
+            multiple
+            clearable
+            deletable-chips
             chips
             persistent-hint
           />
@@ -36,28 +48,35 @@
       <div class="g0v-bubble-chart">
         <div v-responsive.md.sm.xs>
           <h2 class="title">
-            {{ string['$MAIN_TITLE'] }} {{ budget.meta.year }}
+            {{ string["$MAIN_TITLE"] }} {{ budget.meta.year }}
             <a target="_blank" :href="budget.meta.source">
-              <img :src="logo_rdf" class="g0v-rdf-logo">
+              <img :src="logo_rdf" class="g0v-rdf-logo"  >
             </a>
           </h2>
-          <p>{{ string['$INFO_TOTAL_LABEL'] }}<b> <Amount :amount="totAmount.amount" /></b></p>
+          <p>
+            {{ string["$INFO_TOTAL_LABEL"]
+            }}<b> <Amount :amount="totAmount.amount" /></b>
+          </p>
         </div>
         <BudgetBubbles
-          @click="onClick" @over="onMouseOver"
+          @click="onClick"
+          @over="onMouseOver"
           @out="onMouseOut"
-          :partition-id="budget.selectedPartition" :partition-labels="budget.partitionLabels"
-          :accounts="budget.accounts" :filters="filters"
+          :partition-id="budget.selectedPartition"
+          :partition-labels="budget.partitionLabels"
+          :accounts="budget.accounts"
+          :filters="filters"
         />
         <div v-responsive.sm.xs />
       </div>
 
-
       <TooltipBubble
         class="tooltip"
-        :style="{ top: hoveredNode.y + 'px' , left: hoveredNode.x + 'px' }"
-        :current-node="hoveredNode" :bg-color="hoveredNode.colorBg"
-        v-if="showTooltip" @mounted="calcTooltipPos"
+        :style="{ top: hoveredNode.y + 'px', left: hoveredNode.x + 'px' }"
+        :current-node="hoveredNode"
+        :bg-color="hoveredNode.colorBg"
+        v-if="showTooltip"
+        @mounted="calcTooltipPos"
       />
     </div>
   </div>
@@ -297,7 +316,7 @@ export default {
 .g0v-content {
   margin: 1rem 0 0 0;
   position: relative;
-  height: 100%;
+  flex: 1;
   width: 100%;
 }
 
