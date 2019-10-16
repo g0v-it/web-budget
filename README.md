@@ -2,33 +2,29 @@
 
 # web-budget
 
-An interactive web application that visualizes the Italian budget.
+An interactive web application to explore the Italian budget.
 
 **WARNING: this is a complete project refactory. The 2.x versions are no more supported. Please migrate to the new architecture **
 
-This application is inspired by similar applications developed by the [g0v community](http://gov.asia/) in [Taiwan](https://github.com/g0v/twbudget) and [Taipey](https://github.com/tony1223/tw-budget-platform)
+This application is inspired by similar project developed by the [g0v community](http://gov.asia/) in [Taiwan](https://github.com/g0v/twbudget) and [Taipey](https://github.com/tony1223/tw-budget-platform)
 
 g0v is a decentralized civic tech community to advocate transparency of information and build tech solutions
 for citizens to participate in public affairs from the bottom up. The g0v community was born in Taiwan thanks to [Audrey Tang](https://de.wikipedia.org/wiki/Audrey_Tang), [Chia-liang Kao](https://github.com/clkao) and many others.
 
-## Who is using it
 
-As we know, this code is used to:
-
-- visualize the Italian Budget (Legge di bilancio), see https://budget.g0v.it/
-- visualize the public Financial Reports of INPS, see https://inps.g0v.it/
-- visualize the data about politicians in TV, see https://agcom.g0v.it/
-- visualize the Italian Camera dei Deputati budget https://budg.camera.it/ 
+Have a look to the reference implementation  https://budget.g0v.it/
 
 
-## Architect
+## Try with docker
 
-All visualized data are extracted and processed by a dedicated *smart data management platform* (DMP) compliant with the W3C Semantic Web standards. 
-The platform code is in the [data-budget repository](https://github.com/g0v-it/data-budget).
+web-budget requires a stack of three components:
 
-### Run with docker
+- data are extracted and processed by the [data-budget](https://github.com/g0v-it/data-budget) platform according with the Semantic Web Standards
+- the presentation layer is realized by the [LODMAP2D](https://github.com/linkeddatacenter/LODMAP2D) single page web app according with SOLID specification;
+- the [LODMAP2D api](https://github.com/linkeddatacenter/LODMAP2D) micro service access the SPARQL service exposed by the data-budget platform
+providing a CORS compliant linked data interface to LODMAP2D. 
 
-The platform is shipped with a [Docker](https://docker.com) setup that makes it easy 
+The project is shipped with a [Docker](https://docker.com) setup that makes it easy 
 to get a containerized development environment up and running. 
 If you do not already have Docker on your computer, 
 [it's the right time to install it](https://docs.docker.com/install/).
@@ -45,8 +41,8 @@ This will start locally all needed services:
 
 | Name        | Description                                                   | Port 
 | ----------- | ------------------------------------------------------------- | ------- 
-| sdaas       | the data-budget management platform                           | 29321    
-| api         | an  example API microservice to feed webapp                   | 29322 
+| sdaas       | the data-budget management platform                           | (29321) optional    
+| api         | a microservice providing LODMAP2-api                          | 29322 
 | webapp      | the web server using LODMAP2D application                     | 20323
 
 - try http://localhost:29323/
@@ -64,7 +60,6 @@ docker-compose down
 ```
 
 Developers should read [CONTRIBUTING file](CONTRIBUTING.md)
-
 
 
 ## Support
