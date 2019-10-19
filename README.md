@@ -15,14 +15,16 @@ for citizens to participate in public affairs from the bottom up. The g0v commun
 Have a look to the reference implementation  https://budget.g0v.it/
 
 
+web-budget is an integration of three open source projects:
+
+- the [LODMAP2D](https://github.com/linkeddatacenter/LODMAP2D) project that realize a single web page application that manages the presentation layer (ie the bubbles) ;
+- the [LODMAP2D-api](https://github.com/linkeddatacenter/LODMAP2D-api) that provides a CORS enabled microservice to optimize and cache the data required by web-budget ;
+- the [data-budget](https://github.com/g0v-it/data-budget) project that provides a knowledge graph about Italian budge t data with a SPARQL service 
+
+![architecture](doc/architecture.png)
+
+
 ## Try with docker
-
-web-budget requires a stack of three components:
-
-- data are extracted and processed by the [data-budget](https://github.com/g0v-it/data-budget) platform according with the Semantic Web Standards
-- the presentation layer is realized by the [LODMAP2D](https://github.com/linkeddatacenter/LODMAP2D) single page web app according with SOLID specification;
-- the [LODMAP2D api](https://github.com/linkeddatacenter/LODMAP2D) micro service access the SPARQL service exposed by the data-budget platform
-providing a CORS compliant linked data interface to LODMAP2D. 
 
 The project is shipped with a [Docker](https://docker.com) setup that makes it easy 
 to get a containerized development environment up and running. 
@@ -41,9 +43,10 @@ This will start locally all needed services:
 
 | Name        | Description                                                   | Port 
 | ----------- | ------------------------------------------------------------- | ------- 
-| sdaas       | the data-budget management platform                           | (29321) optional    
+| sdaas       | the **data-budget** management platform                       | 29321 
 | api         | a microservice providing LODMAP2-api                          | 29322 
-| webapp      | the web server using LODMAP2D application                     | 20323
+| webapp      | the customized LODMAP2D application                           | 20323
+
 
 - try http://localhost:29323/
 
@@ -51,7 +54,7 @@ The first time you start the containers, Docker downloads and builds images for 
 this is done only once. Starting servers will then be lightning fast.
 
 *WARNING: some external links require to access to a public SPARQL interface. Such links are not working in a 
-local deploy*
+local deploy, if you need it, you have tho expose sdaas port in internet.*
 
 To shudown the platform type: 
 

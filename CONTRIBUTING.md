@@ -30,20 +30,19 @@ We kindly ask you to add following sentence to your pull request:
 
 
 Before submitting a pull request clean your code and test it
-
-```
-HERE INSTRUCTION TO EXECUTE TESTS
 ```
 
-## Architecture overview
+## LODMAP2D customization
 
-This application is a customization of the [LODMAP2D](https://github.com/linkeddatacenter/LODMAP2D) 
 
-![architecture](doc/architecture.png)
+Customized files are in the public directory:
 
-All customized files are in the public directory.
+- index.html is customized adding Copernicani.it SEO related parameters.
+- the Copernicani.it favicon and logos files can be customized as needed. 
+- The preview.png file is used as preview image in social network posts
+- IE_alert manages incompatible old browsers.
 
-Please consider to contribute to the development of the [LODMAP2D](https://github.com/linkeddatacenter/LODMAP2D) project.
+
 
 ## Publish image to dockerhub
 
