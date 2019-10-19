@@ -15,11 +15,12 @@ for citizens to participate in public affairs from the bottom up. The g0v commun
 Have a look to the reference implementation  https://budget.g0v.it/
 
 
-web-budget is an integration of three open source projects:
+web-budget is a mash-up built on three open source projects:
 
-- the [LODMAP2D](https://github.com/linkeddatacenter/LODMAP2D) project that realize a single web page application that manages the presentation layer (ie the bubbles) ;
+- the [LODMAP2D](https://github.com/linkeddatacenter/LODMAP2D) project for the the presentation layer (i.e. the bubbles) ;
 - the [LODMAP2D-api](https://github.com/linkeddatacenter/LODMAP2D-api) that provides a CORS enabled microservice to optimize and cache the data required by web-budget ;
-- the [data-budget](https://github.com/g0v-it/data-budget) project that provides a knowledge graph about Italian budge t data with a SPARQL service 
+- the [data-budget](https://github.com/g0v-it/data-budget) project that provides a knowledge graph about Italian budget data with a SPARQL service. 
+data-budget is an extension of the [SDaaS community edition](https://github.com/linkeddatacenter/sdaas-ce)
 
 ![architecture](doc/architecture.png)
 
@@ -43,7 +44,7 @@ This will start locally all needed services:
 
 | Name        | Description                                                   | Port 
 | ----------- | ------------------------------------------------------------- | ------- 
-| sdaas       | the **data-budget** management platform                       | 29321 
+| sdaas       | the data-budget  platform                                     | 29321 
 | api         | a microservice providing LODMAP2-api                          | 29322 
 | webapp      | the customized LODMAP2D application                           | 20323
 
@@ -56,7 +57,7 @@ this is done only once. Starting servers will then be lightning fast.
 *WARNING: some external links require to access to a public SPARQL interface. Such links are not working in a 
 local deploy, if you need it, you have tho expose sdaas port in internet.*
 
-To shudown the platform type: 
+To shutdown the platform type: 
 
 ```
 docker-compose down
