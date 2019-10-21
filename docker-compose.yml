@@ -1,13 +1,22 @@
 version: '3'
 services:
-  webapp:
-    environment:
-      - G0V_API_ENDPOINT=http://194.177.121.230:29322
-      - G0V_STRING_URL=/strings/mef.json
-      - G0V_TWEETS_URL=https://docs.google.com/spreadsheets/d/1IKb7W6MwpWODE4j2UOSti9tmOw3oh676sEXjlpECvQI/edit?usp=sharing
-      - G0V_APP_HASHTAG=g0vit
-      - G0V_SHOW_MEF_LOGO=0
-      - G0V_MAX_RADIUS=60
-    build: .
+  sdaas:
+    image: copernicani/data-budget-sdaas
+    #ports:
+    #  - "29321:8080"
+  api:
+    image: linkeddatacenter/lodmap2d-api
     ports:
-      - "29323:8080"
+      - "29322:80"
+    depends_on:
+      - "sdaas"
+    environment:
+      - LODMAP2D_BACKEND=http://sdaas:8080/sdaas/sparql
+  webapp:
+    image: copernicani/web-budget
+    ports:
+      - "29323:80"
+    depends_on:
+      - "api"
+    environment:
+      - LODMAP2D_DATA=http://localhost:29322/
