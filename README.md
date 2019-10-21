@@ -17,8 +17,8 @@ Have a look to the reference implementation  https://budget.g0v.it/
 
 web-budget is a mash-up built on three open source projects:
 
-- the [LODMAP2D](https://github.com/linkeddatacenter/LODMAP2D) project for the the presentation layer (i.e. the bubbles) ;
-- the [LODMAP2D-api](https://github.com/linkeddatacenter/LODMAP2D-api) that provides a CORS enabled microservice to optimize and cache the data required by web-budget ;
+- the [LODMAP2D](https://github.com/linkeddatacenter/LODMAP2D) project for the the presentation layer (i.e. the bubbles);
+- the [LODMAP2D-api](https://github.com/linkeddatacenter/LODMAP2D-api) that provides a CORS enabled microservice to optimize and cache the data required by web-budget;
 - the [data-budget](https://github.com/g0v-it/data-budget) project that provides a knowledge graph about Italian budget data with a SPARQL service. 
 data-budget is an extension of the [SDaaS community edition](https://github.com/linkeddatacenter/sdaas-ce)
 
@@ -33,10 +33,9 @@ If you do not already have Docker on your computer,
 [it's the right time to install it](https://docs.docker.com/install/).
 
 
-To try the application, an example stack of services is provided. Just type: 
+To try the latest released application, an example stack of services is provided. Just type: 
 
 ```
-docker-compose build
 docker-compose up -d
 ```
 
@@ -44,7 +43,7 @@ This will start locally all needed services:
 
 | Name        | Description                                                   | Port 
 | ----------- | ------------------------------------------------------------- | ------- 
-| sdaas       | the data-budget  platform                                     | 29321 
+| sdaas       | the data-budget  platform                                     |  
 | api         | a microservice providing LODMAP2-api                          | 29322 
 | webapp      | the customized LODMAP2D application                           | 20323
 

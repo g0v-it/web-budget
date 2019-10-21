@@ -13,7 +13,7 @@ services:
     environment:
       - LODMAP2D_BACKEND=http://sdaas:8080/sdaas/sparql
   webapp:
-    build: .
+    image: copernicani/web-budget
     ports:
       - "29323:80"
     depends_on:
