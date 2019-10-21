@@ -4,7 +4,7 @@
 
 An interactive web application to explore the Italian budget.
 
-**WARNING: this is a complete project refactory. The 2.x versions are no more supported. Please migrate to the new architecture **
+**WARNING: this is a complete project refactory. The 2.x versions are no more supported. Please migrate to the new architecture**
 
 This application is inspired by similar project developed by the [g0v community](http://gov.asia/) in [Taiwan](https://github.com/g0v/twbudget) and [Taipey](https://github.com/tony1223/tw-budget-platform)
 
