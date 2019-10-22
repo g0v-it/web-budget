@@ -8,15 +8,11 @@ services:
     image: linkeddatacenter/lodmap2d-api
     ports:
       - "29322:80"
-    depends_on:
-      - "sdaas"
     environment:
       - LODMAP2D_BACKEND=http://sdaas:8080/sdaas/sparql
   webapp:
     image: copernicani/web-budget
     ports:
       - "29323:80"
-    depends_on:
-      - "api"
     environment:
       - LODMAP2D_DATA=http://localhost:29322/

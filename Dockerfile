@@ -1,2 +1,2 @@
-FROM linkeddatacenter/lodmap2d:1.0.0
+FROM linkeddatacenter/lodmap2d
 COPY public/* public/
