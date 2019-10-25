@@ -16,3 +16,8 @@ services:
       - "29323:80"
     environment:
       - LODMAP2D_DATA=http://localhost:29322/
+      - LODMAP2D_TITLE=Legge di Bilancio Italiana
+      - LODMAP2D_LANG=it
+      - LODMAP2D_DESCRIPTION=Visualizzazione interattiva della Legge di Bilancio Italiana
+      - LODMAP2D_MATOMO_ID=2
+      

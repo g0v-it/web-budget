@@ -1,2 +1,2 @@
 FROM linkeddatacenter/lodmap2d
-COPY public/* public/
+COPY public/* /usr/share/nginx/html/
