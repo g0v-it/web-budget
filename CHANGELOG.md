@@ -5,6 +5,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+
+## 3.0.1
+
+- Aligned with LODMAP2D 1.0.1
+- Added Edge alert
+
 ## 3.0.0
 
 A major release realized as a mash-up of LODMAP2D project
