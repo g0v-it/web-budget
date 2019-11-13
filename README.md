@@ -13,11 +13,12 @@ for citizens to participate in public affairs from the bottom up. The g0v commun
 Have a look to the reference implementation  https://budget.g0v.it/
 
 
-web-budget is a mash-up built on three open source projects:
+The web-budget application is a mash-up on three open source projects:
 
-- the [LODMAP2D](https://github.com/linkeddatacenter/LODMAP2D) project for the the presentation layer (i.e. the bubbles);
-- the [LODMAP2D-api](https://github.com/linkeddatacenter/LODMAP2D-api) that provides a CORS enabled microservice to optimize and cache the data required by web-budget;
+- the [LODMAP2D](https://github.com/linkeddatacenter/LODMAP2D) project that provides the presentation layer (i.e. the bubbles);
+- the [LODMAP2D-api](https://github.com/linkeddatacenter/LODMAP2D-api) that provides a CORS enabled microservices that prepare and cache the data required by web-budget;
 - the [data-budget](https://github.com/g0v-it/data-budget) project that provides a knowledge graph about Italian budget data with a SPARQL service. 
+
 
 ![architecture](doc/architecture.png)
 
