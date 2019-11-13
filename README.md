@@ -18,7 +18,6 @@ web-budget is a mash-up built on three open source projects:
 - the [LODMAP2D](https://github.com/linkeddatacenter/LODMAP2D) project for the the presentation layer (i.e. the bubbles);
 - the [LODMAP2D-api](https://github.com/linkeddatacenter/LODMAP2D-api) that provides a CORS enabled microservice to optimize and cache the data required by web-budget;
 - the [data-budget](https://github.com/g0v-it/data-budget) project that provides a knowledge graph about Italian budget data with a SPARQL service. 
-data-budget is an extension of the [SDaaS community edition](https://github.com/linkeddatacenter/sdaas-ce)
 
 ![architecture](doc/architecture.png)
 
