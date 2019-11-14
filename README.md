@@ -34,6 +34,7 @@ If you do not already have Docker on your computer,
 To try the latest released application, an example stack of services is provided. Just type: 
 
 ```
+docker-compose build
 docker-compose up -d
 ```
 
@@ -41,7 +42,7 @@ This will start locally all needed services:
 
 | Name        | Description                                                   | Port 
 | ----------- | ------------------------------------------------------------- | ------- 
-| sdaas       | the data-budget  platform                                     |  
+| sdaas       | the data-budget  platform                                     | 29321 
 | api         | a microservice providing LODMAP2-api                          | 29322 
 | webapp      | the customized LODMAP2D application                           | 20323
 
@@ -51,8 +52,6 @@ This will start locally all needed services:
 The first time you start the containers, Docker downloads and builds images for you. It will take some time, but don't worry
 this is done only once. Starting servers will then be lightning fast.
 
-*WARNING: some external links require to access to a public SPARQL interface. Such links are not working in a 
-local deploy, if you need it, you have tho expose sdaas port in internet.*
 
 To shutdown the platform type: 
 
@@ -61,7 +60,6 @@ docker-compose down
 ```
 
 Developers should read [CONTRIBUTING file](CONTRIBUTING.md)
-
 
 ## Support
 

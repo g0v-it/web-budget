@@ -2,8 +2,8 @@ version: '3'
 services:
   sdaas:
     image: copernicani/data-budget-sdaas
-    #ports:
-    #  - "29321:8080"
+    ports:
+      - "29321:8080"
   api:
     image: linkeddatacenter/lodmap2d-api
     ports:
@@ -11,7 +11,9 @@ services:
     environment:
       - LODMAP2D_BACKEND=http://sdaas:8080/sdaas/sparql
   webapp:
-    image: copernicani/web-budget
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "29323:80"
     environment:
