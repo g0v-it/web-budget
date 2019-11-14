@@ -30,20 +30,16 @@ We kindly ask you to add following sentence to your pull request:
 
 
 Before submitting a pull request clean your code and test it
-```
 
 
 ## LODMAP2D customization
 
-
 Customized files are in the public directory:
 
-- index.html is customized adding Copernicani.it SEO related parameters.
 - the Copernicani.it favicon and logos files can be customized as needed. 
 - The preview.png file is used as preview image in social network posts
 - IE_alert manages incompatible old browsers.
 - Edge_alert manages warning for Edge Users.
-
 
 
 ## Publish image to dockerhub
